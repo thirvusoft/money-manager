@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:money_manager/views/screens/landingScreen.dart';
-import 'package:money_manager/widgets/curved_navigation.dart';
+import 'package:money_manager/widgets/curvedNavigation.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
-import 'package:money_manager/widgets/curved_navigation.dart';
+import 'package:money_manager/widgets/curvedNavigation.dart';
 
 class landing_screen extends StatefulWidget {
   @override
@@ -28,11 +28,13 @@ class _landing_screenState extends State<landing_screen> {
                 controller: emailid,
                 decoration: const InputDecoration(
                   suffixIcon: Icon(Icons.account_circle),
-                  labelText: "Email_Id",
+                  labelText: "Mobile Number",
                 ),
+                maxLength: 10,
+                keyboardType: TextInputType.number,
                 validator: (value) {
                   if (value!.isEmpty) {
-                    return "Enter email";
+                    return "Mobile Number";
                   } else {
                     return null;
                   }
@@ -137,7 +139,7 @@ class _landing_screenState extends State<landing_screen> {
                     borderRadius:
                         const BorderRadius.all(const Radius.circular(10))),
                 child: const Text(
-                  "Login",
+                  "Get Started",
                   style: const TextStyle(
                       color: Colors.white,
                       fontSize: 15,

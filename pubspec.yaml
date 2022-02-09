@@ -65,12 +65,6 @@ flutter:
   assets:
    - assets/images/thirvulogo.png
    - assets/images/login.svg
-   - assets/images/asset.svg
-   - assets/images/investment.svg
-   - assets/images/agriculture.svg
-   - assets/images/liability.png
-   - assets/images/construction.svg
-
    
 
    
