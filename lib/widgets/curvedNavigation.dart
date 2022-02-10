@@ -12,7 +12,7 @@ class MyHomePage extends StatefulWidget {
   _MyHomePageState createState() => _MyHomePageState();
 }
 
-Color color = Colors.blueAccent;
+Color color = Colors.blue.shade900;
 
 class _MyHomePageState extends State<MyHomePage> {
   int activeIndex = 0;

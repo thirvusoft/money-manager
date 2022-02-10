@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:money_manager/views/screens/landingScreen.dart';
 import 'package:money_manager/widgets/curvedNavigation.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
-import 'package:money_manager/widgets/curvedNavigation.dart';
 
 class landing_screen extends StatefulWidget {
   @override
@@ -140,7 +138,7 @@ class _landing_screenState extends State<landing_screen> {
                         const BorderRadius.all(const Radius.circular(10))),
                 child: const Text(
                   "Get Started",
-                  style: const TextStyle(
+                  style: TextStyle(
                       color: Colors.white,
                       fontSize: 15,
                       fontWeight: FontWeight.bold),
@@ -148,7 +146,7 @@ class _landing_screenState extends State<landing_screen> {
                 onPressed: () {
                   _openPopup(context);
                 },
-                color: Colors.blue[800],
+                color: Colors.blue[900],
               ),
             ),
           ],
@@ -156,4 +154,7 @@ class _landing_screenState extends State<landing_screen> {
       ),
     );
   }
+  // Future<void> login() async{
+  //   await http.post
+  //}
 }
