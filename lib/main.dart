@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
-import 'views/screens/splashScreen.dart';
+import 'package:money_manager/views/categories/categoriesList.dart';
+//import 'package:money_manager/views/categories/categoriesDetails.dart';
+//import 'package:money_manager/views/categories/categoriesList.dart';
+import 'package:money_manager/widgets/subCategoriesCard.dart';
 
 void main() {
   runApp(MyApp());
@@ -9,9 +12,6 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      theme: new ThemeData(scaffoldBackgroundColor: Color(0XFFFFFFFFF)),
-      home: splash_screen(),
-    );
+        debugShowCheckedModeBanner: false, home: AllFieldsForm());
   }
 }
