@@ -2,15 +2,15 @@
 
 import 'package:flutter/material.dart';
 
-class categoriesCard extends StatefulWidget {
-  const categoriesCard({Key? key}) : super(key: key);
+class expensesCard extends StatefulWidget {
+  const expensesCard({Key? key}) : super(key: key);
 
   @override
-  _categoriesCardState createState() => _categoriesCardState();
+  _expensesCardState createState() => _expensesCardState();
 }
 
 // ignore: camel_case_types
-class _categoriesCardState extends State<categoriesCard> {
+class _expensesCardState extends State<expensesCard> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -19,7 +19,7 @@ class _categoriesCardState extends State<categoriesCard> {
             child: Column(
           children: [
             Card(
-              color: Colors.amber,
+              color: Colors.blue.shade900,
               child: Container(
                 height: 100,
                 width: 500,
@@ -29,7 +29,8 @@ class _categoriesCardState extends State<categoriesCard> {
                       padding: EdgeInsets.all(10),
                       child: MaterialButton(
                         onPressed: () {},
-                        child: Text("Property"),
+                        child: Text("Property",
+                            style: TextStyle(color: Colors.white)),
                       ),
                     ),
                     SizedBox(
@@ -39,7 +40,8 @@ class _categoriesCardState extends State<categoriesCard> {
                       padding: EdgeInsets.zero,
                       child: MaterialButton(
                         onPressed: () {},
-                        child: Text("Portable"),
+                        child: Text("Portable",
+                            style: TextStyle(color: Colors.white)),
                       ),
                     ),
                   ],
