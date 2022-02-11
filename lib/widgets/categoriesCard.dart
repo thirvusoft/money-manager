@@ -1,6 +1,10 @@
 // ignore_for_file: deprecated_member_use
 
 import 'package:flutter/material.dart';
+import 'package:money_manager/views/categories/assets.dart';
+import 'package:money_manager/views/screens/landingScreen.dart';
+import 'package:money_manager/views/screens/loginScreen.dart';
+import 'package:money_manager/widgets/curvedNavigation.dart';
 
 class categoriesCard extends StatefulWidget {
   const categoriesCard({Key? key}) : super(key: key);
@@ -14,40 +18,10 @@ class _categoriesCardState extends State<categoriesCard> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SingleChildScrollView(
-        child: Center(
-            child: Column(
-          children: [
-            Card(
-              color: Colors.amber,
-              child: Container(
-                height: 100,
-                width: 500,
-                child: Row(
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.all(10),
-                      child: MaterialButton(
-                        onPressed: () {},
-                        child: Text("Property"),
-                      ),
-                    ),
-                    SizedBox(
-                      width: 160,
-                    ),
-                    Padding(
-                      padding: EdgeInsets.zero,
-                      child: MaterialButton(
-                        onPressed: () {},
-                        child: Text("Portable"),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ],
-        )),
+      body: ListView(
+        children: [
+          for (int i = 0; i < 10; i++) assetsCard(),
+        ],
       ),
     );
   }

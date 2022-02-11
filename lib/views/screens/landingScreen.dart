@@ -5,6 +5,7 @@ import 'package:money_manager/views/categories/assets.dart';
 import 'package:money_manager/views/categories/expenses.dart';
 import 'package:money_manager/views/categories/income.dart';
 import 'package:money_manager/views/categories/liability.dart';
+import 'package:money_manager/widgets/categoriesCard.dart';
 
 class home_page extends StatefulWidget {
   const home_page({Key? key}) : super(key: key);

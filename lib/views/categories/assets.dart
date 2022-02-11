@@ -11,45 +11,30 @@ class assetsCard extends StatefulWidget {
 
 // ignore: camel_case_types
 class _assetsCardState extends State<assetsCard> {
+  final index = 2;
+  List<String> text = ["Property", "Protability"];
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SingleChildScrollView(
-        child: Center(
-            child: Column(
-          children: [
-            Card(
-              color: Colors.blue.shade900,
-              child: Container(
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          SizedBox(
+            height: 150,
+            child: ListView.builder(
+              scrollDirection: Axis.horizontal,
+              itemBuilder: (context, index) => Container(
                 height: 100,
-                width: 500,
-                child: Row(
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.all(10),
-                      child: MaterialButton(
-                        onPressed: () {},
-                        child: Text("Property",
-                            style: TextStyle(color: Colors.white)),
-                      ),
-                    ),
-                    SizedBox(
-                      width: 160,
-                    ),
-                    Padding(
-                      padding: EdgeInsets.zero,
-                      child: MaterialButton(
-                        onPressed: () {},
-                        child: Text("Portable",
-                            style: TextStyle(color: Colors.white)),
-                      ),
-                    ),
-                  ],
+                width: 100,
+                margin: EdgeInsets.all(10),
+                child: Center(
+                  child: Text(text[index]),
                 ),
+                color: Colors.blue.shade900,
               ),
             ),
-          ],
-        )),
+          ),
+        ],
       ),
     );
   }
