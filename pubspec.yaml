@@ -70,9 +70,7 @@ flutter:
   assets:
    - assets/images/thirvulogo.png
    - assets/images/login.svg
-   - assets/images/coin.png
-   
-
+   - assets/images/money.png
    
   #   - images/a_dot_ham.jpeg
 
