@@ -39,6 +39,7 @@ dependencies:
   curved_navigation_bar: ^1.0.2
   flutter_svg: ^1.0.3
   http: ^0.13.4
+  flutter_login: ^3.1.0
 
 dev_dependencies:
   flutter_test:
@@ -66,8 +67,7 @@ flutter:
   assets:
    - assets/images/thirvulogo.png
    - assets/images/login.svg
-   
-
+   - assets/images/money.png
    
   #   - images/a_dot_ham.jpeg
 
