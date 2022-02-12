@@ -13,43 +13,53 @@ class expensesCard extends StatefulWidget {
 class _expensesCardState extends State<expensesCard> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SingleChildScrollView(
-        child: Center(
-            child: Column(
-          children: [
+    return Container(
+      height: 150,
+      width: 600,
+      child: Scaffold(
+        body: ListView(
+          scrollDirection: Axis.horizontal,
+          children: const [
             Card(
-              color: Colors.blue.shade900,
-              child: Container(
-                height: 100,
-                width: 500,
-                child: Row(
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.all(10),
-                      child: MaterialButton(
-                        onPressed: () {},
-                        child: Text("Property",
-                            style: TextStyle(color: Colors.white)),
-                      ),
-                    ),
-                    SizedBox(
-                      width: 160,
-                    ),
-                    Padding(
-                      padding: EdgeInsets.zero,
-                      child: MaterialButton(
-                        onPressed: () {},
-                        child: Text("Portable",
-                            style: TextStyle(color: Colors.white)),
-                      ),
-                    ),
-                  ],
-                ),
+              child: ListTile(
+                title: Text("Property"),
               ),
             ),
+            Card(
+              child: ListTile(
+                title: Text("Protability"),
+              ),
+            ),
+            Card(
+              child: ListTile(
+                title: Text("Protability"),
+              ),
+            ),
+            Card(
+              child: ListTile(
+                title: Text("Protability"),
+              ),
+            ),
+            Card(
+              child: ListTile(
+                title: Text("Protability"),
+              ),
+            ),
+            Card(
+              child: ListTile(
+                title: Text("Protability"),
+              ),
+            ),
+            Card(
+              child: ListTile(
+                title: Text("Protability"),
+              ),
+            )
           ],
-        )),
+          shrinkWrap: true,
+          padding: EdgeInsets.all(10),
+          itemExtent: 100,
+        ),
       ),
     );
   }

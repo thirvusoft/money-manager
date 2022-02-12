@@ -11,58 +11,82 @@ class incomeCard extends StatefulWidget {
 
 // ignore: camel_case_types
 class _incomeCardState extends State<incomeCard> {
+  // List<String> images = [
+  //   "Property",
+  //   "Protable",
+  //   "Property",
+  //   "Protable",
+  //   "Property",
+  //   "Protable",
+  //   "Property",
+  //   "Protable",
+  //   "Property",
+  //   "Protable",
+  // ];
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SingleChildScrollView(
-        child: Center(
-            child: Column(
-          children: [
+    // return Column(
+    //   children: [
+    //     SizedBox(
+    //       height: 100,
+    //       child: ListView.builder(
+    //         itemCount: images.length,
+    //         scrollDirection: Axis.horizontal,
+    //         itemBuilder: (context, index) => Container(
+    //           height: 100,
+    //           width: 100,
+    //           margin: EdgeInsets.all(10),
+    //           child: Center(
+    //             child: Text(images[index]),
+    //           ),
+    //           color: Colors.,
+    //         ),
+    //       ),
+    //     ),
+    //   ],
+    // );
+    return Container(
+      height: 150,
+      width: 500,
+      child: Scaffold(
+        body: ListView(
+          scrollDirection: Axis.horizontal,
+          children: const [
             Card(
-              color: Colors.blue.shade900,
-              child: Container(
-                height: 100,
-                width: 500,
-                child: Row(
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.zero,
-                      child: MaterialButton(
-                        onPressed: () {},
-                        child: Text("Property",
-                            style: TextStyle(color: Colors.white)),
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.zero,
-                      child: MaterialButton(
-                        onPressed: () {},
-                        child: Text("Portable",
-                            style: TextStyle(color: Colors.white)),
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.zero,
-                      child: MaterialButton(
-                        onPressed: () {},
-                        child: Text("Portable",
-                            style: TextStyle(color: Colors.white)),
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.zero,
-                      child: MaterialButton(
-                        onPressed: () {},
-                        child: Text("Portable",
-                            style: TextStyle(color: Colors.white)),
-                      ),
-                    ),
-                  ],
-                ),
+              child: ListTile(
+                title: Text("Property"),
               ),
             ),
+            Card(
+              child: ListTile(
+                title: Text("Property"),
+              ),
+            ),
+            Card(
+              child: ListTile(
+                title: Text("Property"),
+              ),
+            ),
+            Card(
+              child: ListTile(
+                title: Text("Property"),
+              ),
+            ),
+            Card(
+              child: ListTile(
+                title: Text("Property"),
+              ),
+            ),
+            Card(
+              child: ListTile(
+                title: Text("Protability"),
+              ),
+            )
           ],
-        )),
+          shrinkWrap: true,
+          padding: EdgeInsets.all(10),
+          itemExtent: 100,
+        ),
       ),
     );
   }

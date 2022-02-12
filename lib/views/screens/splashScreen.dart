@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:money_manager/views/screens/landingScreen.dart';
 import 'package:money_manager/views/screens/loginScreen.dart';
 
 class splash_screen extends StatefulWidget {

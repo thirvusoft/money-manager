@@ -1,50 +1,35 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_login/flutter_login.dart';
+//import 'dashboard_screen.dart';
 import 'package:http/http.dart' as http;
-
+import 'dart:convert';
 import 'package:money_manager/widgets/curvedNavigation.dart';
-
-const users = const {
-  'dribbble@gmail.com': '12345',
-  'hunter@gmail.com': 'hunter',
-};
 
 class landing_screen extends StatelessWidget {
   Duration get loginTime => Duration(milliseconds: 2250);
-  Future<String?> _authUser(LoginData data) {
-    debugPrint('Name: ${data.name}, Password: ${data.password}');
-    return Future.delayed(loginTime).then((_) {
-      if (!users.containsKey(data.name)) {
-        return 'User not exists';
-      }
-      if (users[data.name] != data.password) {
-        return 'Password does not match';
-      }
-      return null;
-    });
-  }
 
   Future<String?> login(LoginData data) async {
-    print('function called');
     Uri url = Uri.parse(
-        "http://192.168.24.16:8002/api/method/money_management_backend.custom.py.api.login?mobile_no=8428849121&password=yourthirvu");
+        "http://192.168.24.16:8002/api/method/money_management_backend.custom.py.api.login?email=${data.name}&password=${data.password}");
     print('object');
-    // final response = await http.get(url);
-    // if (response.statusCode == 200 || response.statusCode == 400) {
-    //   var res = json.decode(response.body);
-    //   return (res['message']);
-    // } else {
-    return null;
-    // }
+    final response = await http.get(url);
+    if (response.statusCode == 200) {
+      var res = json.decode(response.body);
+      if (res['message'] == 'Logged In') {
+        return null;
+      }
+    }
+    if (response.statusCode == 300) {
+      var res = json.decode(response.body);
+      return res['message'];
+    } else {
+      return "Invalid Login Credentials";
+    }
   }
 
   Future<String> _recoverPassword(String name) async {
-    debugPrint('Name: $name');
     return Future.delayed(loginTime).then((_) {
-      if (!users.containsKey(name)) {
-        return 'User not exists';
-      }
-      return "test";
+      return "";
     });
   }
 

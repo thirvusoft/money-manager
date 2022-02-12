@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:money_manager/widgets/subCategoriesCard.dart';
 import 'views/screens/splashScreen.dart';
 
 void main() {
