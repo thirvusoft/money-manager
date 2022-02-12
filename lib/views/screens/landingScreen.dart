@@ -27,7 +27,12 @@ class _home_pageState extends State<home_page> {
   //   super.dispose();
   int activeIndex = 0;
 
-  final tabs = [assetsCard(), liabilityCard(), incomeCard(), expensesCard()];
+  final tabs = [
+    assetsCard(),
+    liabilityCard(),
+    incomeCard(),
+    expensesCard(),
+  ]; //[categoriesCard()];
 
   @override
   Widget build(BuildContext context) {

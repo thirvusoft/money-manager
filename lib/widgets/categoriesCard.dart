@@ -2,9 +2,9 @@
 
 import 'package:flutter/material.dart';
 import 'package:money_manager/views/categories/assets.dart';
-import 'package:money_manager/views/screens/landingScreen.dart';
-import 'package:money_manager/views/screens/loginScreen.dart';
-import 'package:money_manager/widgets/curvedNavigation.dart';
+import 'package:money_manager/views/categories/expenses.dart';
+import 'package:money_manager/views/categories/income.dart';
+import 'package:money_manager/views/categories/liability.dart';
 
 class categoriesCard extends StatefulWidget {
   const categoriesCard({Key? key}) : super(key: key);
@@ -17,10 +17,13 @@ class categoriesCard extends StatefulWidget {
 class _categoriesCardState extends State<categoriesCard> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: ListView(
+    return Container(
+      child: ListView(
         children: [
           for (int i = 0; i < 10; i++) assetsCard(),
+          liabilityCard(),
+          incomeCard(),
+          expensesCard(),
         ],
       ),
     );
