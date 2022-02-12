@@ -3,6 +3,7 @@ import 'package:flutter_login/flutter_login.dart';
 //import 'dashboard_screen.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:money_manager/widgets/curvedNavigation.dart';
 
 class landing_screen extends StatelessWidget {
@@ -14,7 +15,12 @@ class landing_screen extends StatelessWidget {
     print('object');
     final response = await http.get(url);
     if (response.statusCode == 200) {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      prefs.setString('email', 'useremail@gmail.com');
+      SharedPreferences preferences = await SharedPreferences.getInstance();
+      preferences.setString('password', '123456');
       var res = json.decode(response.body);
+
       if (res['message'] == 'Logged In') {
         return null;
       }
