@@ -1,6 +1,7 @@
 // ignore_for_file: deprecated_member_use
 
 import 'package:flutter/material.dart';
+import 'package:money_manager/widgets/subCategoriesCard.dart';
 
 class assetsCard extends StatefulWidget {
   const assetsCard({Key? key}) : super(key: key);
@@ -8,6 +9,11 @@ class assetsCard extends StatefulWidget {
   @override
   _assetsCardState createState() => _assetsCardState();
 }
+
+// int activeIndex = 0;
+// final tabs = [
+//   Leaf(),
+// ];
 
 // ignore: camel_case_types
 class _assetsCardState extends State<assetsCard> {
@@ -21,9 +27,7 @@ class _assetsCardState extends State<assetsCard> {
           scrollDirection: Axis.horizontal,
           children: const [
             Card(
-              child: ListTile(
-                title: Text("Property"),
-              ),
+              child: ListTile(title: Text("Property")),
             ),
             SizedBox(
               height: 19,
