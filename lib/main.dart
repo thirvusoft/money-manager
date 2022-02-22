@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 
-import 'package:money_manager/views/screens/landingScreen.dart';
-// import 'package:money_manager/test2.dart';
-// import 'package:money_manager/widgets/curvedNavigation.dart';
-// import 'package:money_manager/widgets/subCategoriesCard.dart';
-import 'package:money_manager/widgets/categoriesCard.dart';
-//import 'views/screens/splashScreen.dart';
-//import 'package:money_manager/test.dart';
+import 'package:money_manager/views/categories/assets.dart';
+import 'package:money_manager/views/categories/others.dart';
+import 'package:money_manager/widgets/curvedNavigation.dart';
+
+import 'views/categories/searchbar.dart';
 
 void main() {
   runApp(MyApp());
@@ -18,6 +16,6 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
         debugShowCheckedModeBanner: false,
         theme: new ThemeData(scaffoldBackgroundColor: const Color(0XFFFFFFFFF)),
-        home: home_page());
+        home: MainScreen());
   }
 }
