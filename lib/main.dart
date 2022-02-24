@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'views/screens/loginScreen.dart';
 
-import 'package:money_manager/views/screens/landingScreen.dart';
 // import 'package:money_manager/test2.dart';
 // import 'package:money_manager/widgets/curvedNavigation.dart';
 // import 'package:money_manager/widgets/subCategoriesCard.dart';
@@ -18,6 +18,6 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
         debugShowCheckedModeBanner: false,
         theme: new ThemeData(scaffoldBackgroundColor: const Color(0XFFFFFFFFF)),
-        home: home_page());
+        home: login_page());
   }
 }

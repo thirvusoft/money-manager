@@ -1,17 +1,16 @@
 import 'dart:html';
 import 'package:flutter/material.dart';
 import 'package:money_manager/views/screens/Animation/FadeAnimation.dart';
-import 'package:money_manager/views/screens/forgetpasswordscreen.dart';
+import 'package:money_manager/views/screens/loginScreen.dart';
 
-bool _securetext = true;
+class forget_password extends StatefulWidget {
+  const forget_password({Key? key}) : super(key: key);
 
-class login_page extends StatefulWidget {
-  login_page({Key? key}) : super(key: key);
   @override
-  State<login_page> createState() => _login_pageState();
+  _forget_passwordState createState() => _forget_passwordState();
 }
 
-class _login_pageState extends State<login_page> {
+class _forget_passwordState extends State<forget_password> {
   final formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
@@ -93,6 +92,7 @@ class _login_pageState extends State<login_page> {
                                   hintText: "Email",
                                 ),
                                 validator: (value) {
+                                  print(value);
                                   if (value!.trim().isEmpty ||
                                       !RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
                                           .hasMatch(value!)) {
@@ -103,36 +103,6 @@ class _login_pageState extends State<login_page> {
                                 },
                               ),
                             ),
-                            SizedBox(
-                              height: 30,
-                            ),
-                            FadeAnimation(
-                              1,
-                              TextFormField(
-                                decoration: InputDecoration(
-                                    border: InputBorder.none,
-                                    hintText: "Password",
-                                    suffixIcon: IconButton(
-                                      icon: Icon(_securetext
-                                          ? Icons.lock_clock_outlined
-                                          : Icons.lock_open),
-                                      onPressed: () {
-                                        setState(() {
-                                          _securetext = !_securetext;
-                                        });
-                                      },
-                                    )),
-                                validator: (value) {
-                                  if (value!.trim().isEmpty ||
-                                      !RegExp(r'.{8,}$').hasMatch(value!)) {
-                                    return "Invalid password";
-                                  } else {
-                                    return null;
-                                  }
-                                },
-                                obscureText: _securetext,
-                              ),
-                            )
                           ],
                         )),
                   ),
@@ -140,7 +110,7 @@ class _login_pageState extends State<login_page> {
                     height: 30,
                   ),
                   FadeAnimation(
-                      2,
+                      1.5,
                       Container(
                         height: 50,
                         decoration: BoxDecoration(
@@ -158,11 +128,12 @@ class _login_pageState extends State<login_page> {
                               if (formKey.currentState!.validate()) {
                                 ScaffoldMessenger.of(context).showSnackBar(
                                     SnackBar(
-                                        content: Text("Successfully login")));
+                                        content:
+                                            Text("Email send successfully")));
                               }
                             },
                             child: const Text(
-                              'LOGIN',
+                              'SUBMIT',
                               style: TextStyle(
                                   color: Colors.white,
                                   fontSize: 15,
@@ -176,7 +147,7 @@ class _login_pageState extends State<login_page> {
                     height: 70,
                   ),
                   FadeAnimation(
-                    2.5,
+                    2,
                     TextButton(
                       style: TextButton.styleFrom(
                         textStyle: const TextStyle(fontSize: 20),
@@ -184,12 +155,11 @@ class _login_pageState extends State<login_page> {
                       onPressed: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(
-                              builder: (context) => forget_password()),
+                          MaterialPageRoute(builder: (context) => login_page()),
                         );
                       },
                       child: const Text(
-                        'Forget Password ?',
+                        'Back to login',
                         style: TextStyle(
                             color: Color.fromRGBO(143, 148, 251, 1),
                             fontSize: 15,

@@ -44,7 +44,7 @@ dependencies:
   shared_preferences: ^2.0.13
   shared_preferences_web: ^2.0.3
   flappy_search_bar: ^1.7.2
-
+  simple_animations: ^2.4.2
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -72,7 +72,10 @@ flutter:
    - assets/images/thirvulogo.png
    - assets/images/login.svg
    - assets/images/money.png
-   
+   - assets/images/background.png
+   - assets/images/light-1.png
+   - assets/images/light-2.png
+
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
