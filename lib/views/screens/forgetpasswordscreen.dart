@@ -1,4 +1,3 @@
-import 'dart:html';
 import 'package:flutter/material.dart';
 import 'package:money_manager/views/screens/Animation/FadeAnimation.dart';
 import 'package:money_manager/views/screens/loginScreen.dart';
@@ -95,7 +94,7 @@ class _forget_passwordState extends State<forget_password> {
                                   print(value);
                                   if (value!.trim().isEmpty ||
                                       !RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
-                                          .hasMatch(value!)) {
+                                          .hasMatch(value)) {
                                     return "Invalid email";
                                   } else {
                                     return null;

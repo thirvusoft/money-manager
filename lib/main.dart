@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:money_manager/views/categories/sample.dart';
+import 'package:money_manager/views/screens/profile.dart';
 import 'views/screens/loginScreen.dart';
 
 // import 'package:money_manager/test2.dart';
@@ -18,6 +20,6 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
         debugShowCheckedModeBanner: false,
         theme: new ThemeData(scaffoldBackgroundColor: const Color(0XFFFFFFFFF)),
-        home: login_page());
+        home: ProfilePage());
   }
 }
