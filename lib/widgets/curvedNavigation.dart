@@ -1,46 +1,63 @@
 import 'package:flutter/material.dart';
+import 'package:money_manager/views/screens/searchbar.dart';
+import '../views/categories/assets.dart';
+import '../views/categories/liability.dart';
 
-import 'package:curved_navigation_bar/curved_navigation_bar.dart';
-import 'package:money_manager/views/screens/landingScreen.dart';
-
-import '../views/screens/settingsScreen.dart';
-
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key}) : super(key: key);
-
+class MainScreen extends StatefulWidget {
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+  _MainScreenState createState() => _MainScreenState();
 }
 
-Color color = Colors.blue.shade900;
-
-class _MyHomePageState extends State<MyHomePage> {
-  int activeIndex = 0;
-
-  final tabs = [
-    home_page(),
-    settings(),
+class _MainScreenState extends State<MainScreen> {
+  int _selectedIndex = 0;
+  List<Widget> _widgetOptions = <Widget>[
+    searchbar(),
+    searchbar(),
+    searchbar(),
+    searchbar(),
   ];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      bottomNavigationBar: CurvedNavigationBar(
-        animationCurve: Curves.linear,
+      backgroundColor: Colors.white,
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: _selectedIndex,
+        showSelectedLabels: false,
+        showUnselectedLabels: false,
         items: [
-          Icon(Icons.home),
-          Icon(Icons.settings),
+          BottomNavigationBarItem(
+            icon: Icon(
+              Icons.money,
+              color: Colors.blue.shade400,
+            ),
+            label: 'Money',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(
+              Icons.savings,
+              color: Colors.blue.shade400,
+            ),
+            label: 'Saving',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(
+              Icons.savings,
+              color: Colors.blue.shade400,
+            ),
+            label: 'Profile',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.savings, color: Colors.blue.shade400),
+            label: 'Profile',
+          ),
         ],
         onTap: (index) {
-          setState(
-            () {
-              {
-                activeIndex = index;
-              }
-            },
-          );
+          setState(() {
+            _selectedIndex = index;
+          });
         },
       ),
-      body: tabs[activeIndex],
+      body: _widgetOptions.elementAt(_selectedIndex),
     );
   }
 }
