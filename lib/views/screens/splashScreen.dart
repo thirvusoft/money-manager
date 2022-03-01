@@ -1,5 +1,6 @@
 // import 'package:flutter/material.dart';
 // import 'package:google_fonts/google_fonts.dart';
+// import 'package:money_manager/views/screens/landingScreen.dart';
 // import 'package:money_manager/views/screens/loginScreen.dart';
 
 // class splash_screen extends StatefulWidget {
@@ -19,7 +20,7 @@
 //   _navigatetohome() async {
 //     await Future.delayed(Duration(milliseconds: 3000), () {});
 //     Navigator.pushReplacement(
-//         context, MaterialPageRoute(builder: (Context) => login_page()));
+//         context, MaterialPageRoute(builder: (Context) => landing_screen()));
 //   }
 
 //   @override

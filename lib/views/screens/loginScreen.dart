@@ -1,7 +1,15 @@
-import 'dart:html';
+import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:money_manager/views/categories/assets.dart';
 import 'package:money_manager/views/screens/Animation/FadeAnimation.dart';
+import 'package:money_manager/views/screens/Settings/samplebutton.dart';
 import 'package:money_manager/views/screens/forgetpasswordscreen.dart';
+import 'package:http/http.dart' as http;
+import 'package:money_manager/views/screens/searchbar.dart';
+import 'package:money_manager/widgets/curvedNavigation.dart';
+import 'dart:convert';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_login/flutter_login.dart';
 
 bool _securetext = true;
 
@@ -13,6 +21,10 @@ class login_page extends StatefulWidget {
 
 class _login_pageState extends State<login_page> {
   final formKey = GlobalKey<FormState>();
+  var emailcontroller = TextEditingController();
+  var passwordcontroller = TextEditingController();
+
+  Object? get object => null;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -95,7 +107,7 @@ class _login_pageState extends State<login_page> {
                                 validator: (value) {
                                   if (value!.trim().isEmpty ||
                                       !RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
-                                          .hasMatch(value!)) {
+                                          .hasMatch(value)) {
                                     return "Invalid email";
                                   } else {
                                     return null;
@@ -109,6 +121,7 @@ class _login_pageState extends State<login_page> {
                             FadeAnimation(
                               1,
                               TextFormField(
+                                controller: passwordcontroller,
                                 decoration: InputDecoration(
                                     border: InputBorder.none,
                                     hintText: "Password",
@@ -124,7 +137,7 @@ class _login_pageState extends State<login_page> {
                                     )),
                                 validator: (value) {
                                   if (value!.trim().isEmpty ||
-                                      !RegExp(r'.{8,}$').hasMatch(value!)) {
+                                      !RegExp(r'.{8,}$').hasMatch(value)) {
                                     return "Invalid password";
                                   } else {
                                     return null;
@@ -155,6 +168,13 @@ class _login_pageState extends State<login_page> {
                               textStyle: const TextStyle(fontSize: 20),
                             ),
                             onPressed: () {
+                              print("login");
+                              login();
+                              // Navigator.push(
+                              //   context,
+                              //   MaterialPageRoute(
+                              //       builder: (context) => MainScreen()),
+                              // );
                               if (formKey.currentState!.validate()) {
                                 ScaffoldMessenger.of(context).showSnackBar(
                                     SnackBar(
@@ -205,5 +225,35 @@ class _login_pageState extends State<login_page> {
         ),
       ),
     );
+  }
+
+  //Future<String> login(LoginData data) async {
+  Future<void> login() async {
+    if (passwordcontroller.text.isNotEmpty && emailcontroller.text.isNotEmpty) {
+      var response = await http.post(
+          Uri.parse(
+              "http://192.168.24.101:8000/api/method/money_management_backend.custom.py.api.login?email=cgokul133@gmail.com&password=admin@123"),
+          body: ({
+            'email': emailcontroller.text,
+            'password': passwordcontroller.text,
+          }));
+      print(object);
+      if (response.statusCode == 200) {
+        print('email');
+        print('password');
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => MainScreen()),
+        );
+      } else {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text("Invalid")));
+        print("invalid");
+      }
+    } else {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text("Invalid field")));
+    }
+    //return completer.future;
   }
 }
