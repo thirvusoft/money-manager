@@ -5,8 +5,8 @@ import 'package:money_manager/views/screens/Animation/FadeAnimation.dart';
 import 'package:money_manager/views/screens/Settings/samplebutton.dart';
 import 'package:money_manager/views/screens/forgetpasswordscreen.dart';
 import 'package:http/http.dart' as http;
-import 'package:money_manager/views/screens/searchbar.dart';
 import 'package:money_manager/widgets/curvedNavigation.dart';
+import 'package:money_manager/widgets/searchBar.dart';
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_login/flutter_login.dart';
@@ -243,7 +243,7 @@ class _login_pageState extends State<login_page> {
         print('password');
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => MainScreen()),
+          MaterialPageRoute(builder: (context) => searchbar()),
         );
       } else {
         ScaffoldMessenger.of(context)

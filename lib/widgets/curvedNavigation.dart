@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:money_manager/views/screens/searchbar.dart';
+import 'package:money_manager/widgets/searchBar.dart';
+
 import '../views/categories/assets.dart';
 import '../views/categories/liability.dart';
 

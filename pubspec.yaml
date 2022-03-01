@@ -53,7 +53,6 @@ dependencies:
 
 
   flappy_search_bar: ^1.7.2
-  simple_animations: ^2.4.2
 dev_dependencies:
   flutter_test:
     sdk: flutter
