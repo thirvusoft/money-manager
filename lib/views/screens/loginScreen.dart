@@ -100,7 +100,6 @@ class _login_pageState extends State<login_page> {
                             FadeAnimation(
                               1,
                               TextFormField(
-                                controller: emailcontroller,
                                 decoration: InputDecoration(
                                   border: InputBorder.none,
                                   hintText: "Email",
@@ -176,6 +175,11 @@ class _login_pageState extends State<login_page> {
                               //   MaterialPageRoute(
                               //       builder: (context) => MainScreen()),
                               // );
+                              if (formKey.currentState!.validate()) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                        content: Text("Successfully login")));
+                              }
                             },
                             child: const Text(
                               'LOGIN',
