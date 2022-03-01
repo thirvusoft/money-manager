@@ -23,6 +23,8 @@ class _login_pageState extends State<login_page> {
   final formKey = GlobalKey<FormState>();
   var emailcontroller = TextEditingController();
   var passwordcontroller = TextEditingController();
+
+  Object? get object => null;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -221,66 +223,23 @@ class _login_pageState extends State<login_page> {
     );
   }
 
-  Duration get loginTime => Duration(milliseconds: 2250);
-
   //Future<String> login(LoginData data) async {
-  Future login() async {
-    // var completer = new Completer();
+  Future<void> login() async {
     if (passwordcontroller.text.isNotEmpty && emailcontroller.text.isNotEmpty) {
-//       Uri url = Uri.parse(
-//           "http://192.168.24.101:8000/api/method/money_management_backend.custom.py.api.login?email=cgokul133@gmail.com&password=admin@123");
-//       print('object');
-//       final response = await http.get(url);
-//       print(response.statusCode);
-//       print(response);
-//       if (response.statusCode == 200) {
-//         SharedPreferences prefs = await SharedPreferences.getInstance();
-//         prefs.setString('email', 'useremail@gmail.com');
-//         SharedPreferences preferences = await SharedPreferences.getInstance();
-//         preferences.setString('password', '123456');
-//         var res = json.decode(response.body);
-
-//         if (res['message'] == 'Logged In') {
-//           return null;
-//           // Navigator.push(
-//           //   context,
-//           //   MaterialPageRoute(builder: (context) => MainScreen()),
-//           // );
-//         }
-//       }
-//       if (response.statusCode == 300) {
-//         var res = json.decode(response.body);
-//         return res['message'];
-//       } else {
-//         return "invalid";
-//       }
-//       return null;
-//     }
-
-//     Future<String> _recoverPassword(String name) async {
-//       return Future.delayed(loginTime).then((_) {
-//         return "";
-//       });
-//     }
-//   }
-// }
-
-      var response = await http.get(
+      var response = await http.post(
           Uri.parse(
               "http://192.168.24.101:8000/api/method/money_management_backend.custom.py.api.login?email=cgokul133@gmail.com&password=admin@123"),
-          headers: ({
+          body: ({
             'email': emailcontroller.text,
             'password': passwordcontroller.text,
-            // "Access-Control-Allow-Origin": "*",
-            // "Accept": "application/json"
-            //     "Access-Control-Allow-Methods"
           }));
+      print(object);
       if (response.statusCode == 200) {
         print('email');
         print('password');
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => navigation()),
+          MaterialPageRoute(builder: (context) => MainScreen()),
         );
       } else {
         ScaffoldMessenger.of(context)
@@ -294,38 +253,3 @@ class _login_pageState extends State<login_page> {
     //return completer.future;
   }
 }
-
-
-
-    //  Uri url = Uri.parse(
-    //       "http://192.168.24.101:8000/api/method/money_management_backend.custom.py.api.login?email=cgokul133@gmail.com&password=admin@123");
-    //   print('object');
-    //   final response = await http.get(url);
-    //   print(response.statusCode);
-    //   print(response);
-    //   if (response.statusCode == 200) {
-    //     // SharedPreferences prefs = await SharedPreferences.getInstance();
-    //     // prefs.setString('email', 'useremail@gmail.com');
-    //     // SharedPreferences preferences = await SharedPreferences.getInstance();
-    //     // preferences.setString('password', '123456');
-    //     // var res = json.decode(response.body);
-
-    //     if (res['message'] == 'Logged In') {
-    //       return null;
-    //     }
-    //   }
-    //   if (response.statusCode == 300) {
-    //     var res = json.decode(response.body);
-    //     return res['message'];
-    //   } else {
-    //     //return "Invalid Login Credentials";
-    //   }
-    //   return null;
-    // }
-
-    // Future<String> _recoverPassword(String name) async {
-    //   return Future.delayed(loginTime).then((_) {
-    //     return "";
-    //   });
-    // }
-

@@ -22,7 +22,7 @@ class _AssetState extends State<Asset> {
   final formKey = GlobalKey<FormState>();
 
   List mycard = [
-    Mycard(PixIcon.fa_medal, '', false),
+    Mycard(PixIcon.fa_medal, 'kk', false),
     Mycard(PixIcon.maintenance, '', false),
     Mycard(PixIcon.fa_book, '', false),
     Mycard(Icons.people_outline, '', false),
