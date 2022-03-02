@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:seach_option/sample.dart';
+
 import 'package:seach_option/search.dart';
-import 'package:seach_option/data.dart';
+
+import 'package:seach_option/splash_screen.dart';
 // import 'package:seach_option/icon.dart';
 
 void main() {
@@ -29,7 +30,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       debugShowCheckedModeBanner: false,
-      home: searchbar(),
+      home: splash_screen(),
     );
   }
 }
