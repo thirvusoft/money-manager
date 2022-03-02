@@ -23,167 +23,170 @@ class _forget_passwordState extends State<forget_password> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      body: Container(
-        child: Column(
-          children: [
-            Container(
-              height: 400,
-              decoration: const BoxDecoration(
-                  image: DecorationImage(
-                      image: AssetImage('assets/images/background.png'),
-                      fit: BoxFit.fill)),
-              child: Stack(
-                children: [
-                  Positioned(
-                      left: 30,
-                      width: 80,
-                      height: 200,
-                      child: Container(
-                        decoration: const BoxDecoration(
-                            image: DecorationImage(
-                                image:
-                                    AssetImage('assets/images/light-1.png'))),
-                      )),
-                  Positioned(
-                      left: 130,
-                      width: 80,
-                      height: 150,
-                      child: Container(
-                        decoration: const BoxDecoration(
-                            image: DecorationImage(
-                                image:
-                                    AssetImage('assets/images/light-2.png'))),
-                      )),
-                  FadeAnimation(
-                      0.5,
-                      Positioned(
-                          child: Container(
-                        margin: const EdgeInsets.only(top: 50),
-                        child: const Center(
-                          child: Text(
-                            "FORGET PASSWORD",
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 30,
-                                fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                      )))
-                ],
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(30.0),
-              child: Column(
-                children: [
-                  Container(
-                    padding: const EdgeInsets.all(5),
-                    decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(10),
-                        boxShadow: [
-                          const BoxShadow(
-                              color: Color.fromRGBO(143, 148, 251, .3),
-                              blurRadius: 40.0,
-                              offset: Offset(0, 20)),
-                        ]),
-                    child: Form(
-                        key: formKey,
-                        child: Column(
-                          children: [
-                            FadeAnimation(
-                              1,
-                              TextFormField(
-                                controller: emailcontroller,
-                                decoration: const InputDecoration(
-                                  border: InputBorder.none,
-                                  hintText: "Email",
-                                ),
-                                validator: (value) {
-                                  print(value);
-                                  if (value!.trim().isEmpty ||
-                                      !RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
-                                          .hasMatch(value)) {
-                                    return "Invalid email";
-                                  } else {
-                                    return null;
-                                  }
-                                },
-                              ),
-                            ),
-                          ],
+      body: SingleChildScrollView(
+        child: Container(
+          child: Column(
+            children: [
+              Container(
+                height: 400,
+                decoration: const BoxDecoration(
+                    image: DecorationImage(
+                        image: AssetImage('assets/images/background.png'),
+                        fit: BoxFit.fill)),
+                child: Stack(
+                  children: [
+                    Positioned(
+                        left: 30,
+                        width: 80,
+                        height: 200,
+                        child: Container(
+                          decoration: const BoxDecoration(
+                              image: DecorationImage(
+                                  image:
+                                      AssetImage('assets/images/light-1.png'))),
                         )),
-                  ),
-                  const SizedBox(
-                    height: 30,
-                  ),
-                  FadeAnimation(
-                      1.5,
-                      Container(
-                        height: 50,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            gradient: const LinearGradient(colors: [
-                              Color.fromRGBO(143, 148, 251, 1),
-                              Color.fromRGBO(143, 148, 251, .6),
-                            ])),
-                        child: Center(
-                          child: TextButton(
-                            style: TextButton.styleFrom(
-                              textStyle: const TextStyle(fontSize: 20),
-                            ),
-                            onPressed: () {
-                              print("login");
-                              // reset_password();
-                              login();
-
-                              if (formKey.currentState!.validate()) {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                        content:
-                                            Text("Email send successfully")));
-                              }
-                            },
-                            child: const Text(
-                              'SUBMIT',
+                    Positioned(
+                        left: 130,
+                        width: 80,
+                        height: 150,
+                        child: Container(
+                          decoration: const BoxDecoration(
+                              image: DecorationImage(
+                                  image:
+                                      AssetImage('assets/images/light-2.png'))),
+                        )),
+                    FadeAnimation(
+                        0.5,
+                        Positioned(
+                            child: Container(
+                          margin: const EdgeInsets.only(top: 50),
+                          child: const Center(
+                            child: Text(
+                              "FORGET PASSWORD",
                               style: TextStyle(
                                   color: Colors.white,
-                                  fontSize: 15,
-                                  fontFamily: "Roboto",
+                                  fontSize: 30,
                                   fontWeight: FontWeight.bold),
                             ),
                           ),
+                        )))
+                  ],
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(30.0),
+                child: Column(
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.all(5),
+                      decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(10),
+                          boxShadow: [
+                            const BoxShadow(
+                                color: Color.fromRGBO(143, 148, 251, .3),
+                                blurRadius: 40.0,
+                                offset: Offset(0, 20)),
+                          ]),
+                      child: Form(
+                          key: formKey,
+                          child: Column(
+                            children: [
+                              FadeAnimation(
+                                1,
+                                TextFormField(
+                                  controller: emailcontroller,
+                                  decoration: const InputDecoration(
+                                    border: InputBorder.none,
+                                    hintText: "Email",
+                                  ),
+                                  validator: (value) {
+                                    print(value);
+                                    if (value!.trim().isEmpty ||
+                                        !RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+                                            .hasMatch(value)) {
+                                      return "Invalid email";
+                                    } else {
+                                      return null;
+                                    }
+                                  },
+                                ),
+                              ),
+                            ],
+                          )),
+                    ),
+                    const SizedBox(
+                      height: 30,
+                    ),
+                    FadeAnimation(
+                        1.5,
+                        Container(
+                          height: 50,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              gradient: const LinearGradient(colors: [
+                                Color.fromRGBO(143, 148, 251, 1),
+                                Color.fromRGBO(143, 148, 251, .6),
+                              ])),
+                          child: Center(
+                            child: TextButton(
+                              style: TextButton.styleFrom(
+                                textStyle: const TextStyle(fontSize: 20),
+                              ),
+                              onPressed: () {
+                                print("login");
+                                // reset_password();
+                                login();
+
+                                if (formKey.currentState!.validate()) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                          content:
+                                              Text("Email send successfully")));
+                                }
+                              },
+                              child: const Text(
+                                'SUBMIT',
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 15,
+                                    fontFamily: "Roboto",
+                                    fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                          ),
+                        )),
+                    const SizedBox(
+                      height: 70,
+                    ),
+                    FadeAnimation(
+                      2,
+                      TextButton(
+                        style: TextButton.styleFrom(
+                          textStyle: const TextStyle(fontSize: 20),
                         ),
-                      )),
-                  const SizedBox(
-                    height: 70,
-                  ),
-                  FadeAnimation(
-                    2,
-                    TextButton(
-                      style: TextButton.styleFrom(
-                        textStyle: const TextStyle(fontSize: 20),
-                      ),
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => login_page()),
-                        );
-                      },
-                      child: const Text(
-                        'Back to login',
-                        style: TextStyle(
-                            color: Color.fromRGBO(143, 148, 251, 1),
-                            fontSize: 15,
-                            fontFamily: "Roboto",
-                            fontWeight: FontWeight.bold),
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => login_page()),
+                          );
+                        },
+                        child: const Text(
+                          'Back to login',
+                          style: TextStyle(
+                              color: Color.fromRGBO(143, 148, 251, 1),
+                              fontSize: 15,
+                              fontFamily: "Roboto",
+                              fontWeight: FontWeight.bold),
+                        ),
                       ),
                     ),
-                  ),
-                ],
-              ),
-            )
-          ],
+                  ],
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );

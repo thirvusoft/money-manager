@@ -53,6 +53,7 @@ dependencies:
 
 
   flappy_search_bar: ^1.7.2
+  animated_text_kit: ^4.2.1
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -83,6 +84,7 @@ flutter:
    - assets/images/background.png
    - assets/images/light-1.png
    - assets/images/light-2.png
+   - assets/images/Icon.webp
 
   #   - images/a_dot_ham.jpeg
 
