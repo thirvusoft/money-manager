@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:money_manager/widgets/searchBar.dart';
-
 import '../views/categories/assets.dart';
 import '../views/categories/liability.dart';
+import '../views/screens/search.dart';
 
 class MainScreen extends StatefulWidget {
   @override
