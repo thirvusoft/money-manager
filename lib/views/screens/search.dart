@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../widgets/submitapi.dart';
+
 class searchbar extends StatefulWidget {
   const searchbar({Key? key}) : super(key: key);
 
@@ -95,8 +97,15 @@ class _searchbarState extends State<searchbar> {
                   child: Row(
                     children: [
                       CircleAvatar(
-                        child: Icon(IconData(icon_name[index][1],
-                            fontFamily: 'MaterialIcons')),
+                        // child: IconButton(
+                        //     onPressed: () {}, icon: Icon(IconData(icon_name[index][1],fontFamily: 'MaterialIcons')),
+
+                        child: IconButton(
+                            onPressed: () {
+                              _show(context);
+                            },
+                            icon: Icon(IconData(icon_name[index][1],
+                                fontFamily: 'MaterialIcons'))),
                       ),
                       SizedBox(
                         width: 25,
@@ -110,4 +119,87 @@ class _searchbarState extends State<searchbar> {
               }),
     );
   }
+}
+
+void _show(BuildContext ctx) {
+  showModalBottomSheet(
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.all(Radius.circular(10.0)),
+    ),
+    isScrollControlled: true,
+    elevation: 5,
+    context: ctx,
+    builder: (ctx) => Padding(
+      padding: EdgeInsets.only(
+          top: 15,
+          left: 15,
+          right: 15,
+          bottom: MediaQuery.of(ctx).viewInsets.bottom + 15),
+      child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            TextField(
+              keyboardType: TextInputType.datetime,
+              decoration: InputDecoration(labelText: 'Date'),
+            ),
+            TextField(
+              keyboardType: TextInputType.text,
+              decoration: InputDecoration(labelText: 'Image'),
+            ),
+            TextField(
+              keyboardType: TextInputType.text,
+              decoration: InputDecoration(labelText: 'Notes'),
+            ),
+            TextField(
+              keyboardType: TextInputType.text,
+              decoration: InputDecoration(labelText: 'Notes'),
+            ),
+            SizedBox(
+              height: 15,
+            ),
+            RaisedButton(
+                color: Colors.blue,
+                child: Text("Submit"),
+                onPressed: () {
+                  submit();
+                })
+            // text: 'SUBMIT',
+            // color: Color.fromARGB(255, 197, 105, 14),
+            // pressEvent: () {
+            //   AwesomeDialog(
+            //     context: ctx,
+            //     dialogType: DialogType.SUCCES,
+
+            //     //headerAnimationLoop: false,
+            //     // animType: AnimType.TOPSLIDE,
+            //     // showCloseIcon: true,
+            //     // closeIcon: Icon(Icons.close_fullscreen_outlined),
+            //     title: 'Submit Successfully',
+            //     btnOkOnPress: () {
+            //       Navigator.pop(ctx);
+            //     },
+            //   )..show();
+
+            //       Navigator.pop(ctx);
+            //     })
+            // AnimatedButton(
+            //   text: 'SUBMIT',
+            //   color: Colors.blue,
+            //   onPressed: () {
+            //     // ignore: missing_required_param
+            //     AwesomeDialog(
+            //       dialogType: DialogType.WARNING,
+            //       headerAnimationLoop: false,
+            //       animType: AnimType.TOPSLIDE,
+            //       showCloseIcon: true,
+            //       closeIcon: Icon(Icons.close_fullscreen_outlined),
+            //       title: 'SUBMIT',
+            //       desc: 'Dialog description here',
+            //       btnCancelOnPress: () {},
+            //       btnOkOnPress: () {},
+            //     )..show();
+          ]),
+    ),
+  );
 }
