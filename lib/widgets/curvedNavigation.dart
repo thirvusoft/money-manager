@@ -9,6 +9,7 @@ import 'package:money_manager/views/screens/search.dart';
 
 import '../views/categories/assets.dart';
 import '../views/categories/liability.dart';
+import '../views/screens/search.dart';
 
 class MainScreen extends StatefulWidget {
   @override

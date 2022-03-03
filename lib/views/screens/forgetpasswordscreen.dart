@@ -6,7 +6,6 @@ import 'package:money_manager/views/screens/Animation/FadeAnimation.dart';
 import 'package:money_manager/views/screens/loginScreen.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
-import 'dart:html';
 
 class forget_password extends StatefulWidget {
   const forget_password({Key? key}) : super(key: key);
