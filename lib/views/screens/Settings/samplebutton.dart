@@ -24,7 +24,7 @@ class _navigationState extends State<navigation> {
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => Asset()),
+                MaterialPageRoute(builder: (context) => customAsset()),
               );
             },
           ),
@@ -34,7 +34,7 @@ class _navigationState extends State<navigation> {
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => Liability()),
+                MaterialPageRoute(builder: (context) => customLiability()),
               );
             },
           ),
@@ -44,7 +44,7 @@ class _navigationState extends State<navigation> {
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => Income()),
+                MaterialPageRoute(builder: (context) => customIncome()),
               );
             },
           ),
@@ -54,7 +54,7 @@ class _navigationState extends State<navigation> {
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => Expense()),
+                MaterialPageRoute(builder: (context) => customExpense()),
               );
             },
           ),
@@ -64,7 +64,7 @@ class _navigationState extends State<navigation> {
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => Others()),
+                MaterialPageRoute(builder: (context) => customOthers()),
               );
             },
           ),

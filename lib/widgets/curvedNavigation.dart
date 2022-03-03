@@ -20,12 +20,12 @@ class _MainScreenState extends State<MainScreen> {
   int _selectedIndex = 0;
   List<Widget> _widgetOptions = <Widget>[
     searchbar(),
-    Asset(),
-    Expense(),
-    Income(),
-    Liability(),
+    customAsset(),
+    customExpense(),
+    customIncome(),
+    customLiability(),
+    customOthers(),
     ProfilePageDesign(),
-    Others(),
   ];
   @override
   Widget build(BuildContext context) {
@@ -66,12 +66,12 @@ class _MainScreenState extends State<MainScreen> {
             label: 'Liability',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.person_add, color: Colors.blue.shade400),
-            label: 'Person',
-          ),
-          BottomNavigationBarItem(
             icon: Icon(Icons.plus_one_outlined, color: Colors.blue.shade400),
             label: 'Others',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person, color: Colors.blue.shade400),
+            label: 'profile',
           ),
         ],
         onTap: (index) {
