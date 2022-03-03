@@ -236,11 +236,7 @@ class _login_pageState extends State<login_page> {
 
       var response = await http.post(Uri.parse(
           "http://192.168.24.101:8000/api/method/money_management_backend.custom.py.api.login?email=${email}&password=${password}"));
-      // body:
-      // ({
-      //   'email': emailcontroller.text,
-      //   'password': passwordcontroller.text,
-      // });
+
       print(response);
       if (response.statusCode == 200) {
         print(response.statusCode);
@@ -248,13 +244,17 @@ class _login_pageState extends State<login_page> {
         print(password);
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => searchbar()),
+          MaterialPageRoute(builder: (context) => MainScreen()),
         );
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text("Successfully login")));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text("Successfully login"),
+          backgroundColor: Colors.green,
+        ));
       } else {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text("Invalid")));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text("Invalid"),
+          backgroundColor: Colors.red,
+        ));
         print("invalid");
       }
     } else {
