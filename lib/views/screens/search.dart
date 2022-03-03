@@ -91,7 +91,6 @@ class _searchbarState extends State<searchbar> {
                   ? icon_nameOnSearch.length
                   : icon_name.length,
               itemBuilder: (context, index) {
-                print(icon_name[index][1]);
                 return Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Row(
