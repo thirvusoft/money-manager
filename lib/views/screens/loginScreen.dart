@@ -25,6 +25,10 @@ class _login_pageState extends State<login_page> {
   var passwordcontroller = TextEditingController();
 
   Object? get object => null;
+
+  get getemail => null;
+
+  get setemail => null;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
