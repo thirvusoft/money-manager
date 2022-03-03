@@ -2,11 +2,11 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_login/flutter_login.dart';
 import 'package:money_manager/views/screens/Animation/FadeAnimation.dart';
 import 'package:money_manager/views/screens/loginScreen.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
-import 'dart:html';
 
 class forget_password extends StatefulWidget {
   const forget_password({Key? key}) : super(key: key);
@@ -134,16 +134,8 @@ class _forget_passwordState extends State<forget_password> {
                                 textStyle: const TextStyle(fontSize: 20),
                               ),
                               onPressed: () {
-                                print("login");
-                                // reset_password();
-                                login();
-
-                                if (formKey.currentState!.validate()) {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(
-                                          content:
-                                              Text("Email send successfully")));
-                                }
+                               
+                                reset(emailcontroller.text);
                               },
                               child: const Text(
                                 'SUBMIT',
@@ -192,34 +184,26 @@ class _forget_passwordState extends State<forget_password> {
     );
   }
 
-  Future<void> login() async {
-    if (emailcontroller.text.isNotEmpty) {
-      var response = await http.post(
+  Future<void> reset(email) async {
+    {
+      var response = await http.get(
           Uri.parse(
-              "http://192.168.24.101:8000/api/method/frappe.core.doctype.user.user.reset_password?user=cgokul133@gmail.com"),
-          body: ({
-            'email': emailcontroller.text,
-            // 'password': passwordcontroller.text,
-          }));
-      //print(object);
-      print(response);
+"http://192.168.24.101:8000/api/method/frappe.core.doctype.user.user.reset_password?user=${email}"));          
+
       if (response.statusCode == 200) {
-        //print(response);
-        print('email');
-        //  print('password');
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => login_page()),
-        );
+       Navigator.push(
+             context,
+             MaterialPageRoute(
+             builder: (context) => login_page()),
+               );
+                ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text("Email send successfully"),
+            backgroundColor: Colors.red,));
       } else {
         ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text("not ")));
-        print("invalid");
+            .showSnackBar(SnackBar(content: Text("Invalid email"),
+            backgroundColor: Colors.red,));
       }
-    } else {
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text("Invalid field")));
+    } 
     }
-    //return completer.future;
   }
-}

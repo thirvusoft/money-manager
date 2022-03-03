@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:money_manager/views/screens/profile.dart';
 import 'package:money_manager/widgets/searchBar.dart';
 
 import '../views/categories/assets.dart';
@@ -16,6 +17,7 @@ class _MainScreenState extends State<MainScreen> {
     searchbar(),
     searchbar(),
     searchbar(),
+    ProfilePageDesign()
   ];
   @override
   Widget build(BuildContext context) {

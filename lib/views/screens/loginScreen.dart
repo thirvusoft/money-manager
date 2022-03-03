@@ -25,6 +25,10 @@ class _login_pageState extends State<login_page> {
   var passwordcontroller = TextEditingController();
 
   Object? get object => null;
+
+  get getemail => null;
+
+  get setemail => null;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -101,6 +105,7 @@ class _login_pageState extends State<login_page> {
                               FadeAnimation(
                                 1,
                                 TextFormField(
+                                  controller: emailcontroller,
                                   decoration: InputDecoration(
                                     border: InputBorder.none,
                                     hintText: "Email",
@@ -131,8 +136,8 @@ class _login_pageState extends State<login_page> {
                                             ? Icons.lock_clock_outlined
                                             : Icons.lock_open),
                                         onPressed: () {
-                                          setState(() {
-                                            _securetext = !_securetext;
+                                          setState(() {                                           
+                                            _securetext = !_securetext;                                          
                                           });
                                         },
                                       )),
@@ -169,18 +174,7 @@ class _login_pageState extends State<login_page> {
                                 textStyle: const TextStyle(fontSize: 20),
                               ),
                               onPressed: () {
-                                print("login");
-                                login();
-                                // Navigator.push(
-                                //   context,
-                                //   MaterialPageRoute(
-                                //       builder: (context) => MainScreen()),
-                                // );
-                                if (formKey.currentState!.validate()) {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(
-                                          content: Text("Successfully login")));
-                                }
+                                login(emailcontroller.text,passwordcontroller.text);
                               },
                               child: const Text(
                                 'LOGIN',
@@ -229,33 +223,33 @@ class _login_pageState extends State<login_page> {
     );
   }
 
-  //Future<String> login(LoginData data) async {
-  Future<void> login() async {
-    if (passwordcontroller.text.isNotEmpty && emailcontroller.text.isNotEmpty) {
-      var response = await http.post(
+
+  Future<void> login(email,password) async {
+ 
+    var emailcontroller = TextEditingController();
+  var passwordcontroller = TextEditingController();
+    {
+      var response = await http.get(
           Uri.parse(
-              "http://192.168.24.101:8000/api/method/money_management_backend.custom.py.api.login?email=cgokul133@gmail.com&password=admin@123"),
-          body: ({
-            'email': emailcontroller.text,
-            'password': passwordcontroller.text,
-          }));
-      print(object);
+"http://192.168.24.101:8000/api/method/money_management_backend.custom.py.api.login?email=${email}&password=${password}"));          
+
       if (response.statusCode == 200) {
-        print('email');
-        print('password');
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => searchbar()),
-        );
+        var MySharedPreferences;
+        MySharedPreferences.instance
+        .setStringValue("email" , setemail);
+
+       Navigator.push(
+             context,
+             MaterialPageRoute(
+             builder: (context) => MainScreen()),
+               );
+                ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text("sucess")));
       } else {
         ScaffoldMessenger.of(context)
             .showSnackBar(SnackBar(content: Text("Invalid")));
         print("invalid");
       }
-    } else {
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text("Invalid field")));
+    } 
     }
-    //return completer.future;
   }
-}
