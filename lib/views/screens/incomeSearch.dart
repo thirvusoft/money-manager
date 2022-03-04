@@ -1,27 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
-class searchbar extends StatefulWidget {
-  const searchbar({Key? key}) : super(key: key);
+class incomeSearch extends StatefulWidget {
+  const incomeSearch({Key? key}) : super(key: key);
 
   @override
-  _searchbarState createState() => _searchbarState();
+  _incomeSearchState createState() => _incomeSearchState();
 }
 
-class _searchbarState extends State<searchbar> {
+class _incomeSearchState extends State<incomeSearch> {
   TextEditingController _textEditingController = TextEditingController();
   List icon_nameOnSearch = [];
   List icon_name = [
-    ['Gold', 987727],
-    ['Silver', 987727],
-    ['Platinum', 987727],
-    ['Diamond', 0xf05e7],
-    ['Vehicles', 0xee62],
-    ['Home Appliance', 0xf447],
-    ['Machinery', 0xef06],
-    ['Agri Land', 987215],
-    ['Comm Land', 0xf42b],
-    ['Residential Land', 98633],
+    ['Salary', 61505],
+    ['Asset Sale', 0xf2ee],
+    ['Scrap Sale', 989624],
+    ['Rental', 0xf244],
+    ['Refunds', 0xf2d6],
+    ['Coupons', 0xf3f6],
+    ['Lottery', 0xf3e8],
+    ['Dividends', 0xf0617],
+    ['Business profit', 0xee35],
   ];
 
   var data;

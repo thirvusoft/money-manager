@@ -1,27 +1,39 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
-class searchbar extends StatefulWidget {
-  const searchbar({Key? key}) : super(key: key);
+class expenseSearch extends StatefulWidget {
+  const expenseSearch({Key? key}) : super(key: key);
 
   @override
-  _searchbarState createState() => _searchbarState();
+  _expenseSearchState createState() => _expenseSearchState();
 }
 
-class _searchbarState extends State<searchbar> {
+class _expenseSearchState extends State<expenseSearch> {
   TextEditingController _textEditingController = TextEditingController();
   List icon_nameOnSearch = [];
   List icon_name = [
-    ['Gold', 987727],
-    ['Silver', 987727],
-    ['Platinum', 987727],
-    ['Diamond', 0xf05e7],
-    ['Vehicles', 0xee62],
-    ['Home Appliance', 0xf447],
-    ['Machinery', 0xef06],
-    ['Agri Land', 987215],
-    ['Comm Land', 0xf42b],
-    ['Residential Land', 98633],
+    ['Food', 0xf2e9],
+    ['Travel', 0xf172],
+    ['Grocery', 0xf37d],
+    ['Entertainment', 0xf3cf],
+    ['Shopping', 0xf37f],
+    ['Clothing', 984383],
+    ['Insurance', 0xf05f0],
+    ['Tax', 0xf24e],
+    ['Gas', 0xf076],
+    ['Electricity', 0xf016],
+    ['Telephone', 0xf28c],
+    ['Mobile Recharge', 0xf28d],
+    ['Health', 0xf0f2],
+    ['Beauty', 0xf041],
+    ['Electronics', 0xef0d],
+    ['Gift', 986692],
+    ['Education', 0xf33c],
+    ['Maintenance', 0xf108],
+    ['Social service', 0xf06a4],
+    ['Construction', 0xf109],
+    ['Crop', 0xf041],
+    ['Fertilizer', 0xf068b],
   ];
 
   var data;
