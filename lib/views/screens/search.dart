@@ -10,14 +10,17 @@ class searchbar extends StatefulWidget {
 }
 
 class _searchbarState extends State<searchbar> {
-  TextEditingController _textEditingController = TextEditingController();
+  TextEditingController textEditingController = TextEditingController();
   List icon_nameOnSearch = [];
   List icon_name = [
-    ['Home Appliances', 58759],
+    [
+      'Home Appliances',
+    ],
     ['Machinery', 61190],
-    ['Agri Land', 987215],
-    ['Commercial Land', 62507],
-    ['Residential Land', 98633],
+    ['Agri Land', 0xf106d],
+    ['Commercial Land', 0xef0b],
+    ['Residential Land', 0xf19c1],
+    ['money', 0xf37f]
   ];
 
   var data;
@@ -44,7 +47,7 @@ class _searchbarState extends State<searchbar> {
                 }
               });
             },
-            controller: _textEditingController,
+            controller: textEditingController,
             decoration: InputDecoration(
               suffixIcon: IconButton(
                 icon: Icon(Icons.search_off_outlined),
@@ -59,7 +62,7 @@ class _searchbarState extends State<searchbar> {
           ),
         ),
       ),
-      body: _textEditingController!.text.isNotEmpty && icon_name.length == 0
+      body: textEditingController.text.isNotEmpty && icon_name.length == 0
           ? Center(
               child: Padding(
                 padding: const EdgeInsets.all(18.0),
@@ -86,8 +89,8 @@ class _searchbarState extends State<searchbar> {
             )
           : GridView.builder(
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 5, childAspectRatio: 3, crossAxisSpacing: 12),
-              itemCount: _textEditingController!.text.isNotEmpty
+                  crossAxisCount: 2, childAspectRatio: 3, crossAxisSpacing: 12),
+              itemCount: textEditingController.text.isNotEmpty
                   ? icon_nameOnSearch.length
                   : icon_name.length,
               itemBuilder: (context, index) {
@@ -109,7 +112,7 @@ class _searchbarState extends State<searchbar> {
                       SizedBox(
                         width: 25,
                       ),
-                      Text(_textEditingController!.text.isNotEmpty
+                      Text(textEditingController.text.isNotEmpty
                           ? icon_nameOnSearch[index][0]
                           : icon_name[index][0]),
                     ],
@@ -138,6 +141,7 @@ void _show(BuildContext ctx) {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            // ignore: prefer_const_constructors
             TextField(
               keyboardType: TextInputType.datetime,
               decoration: InputDecoration(labelText: 'Date'),
