@@ -41,53 +41,31 @@ class ProfilePage extends StatelessWidget {
             Text(
               "Vadivelu",
             ),
+            Divider(),
             SizedBox(
               height: 16,
             ),
-
             Text("glenmargon@gmail.com"),
             SizedBox(
               height: 16,
             ),
-            TextButton(
-              style: TextButton.styleFrom(
-                textStyle: const TextStyle(fontSize: 16),
-              ),
-              onPressed: () {},
-              child: const Text(
+            Divider(),
+            SizedBox(
+              height: 16,
+            ),
+            FlatButton(
+              padding: EdgeInsets.only(top: 15, left: 15, right: 15),
+              child: Text(
                 'Logout',
-                textAlign: TextAlign.right,
+                style: TextStyle(fontSize: 20.0),
               ),
+              color: Color.fromARGB(255, 93, 99, 216),
+              textColor: Colors.white,
+              onPressed: () {},
             ),
             SizedBox(
               height: 4,
             ),
-            // Text("New York, USA"),
-            // SizedBox(
-            //   height: 16,
-            // ),
-            // Text(
-            //   "Language",
-            //   style: _style(),
-            // ),
-            // SizedBox(
-            //   height: 4,
-            // ),
-            // Text("English, French"),
-            // SizedBox(
-            //   height: 16,
-            // ),
-            // Text(
-            //   "Occupation",
-            //   style: _style(),
-            // ),
-            // SizedBox(
-            //   height: 4,
-            // ),
-            // Text("Employee"),
-            // SizedBox(
-            //   height: 16,
-            // ),
           ],
         ),
       ),
@@ -105,7 +83,7 @@ class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
       child: Container(
         padding: EdgeInsets.only(top: 4),
         decoration:
-            BoxDecoration(color: Color.fromARGB(96, 78, 88, 236), boxShadow: [
+            BoxDecoration(color: Color.fromARGB(255, 93, 99, 216), boxShadow: [
           BoxShadow(
               color: Color.fromARGB(255, 233, 231, 230),
               blurRadius: 20,
@@ -164,46 +142,4 @@ class MyClipper extends CustomClipper<Path> {
   bool shouldReclip(CustomClipper<Path> oldClipper) {
     return true;
   }
-  // BuildContext context;
-  // ApiService apiService;
-  // SharedPreferences sharedPreferences;
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   apiService = ApiService();
-  //   fetchUser();
-  // }
-  // Future<List<Profile>> fetchUser() async {
-  //   sharedPreferences = await SharedPreferences.getInstance();
-  //   int id = sharedPreferences.getInt("id");
-  //   final response = await client.get('$baseUrl/user/$id');
-  //   if (response.statusCode == 200) {
-  //     return userFromJson(response.body);
-  //   } else
-  //     return null;
-  // }
-  // @override
-  // Widget build(BuildContext context) {
-  //   this.context = context;
-  //   return SafeArea(
-  //     child: FutureBuilder(
-  //       future: fetchUser(),
-  //       builder: (BuildContext context, AsyncSnapshot<List<Profile>> snapshot) {
-  //         if (snapshot.hasError) {
-  //           return Center(
-  //             child: Text(
-  //                 "Something wrong with message: ${snapshot.error.toString()}"),
-  //           );
-  //         } else if (snapshot.connectionState == ConnectionState.done) {
-  //           User user = snapshot.data;
-  //           return _buildListView(user);
-  //         } else {
-  //           return Center(
-  //             child: CircularProgressIndicator(),
-  //           );
-  //         }
-  //       },
-  //     ),
-  //   );
-  // }
 }

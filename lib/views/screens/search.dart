@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 
 import '../../widgets/submitapi.dart';
 
@@ -13,6 +14,7 @@ class _searchbarState extends State<searchbar> {
   TextEditingController textEditingController = TextEditingController();
   List icon_nameOnSearch = [];
   List icon_name = [
+<<<<<<< HEAD
     [
       'Home Appliances',
     ],
@@ -21,6 +23,18 @@ class _searchbarState extends State<searchbar> {
     ['Commercial Land', 0xef0b],
     ['Residential Land', 0xf19c1],
     ['money', 0xf37f]
+=======
+    ['Gold', 987727],
+    ['Silver', 987727],
+    ['Platinum', 987727],
+    ['Diamond', 0xf05e7],
+    ['Vehicles', 0xee62],
+    ['Home Appliance', 0xf447],
+    ['Machinery', 0xef06],
+    ['Agri Land', 987215],
+    ['Comm Land', 0xf42b],
+    ['Residential Land', 98633],
+>>>>>>> deaccda462085423687eb78c84c6ba9a64de6a5d
   ];
 
   var data;
@@ -29,9 +43,10 @@ class _searchbarState extends State<searchbar> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Color.fromARGB(255, 93, 99, 216),
         title: Container(
           decoration: BoxDecoration(
-              color: Colors.blue.shade200,
+              color: Color.fromARGB(255, 255, 255, 255),
               borderRadius: BorderRadius.circular(10)),
           child: TextField(
             onChanged: (value) {
@@ -42,49 +57,63 @@ class _searchbarState extends State<searchbar> {
                   data = icon_name[i][0];
                   if (data.toLowerCase().contains(value.trim().toLowerCase())) {
                     icon_nameOnSearch.add(icon_name[i]);
-                    print(icon_nameOnSearch);
                   }
                 }
               });
             },
             controller: textEditingController,
             decoration: InputDecoration(
-              suffixIcon: IconButton(
-                icon: Icon(Icons.search_off_outlined),
-                onPressed: () {},
-              ),
               border: InputBorder.none,
               errorBorder: InputBorder.none,
               focusedBorder: InputBorder.none,
               contentPadding: EdgeInsets.all(15),
-              hintText: "search",
+              hintText: "Search",
             ),
           ),
         ),
       ),
+<<<<<<< HEAD
       body: textEditingController.text.isNotEmpty && icon_name.length == 0
           ? Center(
               child: Padding(
                 padding: const EdgeInsets.all(18.0),
                 child: Column(
+=======
+      body: Container(
+        child: GridView.builder(
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2, childAspectRatio: 3, crossAxisSpacing: 12),
+            itemCount: _textEditingController!.text.isNotEmpty
+                ? icon_nameOnSearch.length
+                : icon_name.length,
+            itemBuilder: (context, index) {
+              return Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+>>>>>>> deaccda462085423687eb78c84c6ba9a64de6a5d
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
+                    CircleAvatar(
+                      backgroundColor: Color.fromARGB(255, 93, 99, 216),
                       child: Icon(
-                        Icons.search_off,
-                        size: 160,
+                        IconData(icon_name[index][1],
+                            fontFamily: 'MaterialIcons'),
+                        color: Color.fromARGB(255, 255, 255, 255),
                       ),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text(
-                        'No results found,\nPlease try different keyword',
+                    SizedBox(
+                      width: 25,
+                    ),
+                    Text(
+                        _textEditingController!.text.isNotEmpty
+                            ? icon_nameOnSearch[index][0]
+                            : icon_name[index][0],
                         style: TextStyle(
-                            fontSize: 30, fontWeight: FontWeight.w600),
-                      ),
-                    ),
+                            color: Colors.black,
+                            fontSize: 15,
+                            letterSpacing: .7)),
                   ],
                 ),
+<<<<<<< HEAD
               ),
             )
           : GridView.builder(
@@ -119,6 +148,11 @@ class _searchbarState extends State<searchbar> {
                   ),
                 );
               }),
+=======
+              );
+            }),
+      ),
+>>>>>>> deaccda462085423687eb78c84c6ba9a64de6a5d
     );
   }
 }
