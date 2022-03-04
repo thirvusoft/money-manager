@@ -4,11 +4,15 @@ import 'package:money_manager/views/screens/Settings/Expense.dart';
 import 'package:money_manager/views/screens/Settings/Income.dart';
 import 'package:money_manager/views/screens/Settings/liability.dart';
 import 'package:money_manager/views/screens/Settings/Others.dart';
+import 'package:money_manager/views/screens/incomeSearch.dart';
+import 'package:money_manager/views/screens/liabilitySearch.dart';
+import 'package:money_manager/views/screens/othersSearch.dart';
 import 'package:money_manager/views/screens/profile.dart';
 import 'package:money_manager/views/screens/search.dart';
 
 import '../views/categories/assets.dart';
 import '../views/categories/liability.dart';
+import '../views/screens/expensesSearch.dart';
 import '../views/screens/search.dart';
 
 class MainScreen extends StatefulWidget {
@@ -20,11 +24,10 @@ class _MainScreenState extends State<MainScreen> {
   int _selectedIndex = 0;
   List<Widget> _widgetOptions = <Widget>[
     searchbar(),
-    customAsset(),
-    customExpense(),
-    customIncome(),
-    customLiability(),
-    customOthers(),
+    liabilitySearch(),
+    expenseSearch(),
+    incomeSearch(),
+    othersSearch(),
     ProfilePageDesign(),
   ];
   @override

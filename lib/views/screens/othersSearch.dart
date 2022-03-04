@@ -1,27 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
-class searchbar extends StatefulWidget {
-  const searchbar({Key? key}) : super(key: key);
+class othersSearch extends StatefulWidget {
+  const othersSearch({Key? key}) : super(key: key);
 
   @override
-  _searchbarState createState() => _searchbarState();
+  _othersSearchState createState() => _othersSearchState();
 }
 
-class _searchbarState extends State<searchbar> {
+class _othersSearchState extends State<othersSearch> {
   TextEditingController _textEditingController = TextEditingController();
   List icon_nameOnSearch = [];
   List icon_name = [
-    ['Gold', 987727],
-    ['Silver', 987727],
-    ['Platinum', 987727],
-    ['Diamond', 0xf05e7],
-    ['Vehicles', 0xee62],
-    ['Home Appliance', 0xf447],
-    ['Machinery', 0xef06],
-    ['Agri Land', 987215],
-    ['Comm Land', 0xf42b],
-    ['Residential Land', 98633],
+    ['Invitation', 0xf12f],
+    ['Visiting Card', 0xef8f],
+    ['Profile', 0xee35],
   ];
 
   var data;
