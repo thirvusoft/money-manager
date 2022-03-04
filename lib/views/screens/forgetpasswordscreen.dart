@@ -134,7 +134,6 @@ class _forget_passwordState extends State<forget_password> {
                                 textStyle: const TextStyle(fontSize: 20),
                               ),
                               onPressed: () {
-                               
                                 reset(emailcontroller.text);
                               },
                               child: const Text(
@@ -186,24 +185,24 @@ class _forget_passwordState extends State<forget_password> {
 
   Future<void> reset(email) async {
     {
-      var response = await http.get(
-          Uri.parse(
-"http://192.168.24.101:8000/api/method/frappe.core.doctype.user.user.reset_password?user=${email}"));          
+      var response = await http.get(Uri.parse(
+          "http://192.168.24.101:8000/api/method/frappe.core.doctype.user.user.reset_password?user=${email}"));
 
       if (response.statusCode == 200) {
-       Navigator.push(
-             context,
-             MaterialPageRoute(
-             builder: (context) => login_page()),
-               );
-                ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text("Email send successfully"),
-            backgroundColor: Colors.red,));
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => login_page()),
+        );
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text("Email send successfully"),
+          backgroundColor: Colors.green,
+        ));
       } else {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text("Invalid email"),
-            backgroundColor: Colors.red,));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text("Invalid email"),
+          backgroundColor: Colors.red,
+        ));
       }
-    } 
     }
   }
+}
