@@ -9,6 +9,7 @@ import 'package:money_manager/views/screens/search.dart';
 
 import '../views/categories/assets.dart';
 import '../views/categories/liability.dart';
+import '../views/screens/search.dart';
 
 class MainScreen extends StatefulWidget {
   @override
@@ -19,11 +20,12 @@ class _MainScreenState extends State<MainScreen> {
   int _selectedIndex = 0;
   List<Widget> _widgetOptions = <Widget>[
     searchbar(),
-    Expense(),
-    Income(),
-    Liability(),
-    Others(),
-    ProfilePageDesign()
+    customAsset(),
+    customExpense(),
+    customIncome(),
+    customLiability(),
+    customOthers(),
+    ProfilePageDesign(),
   ];
   @override
   Widget build(BuildContext context) {
@@ -67,6 +69,10 @@ class _MainScreenState extends State<MainScreen> {
             icon:
                 Icon(Icons.person_add, color: Color.fromARGB(255, 93, 99, 216)),
             label: 'Profile',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person, color: Colors.blue.shade400),
+            label: 'profile',
           ),
         ],
         onTap: (index) {
