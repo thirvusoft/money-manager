@@ -34,7 +34,7 @@ class _splash_screenState extends State<splash_screen> {
   }
 
   _navigatetohome() async {
-    await Future.delayed(Duration(milliseconds: 1750), () {});
+    await Future.delayed(Duration(milliseconds: 2250), () {});
     Navigator.pushReplacement(
         context, MaterialPageRoute(builder: (Context) => login_page()));
   }
@@ -43,7 +43,7 @@ class _splash_screenState extends State<splash_screen> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      backgroundColor: Colors.blueAccent,
+      backgroundColor: Color.fromARGB(255, 93, 99, 216),
       body: SingleChildScrollView(
         child: Center(
           child: Column(
@@ -52,24 +52,11 @@ class _splash_screenState extends State<splash_screen> {
               // FadeAnimation(
               //   2,
               Container(
-                // width: 200.0,
-                // height: 200.0,
-                // decoration: BoxDecoration(
-                //   borderRadius: BorderRadius.all(Radius.circular(8.0)),
-                //   color: Colors.white,
-                // ),
-
-                //   //borderRadius: BorderRadius.circular(20),
-                //   child: ClipRRect(
-                //     borderRadius: BorderRadius.all(Radius.circular(8.0)),
                 child: Image.asset(
                   'assets/images/Icon.webp',
                   width: 200,
                   height: 300,
                 ),
-
-                //   ),
-                // )),
               ),
               FadeAnimation(
                 .5,
