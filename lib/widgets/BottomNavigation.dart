@@ -19,17 +19,15 @@ class _MainScreenState extends State<MainScreen> {
   int _selectedIndex = 0;
   List<Widget> _widgetOptions = <Widget>[
     searchbar(),
-    Asset(),
     Expense(),
     Income(),
     Liability(),
-    ProfilePageDesign(),
     Others(),
+    ProfilePageDesign()
   ];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _selectedIndex,
         showSelectedLabels: false,
@@ -38,39 +36,37 @@ class _MainScreenState extends State<MainScreen> {
           BottomNavigationBarItem(
             icon: Icon(
               Icons.home_work,
-              color: Colors.blue.shade400,
+              color: Color.fromARGB(255, 93, 99, 216),
             ),
-            label: 'Home',
+            label: 'Asset',
           ),
           BottomNavigationBarItem(
             icon: Icon(
               Icons.assessment_outlined,
-              color: Colors.blue.shade400,
-            ),
-            label: 'Assest',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.savings,
-              color: Colors.blue.shade400,
+              color: Color.fromARGB(255, 93, 99, 216),
             ),
             label: 'Expense',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.money, color: Colors.blue.shade400),
+            icon: Icon(
+              Icons.savings,
+              color: Color.fromARGB(255, 93, 99, 216),
+            ),
             label: 'Income',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.money_off_csred, color: Colors.blue.shade400),
+            icon: Icon(Icons.money, color: Color.fromARGB(255, 93, 99, 216)),
             label: 'Liability',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.person_add, color: Colors.blue.shade400),
-            label: 'Person',
+            icon: Icon(Icons.plus_one_outlined,
+                color: Color.fromARGB(255, 93, 99, 216)),
+            label: 'Others',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.plus_one_outlined, color: Colors.blue.shade400),
-            label: 'Others',
+            icon:
+                Icon(Icons.person_add, color: Color.fromARGB(255, 93, 99, 216)),
+            label: 'Profile',
           ),
         ],
         onTap: (index) {

@@ -175,7 +175,7 @@ class _forget_passwordState extends State<forget_password> {
                         child: const Text(
                           'Back to login',
                           style: TextStyle(
-                              color: Color.fromRGBO(143, 148, 251, 1),
+                              color: Color.fromARGB(255, 93, 99, 216),
                               fontSize: 15,
                               fontFamily: "Roboto",
                               fontWeight: FontWeight.bold),

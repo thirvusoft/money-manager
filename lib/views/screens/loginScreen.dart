@@ -2,15 +2,14 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:money_manager/views/categories/assets.dart';
 import 'package:money_manager/views/screens/Animation/FadeAnimation.dart';
-import 'package:money_manager/views/screens/Settings/samplebutton.dart';
 import 'package:money_manager/views/screens/forgetpasswordscreen.dart';
 import 'package:http/http.dart' as http;
 import 'package:money_manager/views/screens/search.dart';
-import 'package:money_manager/widgets/curvedNavigation.dart';
-
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_login/flutter_login.dart';
+
+import '../../widgets/BottomNavigation.dart';
 
 bool _securetext = true;
 
@@ -213,7 +212,7 @@ class _login_pageState extends State<login_page> {
                         child: const Text(
                           'Forget Password ?',
                           style: TextStyle(
-                              color: Color.fromRGBO(143, 148, 251, 1),
+                              color: Color.fromARGB(255, 93, 99, 216),
                               fontSize: 15,
                               fontFamily: "Roboto",
                               fontWeight: FontWeight.bold),
