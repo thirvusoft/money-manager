@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:money_manager/views/categories/assets.dart';
+
 import 'package:money_manager/views/screens/Animation/FadeAnimation.dart';
 import 'package:money_manager/views/screens/forgetpasswordscreen.dart';
 import 'package:http/http.dart' as http;
@@ -227,29 +227,6 @@ class _login_pageState extends State<login_page> {
                       SizedBox(
                         height: 70,
                       ),
-                      FadeAnimation(
-                        2.5,
-                        TextButton(
-                          style: TextButton.styleFrom(
-                            textStyle: const TextStyle(fontSize: 20),
-                          ),
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => forget_password()),
-                            );
-                          },
-                          child: const Text(
-                            'Forget Password ?',
-                            style: TextStyle(
-                                color: Color.fromARGB(255, 93, 99, 216),
-                                fontSize: 15,
-                                fontFamily: "Roboto",
-                                fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                      )
                     ],
                   ),
                 )
@@ -268,9 +245,9 @@ class _login_pageState extends State<login_page> {
 
       print(response);
       if (response.statusCode == 200) {
-        print(response.statusCode);
-        print(email);
-        print(password);
+        // print(response.statusCode);
+        // print(email);
+        // print(password);
         Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => MainScreen()),

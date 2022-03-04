@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'dart:math' as math;
 
+import 'package:money_manager/views/screens/loginScreen.dart';
+import 'package:money_manager/views/screens/splash_screen.dart';
+
 class ProfilePageDesign extends StatefulWidget {
   @override
   _ProfilePageDesignState createState() => _ProfilePageDesignState();
@@ -54,14 +57,18 @@ class ProfilePage extends StatelessWidget {
               height: 16,
             ),
             FlatButton(
-              padding: EdgeInsets.only(top: 15, left: 15, right: 15),
               child: Text(
                 'Logout',
                 style: TextStyle(fontSize: 20.0),
               ),
               color: Color.fromARGB(255, 93, 99, 216),
               textColor: Colors.white,
-              onPressed: () {},
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => splash_screen()),
+                );
+              },
             ),
             SizedBox(
               height: 4,
@@ -89,35 +96,6 @@ class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
               blurRadius: 20,
               offset: Offset(0, 0))
         ]),
-        child: Column(
-          children: <Widget>[
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: <Widget>[
-                Column(
-                  children: <Widget>[
-                    Container(
-                      width: 100,
-                      height: 200,
-                      decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          image: DecorationImage(
-                              fit: BoxFit.cover,
-                              image: AssetImage("assets/images/profile.jpg"))),
-                    ),
-                    SizedBox(
-                      height: 16,
-                    ),
-                    Text(
-                      "Milan Short",
-                      style: TextStyle(color: Colors.white, fontSize: 20),
-                    )
-                  ],
-                ),
-              ],
-            ),
-          ],
-        ),
       ),
     );
   }

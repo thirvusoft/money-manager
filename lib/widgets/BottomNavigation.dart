@@ -1,17 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:money_manager/views/screens/Settings/Asset.dart';
-import 'package:money_manager/views/screens/Settings/Expense.dart';
-import 'package:money_manager/views/screens/Settings/Income.dart';
-import 'package:money_manager/views/screens/Settings/liability.dart';
-import 'package:money_manager/views/screens/Settings/Others.dart';
 import 'package:money_manager/views/screens/incomeSearch.dart';
 import 'package:money_manager/views/screens/liabilitySearch.dart';
 import 'package:money_manager/views/screens/othersSearch.dart';
 import 'package:money_manager/views/screens/profile.dart';
 import 'package:money_manager/views/screens/search.dart';
-
-import '../views/categories/assets.dart';
-import '../views/categories/liability.dart';
 import '../views/screens/expensesSearch.dart';
 import '../views/screens/search.dart';
 
@@ -50,7 +42,7 @@ class _MainScreenState extends State<MainScreen> {
               Icons.assessment_outlined,
               color: Color.fromARGB(255, 93, 99, 216),
             ),
-            label: 'Expense',
+            label: 'Liability',
           ),
           BottomNavigationBarItem(
             icon: Icon(
@@ -61,7 +53,7 @@ class _MainScreenState extends State<MainScreen> {
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.money, color: Color.fromARGB(255, 93, 99, 216)),
-            label: 'Liability',
+            label: 'Expense',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.plus_one_outlined,
@@ -72,10 +64,6 @@ class _MainScreenState extends State<MainScreen> {
             icon:
                 Icon(Icons.person_add, color: Color.fromARGB(255, 93, 99, 216)),
             label: 'Profile',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person, color: Colors.blue.shade400),
-            label: 'profile',
           ),
         ],
         onTap: (index) {
