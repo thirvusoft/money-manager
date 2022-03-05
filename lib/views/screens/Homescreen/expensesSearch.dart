@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:money_manager/views/screens/Settings/Expense.dart';
+
+import '../Categories/Expense.dart';
 
 class expenseSearch extends StatefulWidget {
   const expenseSearch({Key? key}) : super(key: key);
