@@ -1,7 +1,8 @@
 import 'dart:async';
-
+import 'dart:convert';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 import 'package:money_manager/views/screens/Homescreen/expensesSearch.dart';
 import 'package:money_manager/views/screens/Homescreen/incomeSearch.dart';
 import 'package:money_manager/views/screens/Homescreen/liabilitySearch.dart';
@@ -9,6 +10,7 @@ import 'package:money_manager/views/screens/Homescreen/othersSearch.dart';
 import 'package:money_manager/views/screens/Homescreen/search.dart';
 import 'package:money_manager/views/screens/profile.dart';
 import 'package:rounded_loading_button/rounded_loading_button.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() => runApp(MainScreen());
 
@@ -90,6 +92,9 @@ class _MainScreenState extends State<MainScreen> {
         onTap: (index) {
           setState(() {
             selectedpage = index;
+            if (selectedpage == 5) {
+              profile();
+            }
             controller:
             _btnController; // changing selected page as per bar index selected by the user
             _doSomething();
@@ -97,5 +102,18 @@ class _MainScreenState extends State<MainScreen> {
         },
       ),
     );
+  }
+}
+
+Future profile() async {
+  print('profile');
+  var response = await http.post(Uri.parse(
+      "http://192.168.46.158:8002/api/method/money_management_backend.custom.py.api.profile?email=barathpalanisamy2002@gmail.com"));
+  print('response');
+  if (response.statusCode == 200) {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString("mobile_number",
+        json.decode(response.body)['message']['mobile_number']);
+    print(prefs.getString("mobile_number"));
   }
 }
