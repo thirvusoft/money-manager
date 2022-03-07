@@ -192,6 +192,16 @@ emailcontroller.text,
           content: Text("Email Send successful"),
           backgroundColor: Colors.green,
         ));
+      } else if (response.statusCode == 403) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(" Access Denied."),
+          backgroundColor: Colors.red,
+        ));
+      } else if (response.statusCode == 503) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text("service unavailable"),
+          backgroundColor: Colors.red,
+        ));
       } else {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text("Invalid"),
