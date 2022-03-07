@@ -15,7 +15,7 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
-  int selectedpage = 0; //initial value
+  int selectedpage = 0;
   final _pageOptions = [
     searchbar(),
     liabilitySearch(),
@@ -23,7 +23,7 @@ class _MainScreenState extends State<MainScreen> {
     incomeSearch(),
     othersSearch(),
     ProfilePage(),
-  ]; // listing of all 3 pages index wise
+  ];
   final bgcolor = [
     Colors.grey,
     Colors.grey,
@@ -31,48 +31,39 @@ class _MainScreenState extends State<MainScreen> {
     Colors.grey,
     Colors.grey,
     Colors.grey,
-  ]; // changing color as per active index value
+  ];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: _pageOptions[
-          selectedpage], // initial value is 0 so HomePage will be shown linearToEaseOut
+      body: _pageOptions[selectedpage],
       bottomNavigationBar: CurvedNavigationBar(
         height: 50,
         buttonBackgroundColor: Colors.white,
         backgroundColor: bgcolor[selectedpage],
         color: Colors.white,
         animationCurve: Curves.fastOutSlowIn,
-        items: const <Widget>[
+        items: <Widget>[
           Icon(
             Icons.home_work,
             size: 30,
-            semanticLabel: 'Asset',
-
-            // color: Colors.black,
             color: Color.fromARGB(255, 93, 99, 216),
           ),
           Icon(
-            Icons.assessment_outlined, semanticLabel: 'Liability',
+            Icons.assessment_outlined,
             size: 30,
-            // color: Colors.black,
             color: Color.fromARGB(255, 93, 99, 216),
           ),
           Icon(
             Icons.savings,
-            semanticLabel: 'Income',
             size: 30,
-            // color: Colors.black,
             color: Color.fromARGB(255, 93, 99, 216),
           ),
           Icon(
             Icons.money,
-            semanticLabel: 'Expense',
             color: Color.fromARGB(255, 93, 99, 216),
           ),
           Icon(
             Icons.plus_one_outlined,
-            semanticLabel: 'Others',
             color: Color.fromARGB(255, 93, 99, 216),
           ),
           Icon(
@@ -82,8 +73,7 @@ class _MainScreenState extends State<MainScreen> {
         ],
         onTap: (index) {
           setState(() {
-            selectedpage =
-                index; // changing selected page as per bar index selected by the user
+            selectedpage = index;
           });
         },
       ),
