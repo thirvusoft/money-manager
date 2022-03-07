@@ -226,8 +226,9 @@ class _login_pageState extends State<login_page> {
       print('email');
 
       var response = await http.post(Uri.parse(
-          "http://192.168.24.34:8000/api/method/money_management_backend.custom.py.api.login?email=${email}&password=${password}"));
+          "http://192.168.24.101:8000/api/method/money_management_backend.custom.py.api.login?email=${email}&password=${password}"));
 
+      print(response);
       if (response.statusCode == 200) {
         Navigator.push(
           context,
@@ -243,9 +244,6 @@ class _login_pageState extends State<login_page> {
           backgroundColor: Colors.red,
         ));
       }
-    } else {
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text("No empty")));
     }
   }
 }
