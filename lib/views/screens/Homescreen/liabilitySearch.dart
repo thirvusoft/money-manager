@@ -60,7 +60,7 @@ class _liabilitySearchState extends State<liabilitySearch> {
         body: GridView.builder(
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2, childAspectRatio: 3, crossAxisSpacing: 12),
-            itemCount: _textEditingController!.text.isNotEmpty
+            itemCount: _textEditingController.text.isNotEmpty
                 ? icon_nameOnSearch.length
                 : icon_name.length,
             itemBuilder: (context, index) {
@@ -84,7 +84,7 @@ class _liabilitySearchState extends State<liabilitySearch> {
                       width: 25,
                     ),
                     Text(
-                        _textEditingController!.text.isNotEmpty
+                        _textEditingController.text.isNotEmpty
                             ? icon_nameOnSearch[index][0]
                             : icon_name[index][0],
                         style: TextStyle(
