@@ -22,7 +22,7 @@ class _MainScreenState extends State<MainScreen> {
     expenseSearch(),
     incomeSearch(),
     othersSearch(),
-    ProfilePageDesign(),
+    ProfilePage(),
   ]; // listing of all 3 pages index wise
   final bgcolor = [
     Colors.grey,
@@ -43,31 +43,36 @@ class _MainScreenState extends State<MainScreen> {
         backgroundColor: bgcolor[selectedpage],
         color: Colors.white,
         animationCurve: Curves.fastOutSlowIn,
-        items: <Widget>[
+        items: const <Widget>[
           Icon(
             Icons.home_work,
             size: 30,
+            semanticLabel: 'Asset',
+
             // color: Colors.black,
             color: Color.fromARGB(255, 93, 99, 216),
           ),
           Icon(
-            Icons.assessment_outlined,
+            Icons.assessment_outlined, semanticLabel: 'Liability',
             size: 30,
             // color: Colors.black,
             color: Color.fromARGB(255, 93, 99, 216),
           ),
           Icon(
             Icons.savings,
+            semanticLabel: 'Income',
             size: 30,
             // color: Colors.black,
             color: Color.fromARGB(255, 93, 99, 216),
           ),
           Icon(
             Icons.money,
+            semanticLabel: 'Expense',
             color: Color.fromARGB(255, 93, 99, 216),
           ),
           Icon(
             Icons.plus_one_outlined,
+            semanticLabel: 'Others',
             color: Color.fromARGB(255, 93, 99, 216),
           ),
           Icon(

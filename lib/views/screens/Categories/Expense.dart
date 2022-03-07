@@ -12,11 +12,11 @@ class _customExpenseState extends State<customExpense> {
   TextEditingController _textEditingController = TextEditingController();
   List icon_nameOnSearch = [];
   List icon_name = [
-    ['Lock', 61847],
-    ['Machinery', 61190],
-    ['Agri Land', 987215],
-    ['Comm Land', 62507],
-    ['Residential', 98633],
+    ['', 61847],
+    ['', 61190],
+    ['', 987215],
+    ['', 62507],
+    ['', 98633],
   ];
 
   var data;
@@ -24,6 +24,10 @@ class _customExpenseState extends State<customExpense> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Color.fromARGB(255, 93, 99, 216),
+        title: Text('Expense Customise Icons'),
+      ),
       body: GridView.builder(
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 2, childAspectRatio: 3, crossAxisSpacing: 12),
@@ -31,14 +35,15 @@ class _customExpenseState extends State<customExpense> {
               ? icon_nameOnSearch.length
               : icon_name.length,
           itemBuilder: (context, index) {
-            print(icon_name[index][1]);
             return Padding(
               padding: const EdgeInsets.all(8.0),
               child: Row(
                 children: [
                   CircleAvatar(
+                    radius: 58,
                     backgroundColor: Color.fromARGB(255, 93, 99, 216),
                     child: IconButton(
+                        iconSize: 30.0,
                         onPressed: () {
                           _show(context);
                         },
@@ -50,14 +55,14 @@ class _customExpenseState extends State<customExpense> {
                   SizedBox(
                     width: 25,
                   ),
-                  Text(
-                      _textEditingController!.text.isNotEmpty
-                          ? icon_nameOnSearch[index][0]
-                          : icon_name[index][0],
-                      style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 15,
-                          letterSpacing: .7)),
+                  // Text(
+                  //     _textEditingController!.text.isNotEmpty
+                  //         ? icon_nameOnSearch[index][0]
+                  //         : icon_name[index][0],
+                  //     style: TextStyle(
+                  //         color: Colors.black,
+                  //         fontSize: 15,
+                  //         letterSpacing: .7)),
                 ],
               ),
             );
