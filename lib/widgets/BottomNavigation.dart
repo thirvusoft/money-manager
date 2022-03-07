@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:money_manager/views/screens/Homescreen/expensesSearch.dart';
@@ -6,6 +8,7 @@ import 'package:money_manager/views/screens/Homescreen/liabilitySearch.dart';
 import 'package:money_manager/views/screens/Homescreen/othersSearch.dart';
 import 'package:money_manager/views/screens/Homescreen/search.dart';
 import 'package:money_manager/views/screens/profile.dart';
+import 'package:rounded_loading_button/rounded_loading_button.dart';
 
 void main() => runApp(MainScreen());
 
@@ -16,6 +19,14 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   int selectedpage = 0;
+  final RoundedLoadingButtonController _btnController =
+      RoundedLoadingButtonController();
+  void _doSomething() async {
+    Timer(Duration(seconds: 3), () {
+      _btnController.success();
+    });
+  }
+
   final _pageOptions = [
     searchbar(),
     liabilitySearch(),
@@ -31,6 +42,12 @@ class _MainScreenState extends State<MainScreen> {
     Colors.grey,
     Colors.grey,
     Colors.grey,
+    Color.fromARGB(255, 93, 99, 216),
+    Color.fromARGB(255, 93, 99, 216),
+    Color.fromARGB(255, 93, 99, 216),
+    Color.fromARGB(255, 93, 99, 216),
+    Color.fromARGB(255, 93, 99, 216),
+    Color.fromARGB(255, 93, 99, 216),
   ];
   @override
   Widget build(BuildContext context) {
@@ -46,10 +63,12 @@ class _MainScreenState extends State<MainScreen> {
           Icon(
             Icons.home_work,
             size: 30,
+            semanticLabel: 'Asset',
             color: Color.fromARGB(255, 93, 99, 216),
           ),
           Icon(
             Icons.assessment_outlined,
+            semanticLabel: 'Liability',
             size: 30,
             color: Color.fromARGB(255, 93, 99, 216),
           ),
@@ -74,91 +93,12 @@ class _MainScreenState extends State<MainScreen> {
         onTap: (index) {
           setState(() {
             selectedpage = index;
+            controller:
+            _btnController; // changing selected page as per bar index selected by the user
+            _doSomething();
           });
         },
       ),
     );
   }
 }
-
-
-
-
-
-// import 'package:flutter/material.dart';
-// import 'package:money_manager/views/screens/profile.dart';
-// import '../views/screens/Homescreen/expensesSearch.dart';
-// import '../views/screens/Homescreen/incomeSearch.dart';
-// import '../views/screens/Homescreen/liabilitySearch.dart';
-// import '../views/screens/Homescreen/othersSearch.dart';
-// import '../views/screens/Homescreen/search.dart';
-
-// class MainScreen extends StatefulWidget {
-//   @override
-//   _MainScreenState createState() => _MainScreenState();
-// }
-
-// class _MainScreenState extends State<MainScreen> {
-//   int _selectedIndex = 0;
-//   List<Widget> _widgetOptions = <Widget>[
-//     searchbar(),
-//     liabilitySearch(),
-//     expenseSearch(),
-//     incomeSearch(),
-//     othersSearch(),
-//     ProfilePageDesign(),
-//   ];
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       bottomNavigationBar: BottomNavigationBar(
-//         currentIndex: _selectedIndex,
-//         showSelectedLabels: false,
-//         showUnselectedLabels: false,
-//         items: const [
-//           BottomNavigationBarItem(
-//             icon: Icon(
-//               Icons.home_work,
-//               color: Color.fromARGB(255, 93, 99, 216),
-//             ),
-//             label: 'Asset',
-//           ),
-//           BottomNavigationBarItem(
-//             icon: Icon(
-//               Icons.assessment_outlined,
-//               color: Color.fromARGB(255, 93, 99, 216),
-//             ),
-//             label: 'Liability',
-//           ),
-//           BottomNavigationBarItem(
-//             icon: Icon(
-//               Icons.savings,
-//               color: Color.fromARGB(255, 93, 99, 216),
-//             ),
-//             label: 'Expense',
-//           ),
-//           BottomNavigationBarItem(
-//             icon: Icon(Icons.money, color: Color.fromARGB(255, 93, 99, 216)),
-//             label: 'Income',
-//           ),
-//           BottomNavigationBarItem(
-//             icon: Icon(Icons.plus_one_outlined,
-//                 color: Color.fromARGB(255, 93, 99, 216)),
-//             label: 'Others',
-//           ),
-//           BottomNavigationBarItem(
-//             icon:
-//                 Icon(Icons.person_add, color: Color.fromARGB(255, 93, 99, 216)),
-//             label: 'Profile',
-//           ),
-//         ],
-//         onTap: (index) {
-//           setState(() {
-//             _selectedIndex = index;
-//           });
-//         },
-//       ),
-//       body: _widgetOptions.elementAt(_selectedIndex),
-//     );
-//   }
-// }
