@@ -31,6 +31,7 @@ class _incomeSearchState extends State<incomeSearch> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
+          automaticallyImplyLeading: false,
           backgroundColor: Color.fromARGB(255, 93, 99, 216),
           title: Container(
             decoration: BoxDecoration(
@@ -101,10 +102,10 @@ class _incomeSearchState extends State<incomeSearch> {
                 ),
               );
             }),
-        floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
+        floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
         floatingActionButton: FloatingActionButton(
             // isExtended: true,
-            child: Icon(Icons.add),
+            child: Icon(Icons.add, semanticLabel: 'Customise icon'),
             backgroundColor: Color.fromARGB(255, 93, 99, 216),
             onPressed: () {
               Navigator.push(

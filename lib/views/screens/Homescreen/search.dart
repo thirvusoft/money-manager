@@ -33,6 +33,7 @@ class _searchbarState extends State<searchbar> {
     return Scaffold(
         appBar: AppBar(
           backgroundColor: Color.fromARGB(255, 93, 99, 216),
+          automaticallyImplyLeading: false,
           title: Container(
             decoration: BoxDecoration(
                 color: Color.fromARGB(255, 255, 255, 255),
@@ -48,6 +49,7 @@ class _searchbarState extends State<searchbar> {
                         .toLowerCase()
                         .contains(value.trim().toLowerCase())) {
                       icon_nameOnSearch.add(icon_name[i]);
+                      print(icon_nameOnSearch);
                     }
                   }
                 });
@@ -57,55 +59,57 @@ class _searchbarState extends State<searchbar> {
                 border: InputBorder.none,
                 errorBorder: InputBorder.none,
                 focusedBorder: InputBorder.none,
-                contentPadding: EdgeInsets.all(25),
-                hintText: "Search",
+                contentPadding: EdgeInsets.all(15),
+                hintText: "search",
               ),
             ),
           ),
         ),
-        body: Container(
-          child: GridView.builder(
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2, childAspectRatio: 3, crossAxisSpacing: 12),
-              itemCount: _textEditingController!.text.isNotEmpty
-                  ? icon_nameOnSearch.length
-                  : icon_name.length,
-              itemBuilder: (context, index) {
-                return Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Row(
-                    children: [
-                      CircleAvatar(
-                        backgroundColor: Color.fromARGB(255, 93, 99, 216),
-                        child: IconButton(
-                            onPressed: () {
-                              _show(context);
-                            },
-                            icon: Icon(
-                                IconData(icon_name[index][1],
-                                    fontFamily: 'MaterialIcons'),
-                                color: Color.fromARGB(255, 255, 255, 255))),
-                      ),
-                      SizedBox(
-                        width: 25,
-                      ),
-                      Text(
-                          _textEditingController!.text.isNotEmpty
-                              ? icon_nameOnSearch[index][0]
-                              : icon_name[index][0],
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 15,
-                              letterSpacing: .7)),
-                    ],
-                  ),
-                );
-              }),
-        ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
+        body: GridView.builder(
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2, childAspectRatio: 3, crossAxisSpacing: 12),
+            itemCount: _textEditingController!.text.isNotEmpty
+                ? icon_nameOnSearch.length
+                : icon_name.length,
+            itemBuilder: (context, index) {
+              print(icon_name[index][1]);
+              return Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  children: [
+                    CircleAvatar(
+                      backgroundColor: Color.fromARGB(255, 93, 99, 216),
+                      child: IconButton(
+                          onPressed: () {
+                            _show(context);
+                          },
+                          icon: Icon(
+                              IconData(icon_name[index][1],
+                                  fontFamily: 'MaterialIcons'),
+                              color: Color.fromARGB(255, 255, 255, 255))),
+                    ),
+                    SizedBox(
+                      width: 25,
+                    ),
+                    Text(
+                        _textEditingController!.text.isNotEmpty
+                            ? icon_nameOnSearch[index][0]
+                            : icon_name[index][0],
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 15,
+                            letterSpacing: .7)),
+                  ],
+                ),
+              );
+            }),
+        floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
         floatingActionButton: FloatingActionButton(
             // isExtended: true,
-            child: Icon(Icons.add),
+            child: Icon(
+              Icons.add,
+              semanticLabel: 'Customise icon',
+            ),
             backgroundColor: Color.fromARGB(255, 93, 99, 216),
             onPressed: () {
               Navigator.push(

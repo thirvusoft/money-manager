@@ -190,7 +190,7 @@ class _forget_passwordState extends State<forget_password> {
   Future reset(email) async {
     if (emailcontroller.text.isNotEmpty) {
       var response = await http.post(Uri.parse(
-          "http://192.168.24.101:8000/api/method/frappe.core.doctype.user.user.reset_password?user=${email}"));
+          "http://192.168.24.34:8000/api/method/frappe.core.doctype.user.user.reset_password?user=${email}"));
 
       print(response);
       if (response.statusCode == 200) {

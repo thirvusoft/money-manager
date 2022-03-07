@@ -5,28 +5,6 @@ import 'dart:math' as math;
 import 'package:money_manager/views/screens/loginScreen.dart';
 import 'package:money_manager/views/screens/splash_screen.dart';
 
-class ProfilePageDesign extends StatefulWidget {
-  @override
-  _ProfilePageDesignState createState() => _ProfilePageDesignState();
-}
-
-class _ProfilePageDesignState extends State<ProfilePageDesign> {
-  @override
-  void initState() {
-    super.initState();
-    SystemChrome.setEnabledSystemUIOverlays([]);
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: "Profile",
-      home: ProfilePage(),
-      debugShowCheckedModeBanner: false,
-    );
-  }
-}
-
 class ProfilePage extends StatelessWidget {
   TextStyle _style() {
     return TextStyle(fontWeight: FontWeight.bold);
