@@ -6,6 +6,7 @@ import 'package:flutter_login/flutter_login.dart';
 import 'package:money_manager/views/screens/Animation/FadeAnimation.dart';
 import 'package:money_manager/views/screens/loginScreen.dart';
 import 'package:http/http.dart' as http;
+import 'package:rounded_loading_button/rounded_loading_button.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class forget_password extends StatefulWidget {
@@ -18,6 +19,12 @@ class forget_password extends StatefulWidget {
 class _forget_passwordState extends State<forget_password> {
   final formKey = GlobalKey<FormState>();
   var emailcontroller = TextEditingController();
+  final RoundedLoadingButtonController _btnController = RoundedLoadingButtonController();
+void _doSomething() async {
+    Timer(Duration(seconds: 1), () {
+        _btnController.reset();
+    });
+}
 
   @override
   Widget build(BuildContext context) {
@@ -120,37 +127,20 @@ class _forget_passwordState extends State<forget_password> {
                     ),
                     FadeAnimation(
                         1.5,
-                        Container(
-                          height: 50,
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              gradient: const LinearGradient(colors: [
-                                Color.fromRGBO(143, 148, 251, 1),
-                                Color.fromRGBO(143, 148, 251, .6),
-                              ])),
-                          child: Center(
-                            child: TextButton(
-                              style: TextButton.styleFrom(
-                                textStyle: const TextStyle(fontSize: 20),
-                              ),
-                              onPressed: () {
-                                if (formKey.currentState!.validate()) {
-                                  reset(
-                                    emailcontroller.text,
-                                  );
-                                }
-                              },
-                              child: const Text(
-                                'Send Email',
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 15,
-                                    fontFamily: "Roboto",
-                                    fontWeight: FontWeight.bold),
-                              ),
-                            ),
-                          ),
-                        )),
+                        RoundedLoadingButton(
+                            color: Color.fromRGBO(143, 148, 251, 1),
+    child: Text('Send Email', style: TextStyle(color: Colors.white)),
+    controller: _btnController,
+    onPressed: () {
+        _doSomething();
+if (formKey.currentState!.validate()) {
+reset(
+emailcontroller.text,
+);
+}
+},
+),
+                        ),
                     const SizedBox(
                       height: 70,
                     ),
