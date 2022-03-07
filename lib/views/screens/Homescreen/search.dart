@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:money_manager/views/screens/Settings/Asset.dart';
 
-import '../../widgets/submitapi.dart';
+import '../Categories/Asset.dart';
 
 class searchbar extends StatefulWidget {
   const searchbar({Key? key}) : super(key: key);
@@ -58,7 +57,7 @@ class _searchbarState extends State<searchbar> {
                 border: InputBorder.none,
                 errorBorder: InputBorder.none,
                 focusedBorder: InputBorder.none,
-                contentPadding: EdgeInsets.all(15),
+                contentPadding: EdgeInsets.all(25),
                 hintText: "Search",
               ),
             ),
@@ -170,7 +169,7 @@ void _show(BuildContext ctx) {
                   style: TextStyle(color: Colors.white),
                 ),
                 onPressed: () {
-                  submit();
+                  // submit();
                 })
           ]),
     ),

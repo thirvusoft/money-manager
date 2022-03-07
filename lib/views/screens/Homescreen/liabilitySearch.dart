@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:money_manager/views/screens/Settings/liability.dart';
+
+import '../Categories/liability.dart';
 
 class liabilitySearch extends StatefulWidget {
   const liabilitySearch({Key? key}) : super(key: key);

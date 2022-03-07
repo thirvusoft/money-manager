@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:money_manager/views/screens/Animation/FadeAnimation.dart';
 import 'package:money_manager/views/screens/forgetpasswordscreen.dart';
 import 'package:http/http.dart' as http;
-import 'package:money_manager/views/screens/search.dart';
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_login/flutter_login.dart';
@@ -24,11 +23,6 @@ class _login_pageState extends State<login_page> {
   var emailcontroller = TextEditingController();
   var passwordcontroller = TextEditingController();
 
-  Object? get object => null;
-
-  get getemail => null;
-
-  get setemail => null;
   @override
   Widget build(BuildContext context) {
     return Scaffold(

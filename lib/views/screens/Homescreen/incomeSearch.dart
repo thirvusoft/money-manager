@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:money_manager/views/screens/Settings/Income.dart';
+
+import '../Categories/Income.dart';
 
 class incomeSearch extends StatefulWidget {
   const incomeSearch({Key? key}) : super(key: key);

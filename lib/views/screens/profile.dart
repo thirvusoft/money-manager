@@ -66,7 +66,7 @@ class ProfilePage extends StatelessWidget {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => splash_screen()),
+                  MaterialPageRoute(builder: (context) => login_page()),
                 );
               },
             ),

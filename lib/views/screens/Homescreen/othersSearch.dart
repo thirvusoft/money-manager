@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:money_manager/views/screens/Settings/Others.dart';
+
+import '../Categories/Others.dart';
 
 class othersSearch extends StatefulWidget {
   const othersSearch({Key? key}) : super(key: key);
