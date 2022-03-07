@@ -90,12 +90,9 @@ class _MainScreenState extends State<MainScreen> {
         onTap: (index) {
           setState(() {
             selectedpage = index;
-<<<<<<< HEAD
             controller:
             _btnController; // changing selected page as per bar index selected by the user
             _doSomething();
-=======
->>>>>>> b84a36e3b5a88b5e4396b5dfe526ead908ed5532
           });
         },
       ),
