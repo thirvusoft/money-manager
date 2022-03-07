@@ -168,6 +168,7 @@ class _login_pageState extends State<login_page> {
                                   textStyle: const TextStyle(fontSize: 20),
                                 ),
                                 onPressed: () {
+                                  login(emailcontroller, passwordcontroller);
                                   if (formKey.currentState!.validate()) {
                                     login(emailcontroller.text,
                                         passwordcontroller.text);

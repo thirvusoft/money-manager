@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:money_manager/views/screens/Homescreen/expensesSearch.dart';
@@ -6,6 +8,7 @@ import 'package:money_manager/views/screens/Homescreen/liabilitySearch.dart';
 import 'package:money_manager/views/screens/Homescreen/othersSearch.dart';
 import 'package:money_manager/views/screens/Homescreen/search.dart';
 import 'package:money_manager/views/screens/profile.dart';
+import 'package:rounded_loading_button/rounded_loading_button.dart';
 
 void main() => runApp(MainScreen());
 
@@ -15,6 +18,14 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
+  final RoundedLoadingButtonController _btnController =
+      RoundedLoadingButtonController();
+  void _doSomething() async {
+    Timer(Duration(seconds: 3), () {
+      _btnController.success();
+    });
+  }
+
   int selectedpage = 0; //initial value
   final _pageOptions = [
     searchbar(),
@@ -82,8 +93,10 @@ class _MainScreenState extends State<MainScreen> {
         ],
         onTap: (index) {
           setState(() {
-            selectedpage =
-                index; // changing selected page as per bar index selected by the user
+            selectedpage = index;
+            controller:
+            _btnController; // changing selected page as per bar index selected by the user
+            _doSomething();
           });
         },
       ),

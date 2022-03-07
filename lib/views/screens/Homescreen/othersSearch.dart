@@ -12,6 +12,17 @@ class othersSearch extends StatefulWidget {
 
 class _othersSearchState extends State<othersSearch> {
   TextEditingController _textEditingController = TextEditingController();
+  bool _loading = true;
+  @override
+  void initState() {
+    super.initState();
+    Future.delayed(Duration(seconds: 1), () {
+      setState(() {
+        _loading = false;
+      });
+    });
+  }
+
   List icon_nameOnSearch = [];
   List icon_name = [
     ['Invitation', 0xf12f],
@@ -58,44 +69,50 @@ class _othersSearchState extends State<othersSearch> {
             ),
           ),
         ),
-        body: GridView.builder(
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2, childAspectRatio: 3, crossAxisSpacing: 12),
-            itemCount: _textEditingController!.text.isNotEmpty
-                ? icon_nameOnSearch.length
-                : icon_name.length,
-            itemBuilder: (context, index) {
-              print(icon_name[index][1]);
-              return Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  children: [
-                    CircleAvatar(
-                      backgroundColor: Color.fromARGB(255, 93, 99, 216),
-                      child: IconButton(
-                          onPressed: () {
-                            _show(context);
-                          },
-                          icon: Icon(
-                              IconData(icon_name[index][1],
-                                  fontFamily: 'MaterialIcons'),
-                              color: Color.fromARGB(255, 255, 255, 255))),
-                    ),
-                    SizedBox(
-                      width: 25,
-                    ),
-                    Text(
-                        _textEditingController!.text.isNotEmpty
-                            ? icon_nameOnSearch[index][0]
-                            : icon_name[index][0],
-                        style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 15,
-                            letterSpacing: .7)),
-                  ],
-                ),
-              );
-            }),
+        body: Center(
+            child: _loading
+                ? CircularProgressIndicator()
+                : GridView.builder(
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2,
+                        childAspectRatio: 3,
+                        crossAxisSpacing: 12),
+                    itemCount: _textEditingController!.text.isNotEmpty
+                        ? icon_nameOnSearch.length
+                        : icon_name.length,
+                    itemBuilder: (context, index) {
+                      print(icon_name[index][1]);
+                      return Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Row(
+                          children: [
+                            CircleAvatar(
+                              backgroundColor: Color.fromARGB(255, 93, 99, 216),
+                              child: IconButton(
+                                  onPressed: () {
+                                    _show(context);
+                                  },
+                                  icon: Icon(
+                                      IconData(icon_name[index][1],
+                                          fontFamily: 'MaterialIcons'),
+                                      color:
+                                          Color.fromARGB(255, 255, 255, 255))),
+                            ),
+                            SizedBox(
+                              width: 25,
+                            ),
+                            Text(
+                                _textEditingController!.text.isNotEmpty
+                                    ? icon_nameOnSearch[index][0]
+                                    : icon_name[index][0],
+                                style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 15,
+                                    letterSpacing: .7)),
+                          ],
+                        ),
+                      );
+                    })),
         floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
         floatingActionButton: FloatingActionButton(
             // isExtended: true,
