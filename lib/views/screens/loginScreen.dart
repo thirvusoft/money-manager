@@ -23,15 +23,14 @@ class _login_pageState extends State<login_page> {
   final formKey = GlobalKey<FormState>();
   var emailcontroller = TextEditingController();
   var passwordcontroller = TextEditingController();
-  final RoundedLoadingButtonController _btnController = RoundedLoadingButtonController();
-void _doSomething() async {
-    Timer(Duration(seconds: 1),() {
+  final RoundedLoadingButtonController _btnController =
+      RoundedLoadingButtonController();
+  void _doSomething() async {
+    Timer(Duration(seconds: 1), () {
       MainScreen();
-        _btnController.reset(
-          
-        );
+      _btnController.reset();
     });
-}
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -126,7 +125,6 @@ void _doSomething() async {
                                   ),
                                 ),
                                 Divider(),
-                                
                                 FadeAnimation(
                                   1,
                                   TextFormField(
@@ -135,9 +133,13 @@ void _doSomething() async {
                                         border: InputBorder.none,
                                         hintText: "Password",
                                         suffixIcon: IconButton(
-                                          icon: Icon(_securetext
-                                              ? Icons.lock_clock_outlined
-                                              : Icons.lock_open,color: Color.fromRGBO(143, 148, 251, 1),),
+                                          icon: Icon(
+                                            _securetext
+                                                ? Icons.lock_clock_outlined
+                                                : Icons.lock_open,
+                                            color: Color.fromRGBO(
+                                                143, 148, 251, 1),
+                                          ),
                                           onPressed: () {
                                             setState(() {
                                               _securetext = !_securetext;
@@ -163,19 +165,37 @@ void _doSomething() async {
                       ),
                       FadeAnimation(
                           2,
-                          
-                          RoundedLoadingButton(
-                            color: Color.fromRGBO(143, 148, 251, 1),
-    child: Text('Login', style: TextStyle(color: Colors.white)),
-    controller: _btnController,
-    onPressed: () {
-          _doSomething();
-          if (formKey.currentState!.validate()) {
-          login(emailcontroller.text,
-          passwordcontroller.text);
-          }},
-          ),
-                      ),
+                          Container(
+                            height: 50,
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                gradient: LinearGradient(colors: [
+                                  Color.fromRGBO(143, 148, 251, 1),
+                                  Color.fromRGBO(143, 148, 251, .6),
+                                ])),
+                            child: Center(
+                              child: TextButton(
+                                style: TextButton.styleFrom(
+                                  textStyle: const TextStyle(fontSize: 20),
+                                ),
+                                onPressed: () {
+                                  login(emailcontroller, passwordcontroller);
+                                  if (formKey.currentState!.validate()) {
+                                    login(emailcontroller.text,
+                                        passwordcontroller.text);
+                                  }
+                                },
+                                child: const Text(
+                                  'LOGIN',
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 15,
+                                      fontFamily: "Roboto",
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                            ),
+                          )),
                       SizedBox(
                         height: 70,
                       ),

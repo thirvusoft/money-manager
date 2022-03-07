@@ -49,12 +49,10 @@ dependencies:
   flutter_icons: ^1.1.0
   iconsax: ^0.0.8
   grafpix: ^1.2.8
-
-
-
   flappy_search_bar: ^1.7.2
   animated_text_kit: ^4.2.1
   bottom_navy_bar: ^6.0.0
+  screen_loader: ^4.0.1
 dev_dependencies:
   flutter_test:
     sdk: flutter
