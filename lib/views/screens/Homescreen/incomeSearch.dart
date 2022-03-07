@@ -77,7 +77,10 @@ class _incomeSearchState extends State<incomeSearch> {
         ),
         body: Center(
             child: _loading
-                ? CircularProgressIndicator()
+                ? CircularProgressIndicator(
+                    valueColor: AlwaysStoppedAnimation<Color>(
+                        Color.fromARGB(255, 93, 99, 216)),
+                  )
                 : GridView.builder(
                     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: 2,
