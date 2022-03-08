@@ -22,15 +22,13 @@ class _login_pageState extends State<login_page> {
   final formKey = GlobalKey<FormState>();
   var emailcontroller = TextEditingController();
   var passwordcontroller = TextEditingController();
-  final RoundedLoadingButtonController _btnController = RoundedLoadingButtonController();
-void _doSomething() async {
-    Timer(Duration(seconds: 1),() {
-     
-        _btnController.reset(
-          
-        );
+  final RoundedLoadingButtonController _btnController =
+      RoundedLoadingButtonController();
+  void _doSomething() async {
+    Timer(Duration(seconds: 1), () {
+      _btnController.reset();
     });
-}
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -125,7 +123,6 @@ void _doSomething() async {
                                   ),
                                 ),
                                 Divider(),
-                                
                                 FadeAnimation(
                                   1,
                                   TextFormField(
@@ -134,9 +131,13 @@ void _doSomething() async {
                                         border: InputBorder.none,
                                         hintText: "Password",
                                         suffixIcon: IconButton(
-                                          icon: Icon(_securetext
-                                              ? Icons.lock_clock_outlined
-                                              : Icons.lock_open,color: Color.fromRGBO(143, 148, 251, 1),),
+                                          icon: Icon(
+                                            _securetext
+                                                ? Icons.lock_clock_outlined
+                                                : Icons.lock_open,
+                                            color: Color.fromRGBO(
+                                                143, 148, 251, 1),
+                                          ),
                                           onPressed: () {
                                             setState(() {
                                               _securetext = !_securetext;
@@ -161,19 +162,20 @@ void _doSomething() async {
                         height: 30,
                       ),
                       FadeAnimation(
-                          2,
-                          
-                          RoundedLoadingButton(
-                            color: Color.fromRGBO(143, 148, 251, 1),
-    child: Text('Login', style: TextStyle(color: Colors.white)),
-    controller: _btnController,
-    onPressed: () {
-          _doSomething();
-          if (formKey.currentState!.validate()) {
-          login(emailcontroller.text,
-          passwordcontroller.text);
-          }},
-          ),
+                        2,
+                        RoundedLoadingButton(
+                          color: Color.fromRGBO(143, 148, 251, 1),
+                          child: Text('Login',
+                              style: TextStyle(color: Colors.white)),
+                          controller: _btnController,
+                          onPressed: () {
+                            _doSomething();
+                            if (formKey.currentState!.validate()) {
+                              login(emailcontroller.text,
+                                  passwordcontroller.text);
+                            }
+                          },
+                        ),
                       ),
                       SizedBox(
                         height: 70,
@@ -220,7 +222,7 @@ void _doSomething() async {
       if (response.statusCode == 200) {
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => MainScreen()),
+          MaterialPageRoute(builder: (context) => bottomnavigation()),
         );
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text("Email Send successful"),
