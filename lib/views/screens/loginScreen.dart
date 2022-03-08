@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:money_manager/views/screens/Animation/FadeAnimation.dart';
 import 'package:money_manager/views/screens/forgetpasswordscreen.dart';
 import 'package:http/http.dart' as http;
+import 'package:rounded_loading_button/rounded_loading_button.dart';
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_login/flutter_login.dart';
@@ -21,7 +22,6 @@ class _login_pageState extends State<login_page> {
   final formKey = GlobalKey<FormState>();
   var emailcontroller = TextEditingController();
   var passwordcontroller = TextEditingController();
-<<<<<<< HEAD
   final RoundedLoadingButtonController _btnController = RoundedLoadingButtonController();
 void _doSomething() async {
     Timer(Duration(seconds: 1),() {
@@ -31,8 +31,6 @@ void _doSomething() async {
         );
     });
 }
-=======
->>>>>>> 7f8b3773e28876d532a6236129b29707ccf2cdce
 
   @override
   Widget build(BuildContext context) {
@@ -126,9 +124,8 @@ void _doSomething() async {
                                     },
                                   ),
                                 ),
-                                SizedBox(
-                                  height: 30,
-                                ),
+                                Divider(),
+                                
                                 FadeAnimation(
                                   1,
                                   TextFormField(
@@ -139,7 +136,7 @@ void _doSomething() async {
                                         suffixIcon: IconButton(
                                           icon: Icon(_securetext
                                               ? Icons.lock_clock_outlined
-                                              : Icons.lock_open),
+                                              : Icons.lock_open,color: Color.fromRGBO(143, 148, 251, 1),),
                                           onPressed: () {
                                             setState(() {
                                               _securetext = !_securetext;
@@ -165,36 +162,19 @@ void _doSomething() async {
                       ),
                       FadeAnimation(
                           2,
-                          Container(
-                            height: 50,
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                gradient: LinearGradient(colors: [
-                                  Color.fromRGBO(143, 148, 251, 1),
-                                  Color.fromRGBO(143, 148, 251, .6),
-                                ])),
-                            child: Center(
-                              child: TextButton(
-                                style: TextButton.styleFrom(
-                                  textStyle: const TextStyle(fontSize: 20),
-                                ),
-                                onPressed: () {
-                                  if (formKey.currentState!.validate()) {
-                                    login(emailcontroller.text,
-                                        passwordcontroller.text);
-                                  }
-                                },
-                                child: const Text(
-                                  'LOGIN',
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 15,
-                                      fontFamily: "Roboto",
-                                      fontWeight: FontWeight.bold),
-                                ),
-                              ),
-                            ),
-                          )),
+                          
+                          RoundedLoadingButton(
+                            color: Color.fromRGBO(143, 148, 251, 1),
+    child: Text('Login', style: TextStyle(color: Colors.white)),
+    controller: _btnController,
+    onPressed: () {
+          _doSomething();
+          if (formKey.currentState!.validate()) {
+          login(emailcontroller.text,
+          passwordcontroller.text);
+          }},
+          ),
+                      ),
                       SizedBox(
                         height: 70,
                       ),
@@ -235,18 +215,26 @@ void _doSomething() async {
   Future login(email, password) async {
     if (passwordcontroller.text.isNotEmpty || emailcontroller.text.isNotEmpty) {
       print('email');
-
       var response = await http.post(Uri.parse(
           "http://192.168.24.34:8000/api/method/money_management_backend.custom.py.api.login?email=${email}&password=${password}"));
-
       if (response.statusCode == 200) {
         Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => MainScreen()),
         );
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text("Successfully login"),
+          content: Text("Email Send successful"),
           backgroundColor: Colors.green,
+        ));
+      } else if (response.statusCode == 403) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(" Access Denied."),
+          backgroundColor: Colors.red,
+        ));
+      } else if (response.statusCode == 503) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text("service unavailable"),
+          backgroundColor: Colors.red,
         ));
       } else {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -254,9 +242,6 @@ void _doSomething() async {
           backgroundColor: Colors.red,
         ));
       }
-    } else {
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text("No empty")));
     }
   }
 }
