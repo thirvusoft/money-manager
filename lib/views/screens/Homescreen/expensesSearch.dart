@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:money_manager/views/imageScreen.dart';
+import 'package:money_manager/views/screens/fileScreen.dart';
 
 import '../Categories/Expense.dart';
 
@@ -154,16 +157,27 @@ void _show(BuildContext ctx) {
             TextButton(
               style: TextButton.styleFrom(
                 textStyle: const TextStyle(fontSize: 20),
-              ),
+              ), 
               onPressed: () {},
-              child: const Text('Image'),
+              child: const Text('Image',
+              style: TextStyle(),),
             ),
             Divider(),
             TextButton(
               style: TextButton.styleFrom(
                 textStyle: const TextStyle(fontSize: 20),
+              ), 
+              onPressed: () => pickImage(ImageSource.camera),
+              child: const Text('Camera',
+              style: TextStyle(),),
+            ),
+            
+            Divider(),
+            TextButton(
+              style: TextButton.styleFrom(
+                textStyle: const TextStyle(fontSize: 20),
               ),
-              onPressed: () {},
+              onPressed: () {MyHomePage();},
               child: const Text('File',
                   style: TextStyle(color: Colors.blueAccent)),
             ),
@@ -187,4 +201,7 @@ void _show(BuildContext ctx) {
           ]),
     ),
   );
+}
+
+pickImage(ImageSource gallery) {
 }

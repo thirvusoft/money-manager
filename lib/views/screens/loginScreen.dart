@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-
 import 'package:money_manager/views/screens/Animation/FadeAnimation.dart';
 import 'package:money_manager/views/screens/forgetpasswordscreen.dart';
 import 'package:http/http.dart' as http;
@@ -26,7 +25,7 @@ class _login_pageState extends State<login_page> {
   final RoundedLoadingButtonController _btnController = RoundedLoadingButtonController();
 void _doSomething() async {
     Timer(Duration(seconds: 1),() {
-      MainScreen();
+     
         _btnController.reset(
           
         );
@@ -221,7 +220,7 @@ void _doSomething() async {
       if (response.statusCode == 200) {
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => login_page()),
+          MaterialPageRoute(builder: (context) => MainScreen()),
         );
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text("Email Send successful"),

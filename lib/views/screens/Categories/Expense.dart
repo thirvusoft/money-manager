@@ -55,18 +55,12 @@ class _customExpenseState extends State<customExpense> {
                   SizedBox(
                     width: 25,
                   ),
-                  // Text(
-                  //     _textEditingController!.text.isNotEmpty
-                  //         ? icon_nameOnSearch[index][0]
-                  //         : icon_name[index][0],
-                  //     style: TextStyle(
-                  //         color: Colors.black,
-                  //         fontSize: 15,
-                  //         letterSpacing: .7)),
+             
                 ],
               ),
             );
-          }),
+          },
+          ),
     );
   }
 }

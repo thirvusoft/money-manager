@@ -15,6 +15,7 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
+  
   int selectedpage = 0; //initial value
   final _pageOptions = [
     searchbar(),
@@ -35,6 +36,7 @@ class _MainScreenState extends State<MainScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Color.fromARGB(255, 93, 99, 216),
       body: _pageOptions[selectedpage],
       bottomNavigationBar: CurvedNavigationBar(
         height: 50,
@@ -73,6 +75,7 @@ class _MainScreenState extends State<MainScreen> {
           ),
           Icon(
             Icons.person_add,
+            
             color: Color.fromARGB(255, 93, 99, 216),
           ),
         ],
