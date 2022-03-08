@@ -16,7 +16,9 @@ class _expenseSearchState extends State<expenseSearch> {
   @override
   void initState() {
     super.initState();
+
     Future.delayed(Duration(seconds: 1), () {
+      Color.fromARGB(255, 93, 99, 216);
       setState(() {
         _loading = false;
       });
@@ -90,7 +92,10 @@ class _expenseSearchState extends State<expenseSearch> {
         ),
         body: Center(
             child: _loading
-                ? CircularProgressIndicator()
+                ? CircularProgressIndicator(
+                    valueColor: AlwaysStoppedAnimation<Color>(
+                        Color.fromARGB(255, 93, 99, 216)),
+                  )
                 : GridView.builder(
                     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: 2,
