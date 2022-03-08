@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:money_manager/views/screens/Homescreen/search.dart';
-import 'package:money_manager/widgets/BottomNavigation.dart';
 import 'Animation/FadeAnimation.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';

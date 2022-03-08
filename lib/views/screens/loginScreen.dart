@@ -23,8 +23,6 @@ class _login_pageState extends State<login_page> {
   var passwordcontroller = TextEditingController();
   final RoundedLoadingButtonController _btnController =
       RoundedLoadingButtonController();
-
-  get prefs => null;
   void _doSomething() async {
     Timer(Duration(seconds: 1), () {
       _btnController.reset();
@@ -225,10 +223,6 @@ class _login_pageState extends State<login_page> {
           context,
           MaterialPageRoute(builder: (context) => bottomnavigation()),
         );
-        prefs.setString(
-            "email", json.decode(response.body)['message']['email']);
-        print(prefs.getString("full_name"));
-        print(email);
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text("Email Send successful"),
           backgroundColor: Colors.green,

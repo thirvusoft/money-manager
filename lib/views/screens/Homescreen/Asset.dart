@@ -4,14 +4,14 @@ import 'package:flutter/rendering.dart';
 import '../Categories/Asset.dart';
 import 'package:http/http.dart' as http;
 
-class othersSearch extends StatefulWidget {
-  const othersSearch({Key? key}) : super(key: key);
+class searchbar extends StatefulWidget {
+  const searchbar({Key? key}) : super(key: key);
 
   @override
-  _othersSearchState createState() => _othersSearchState();
+  _searchbarState createState() => _searchbarState();
 }
 
-class _othersSearchState extends State<othersSearch> {
+class _searchbarState extends State<searchbar> {
   TextEditingController _textEditingController = TextEditingController();
 
   var typecontroller = TextEditingController();
@@ -34,10 +34,18 @@ class _othersSearchState extends State<othersSearch> {
 
   List icon_nameOnSearch = [];
   List icon_name = [
-    ['Invitation', 0xf12f],
-    ['Visiting Card', 0xef8f],
-    ['Profile', 0xee35],
+    ['Gold', 987727],
+    ['Silver', 987727],
+    ['Platinum', 987727],
+    ['Diamond', 0xf05e7],
+    ['Vehicles', 0xee62],
+    ['Home ', 0xf447],
+    ['Machinery', 0xef06],
+    ['Agri Land', 987215],
+    ['Comm Land', 0xf42b],
+    ['Residential ', 98633],
   ];
+
   var data;
   get index => null;
   @override
@@ -87,44 +95,49 @@ class _othersSearchState extends State<othersSearch> {
                     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: 2,
                         childAspectRatio: 3,
-                        crossAxisSpacing: 20),
-                    itemCount: _textEditingController.text.isNotEmpty
+                        crossAxisSpacing: 12),
+                    itemCount: _textEditingController!.text.isNotEmpty
                         ? icon_nameOnSearch.length
                         : icon_name.length,
                     itemBuilder: (context, index) {
                       print(icon_name[index][1]);
-                      return Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: Row(
-                            children: [
-                              Center(
-                                  child: TextButton.icon(
-                                      onPressed: () {
-                                        _show(context);
-                                      },
-                                      label: Text(
-                                        _textEditingController.text.isNotEmpty
-                                            ? icon_nameOnSearch[index][0]
-                                            : icon_name[index][0],
-                                        style: TextStyle(
-                                            color: Colors.black,
-                                            fontSize: 15,
-                                            letterSpacing: .7),
-                                      ),
-                                      icon: Icon(
-                                          IconData(icon_name[index][1],
-                                              fontFamily: 'MaterialIcons'),
-                                          color: Color.fromARGB(
-                                              255, 93, 99, 216)))),
-                            ],
-                          ));
+                      return Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Row(
+                          children: [
+                            CircleAvatar(
+                              backgroundColor: Color.fromARGB(255, 93, 99, 216),
+                              child: IconButton(
+                                  onPressed: () {
+                                    _show(context);
+                                  },
+                                  icon: Icon(
+                                      IconData(icon_name[index][1],
+                                          fontFamily: 'MaterialIcons'),
+                                      color:
+                                          Color.fromARGB(255, 255, 255, 255))),
+                            ),
+                            SizedBox(
+                              width: 25,
+                            ),
+                            Text(
+                                _textEditingController!.text.isNotEmpty
+                                    ? icon_nameOnSearch[index][0]
+                                    : icon_name[index][0],
+                                style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 15,
+                                    letterSpacing: .7)),
+                          ],
+                        ),
+                      );
                     })),
         floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
         floatingActionButton: FloatingActionButton(
-            // isExtended: true,
-            child: Icon(Icons.add, semanticLabel: 'Customise icon'),
+            child: Icon(
+              Icons.add,
+              semanticLabel: 'Customise icon',
+            ),
             backgroundColor: Color.fromARGB(255, 93, 99, 216),
             onPressed: () {
               Navigator.push(
@@ -205,7 +218,7 @@ class _othersSearchState extends State<othersSearch> {
                     style: TextStyle(color: Colors.white),
                   ),
                   onPressed: () {
-                    // print(typecontroller.text);
+                    print(typecontroller.text);
                     dataentry(
                         typecontroller.text,
                         subtypecontroller.text,
