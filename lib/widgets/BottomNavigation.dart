@@ -20,6 +20,7 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
+  int selectedpage = 0;
   final RoundedLoadingButtonController _btnController =
       RoundedLoadingButtonController();
   void _doSomething() async {
@@ -28,7 +29,6 @@ class _MainScreenState extends State<MainScreen> {
     });
   }
 
-  int selectedpage = 0; //initial value
   final _pageOptions = [
     searchbar(),
     liabilitySearch(),
@@ -36,8 +36,14 @@ class _MainScreenState extends State<MainScreen> {
     incomeSearch(),
     othersSearch(),
     ProfilePage(),
-  ]; // listing of all 3 pages index wise
+  ];
   final bgcolor = [
+    Colors.grey,
+    Colors.grey,
+    Colors.grey,
+    Colors.grey,
+    Colors.grey,
+    Colors.grey,
     Color.fromARGB(255, 93, 99, 216),
     Color.fromARGB(255, 93, 99, 216),
     Color.fromARGB(255, 93, 99, 216),
@@ -55,7 +61,7 @@ class _MainScreenState extends State<MainScreen> {
         backgroundColor: bgcolor[selectedpage],
         color: Colors.white,
         animationCurve: Curves.fastOutSlowIn,
-        items: const <Widget>[
+        items: <Widget>[
           Icon(
             Icons.home_work,
             size: 30,
@@ -70,18 +76,15 @@ class _MainScreenState extends State<MainScreen> {
           ),
           Icon(
             Icons.savings,
-            semanticLabel: 'Income',
             size: 30,
             color: Color.fromARGB(255, 93, 99, 216),
           ),
           Icon(
             Icons.money,
-            semanticLabel: 'Expense',
             color: Color.fromARGB(255, 93, 99, 216),
           ),
           Icon(
             Icons.plus_one_outlined,
-            semanticLabel: 'Others',
             color: Color.fromARGB(255, 93, 99, 216),
           ),
           Icon(

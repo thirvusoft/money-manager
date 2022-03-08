@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:money_manager/views/screens/Animation/FadeAnimation.dart';
 import 'package:money_manager/views/screens/forgetpasswordscreen.dart';
 import 'package:http/http.dart' as http;
-import 'package:rounded_loading_button/rounded_loading_button.dart';
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_login/flutter_login.dart';
@@ -23,14 +22,6 @@ class _login_pageState extends State<login_page> {
   final formKey = GlobalKey<FormState>();
   var emailcontroller = TextEditingController();
   var passwordcontroller = TextEditingController();
-  final RoundedLoadingButtonController _btnController =
-      RoundedLoadingButtonController();
-  void _doSomething() async {
-    Timer(Duration(seconds: 1), () {
-      MainScreen();
-      _btnController.reset();
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -124,7 +115,9 @@ class _login_pageState extends State<login_page> {
                                     },
                                   ),
                                 ),
-                                Divider(),
+                                SizedBox(
+                                  height: 30,
+                                ),
                                 FadeAnimation(
                                   1,
                                   TextFormField(
@@ -133,13 +126,9 @@ class _login_pageState extends State<login_page> {
                                         border: InputBorder.none,
                                         hintText: "Password",
                                         suffixIcon: IconButton(
-                                          icon: Icon(
-                                            _securetext
-                                                ? Icons.lock_clock_outlined
-                                                : Icons.lock_open,
-                                            color: Color.fromRGBO(
-                                                143, 148, 251, 1),
-                                          ),
+                                          icon: Icon(_securetext
+                                              ? Icons.lock_clock_outlined
+                                              : Icons.lock_open),
                                           onPressed: () {
                                             setState(() {
                                               _securetext = !_securetext;
@@ -179,7 +168,6 @@ class _login_pageState extends State<login_page> {
                                   textStyle: const TextStyle(fontSize: 20),
                                 ),
                                 onPressed: () {
-                                  login(emailcontroller, passwordcontroller);
                                   if (formKey.currentState!.validate()) {
                                     login(emailcontroller.text,
                                         passwordcontroller.text);
@@ -236,26 +224,18 @@ class _login_pageState extends State<login_page> {
   Future login(email, password) async {
     if (passwordcontroller.text.isNotEmpty || emailcontroller.text.isNotEmpty) {
       print('email');
+
       var response = await http.post(Uri.parse(
           "http://192.168.24.34:8000/api/method/money_management_backend.custom.py.api.login?email=${email}&password=${password}"));
+
       if (response.statusCode == 200) {
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => login_page()),
+          MaterialPageRoute(builder: (context) => MainScreen()),
         );
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text("Email Send successful"),
+          content: Text("Successfully login"),
           backgroundColor: Colors.green,
-        ));
-      } else if (response.statusCode == 403) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text(" Access Denied."),
-          backgroundColor: Colors.red,
-        ));
-      } else if (response.statusCode == 503) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text("service unavailable"),
-          backgroundColor: Colors.red,
         ));
       } else {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -263,6 +243,9 @@ class _login_pageState extends State<login_page> {
           backgroundColor: Colors.red,
         ));
       }
+    } else {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text("No empty")));
     }
   }
 }

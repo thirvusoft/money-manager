@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+
+import 'package:money_manager/views/screens/profile.dart';
 import 'package:money_manager/views/screens/splash_screen.dart';
 
 import 'views/screens/Categories/Asset.dart';
@@ -15,6 +17,6 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
         debugShowCheckedModeBanner: false,
         theme: new ThemeData(scaffoldBackgroundColor: const Color(0XFFFFFFFFF)),
-        home: splash_screen());
+        home: ProfilePage());
   }
 }
