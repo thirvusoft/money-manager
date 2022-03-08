@@ -34,6 +34,10 @@ class ProfilePage extends StatelessWidget {
             SizedBox(
               height: 16,
             ),
+            Text(
+              "5465154541",
+            ),
+            Divider(),
             FlatButton(
               child: Text(
                 'Logout',

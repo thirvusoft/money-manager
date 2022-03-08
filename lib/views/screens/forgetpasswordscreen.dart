@@ -1,16 +1,15 @@
 import 'dart:async';
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_login/flutter_login.dart';
 import 'package:money_manager/views/screens/Animation/FadeAnimation.dart';
 import 'package:money_manager/views/screens/loginScreen.dart';
 import 'package:http/http.dart' as http;
+import 'package:rounded_loading_button/rounded_loading_button.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class forget_password extends StatefulWidget {
   const forget_password({Key? key}) : super(key: key);
-
   @override
   _forget_passwordState createState() => _forget_passwordState();
 }
@@ -18,6 +17,13 @@ class forget_password extends StatefulWidget {
 class _forget_passwordState extends State<forget_password> {
   final formKey = GlobalKey<FormState>();
   var emailcontroller = TextEditingController();
+  final RoundedLoadingButtonController _btnController =
+      RoundedLoadingButtonController();
+  void _doSomething() async {
+    Timer(Duration(seconds: 1), () {
+      _btnController.reset();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -119,38 +125,22 @@ class _forget_passwordState extends State<forget_password> {
                       height: 30,
                     ),
                     FadeAnimation(
-                        1.5,
-                        Container(
-                          height: 50,
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              gradient: const LinearGradient(colors: [
-                                Color.fromRGBO(143, 148, 251, 1),
-                                Color.fromRGBO(143, 148, 251, .6),
-                              ])),
-                          child: Center(
-                            child: TextButton(
-                              style: TextButton.styleFrom(
-                                textStyle: const TextStyle(fontSize: 20),
-                              ),
-                              onPressed: () {
-                                if (formKey.currentState!.validate()) {
-                                  reset(
-                                    emailcontroller.text,
-                                  );
-                                }
-                              },
-                              child: const Text(
-                                'Send Email',
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 15,
-                                    fontFamily: "Roboto",
-                                    fontWeight: FontWeight.bold),
-                              ),
-                            ),
-                          ),
-                        )),
+                      1.5,
+                      RoundedLoadingButton(
+                        color: Color.fromRGBO(143, 148, 251, 1),
+                        child: Text('Send Email',
+                            style: TextStyle(color: Colors.white)),
+                        controller: _btnController,
+                        onPressed: () {
+                          _doSomething();
+                          if (formKey.currentState!.validate()) {
+                            reset(
+                              emailcontroller.text,
+                            );
+                          }
+                        },
+                      ),
+                    ),
                     const SizedBox(
                       height: 70,
                     ),
@@ -191,7 +181,6 @@ class _forget_passwordState extends State<forget_password> {
     if (emailcontroller.text.isNotEmpty) {
       var response = await http.post(Uri.parse(
           "http://192.168.24.34:8000/api/method/frappe.core.doctype.user.user.reset_password?user=${email}"));
-
       print(response);
       if (response.statusCode == 200) {
         Navigator.push(
@@ -201,6 +190,16 @@ class _forget_passwordState extends State<forget_password> {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text("Email Send successful"),
           backgroundColor: Colors.green,
+        ));
+      } else if (response.statusCode == 403) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(" Access Denied."),
+          backgroundColor: Colors.red,
+        ));
+      } else if (response.statusCode == 503) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text("service unavailable"),
+          backgroundColor: Colors.red,
         ));
       } else {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
