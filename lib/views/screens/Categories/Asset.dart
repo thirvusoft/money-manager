@@ -29,43 +29,48 @@ class _customAssetState extends State<customAsset> {
         backgroundColor: Color.fromARGB(255, 93, 99, 216),
         title: Text('Asset Customise Icons'),
       ),
-      body: Container(
-        child: GridView.builder(
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2, childAspectRatio: 3, crossAxisSpacing: 12),
-            itemCount: _textEditingController.text.isNotEmpty
-                ? icon_nameOnSearch.length
-                : icon_name.length,
-            itemBuilder: (context, index) {
-              print(icon_name[index][1]);
-              return Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  children: [
-                    CircleAvatar(
-                      radius: 58,
-                      backgroundColor: Color.fromARGB(255, 93, 99, 216),
-                      child: IconButton(
-                          iconSize: 30.0,
-                          onPressed: () {
-                            _show(context);
-                          },
-                          icon: Icon(
-                              IconData(
-                                icon_name[index][1],
-                                fontFamily: 'MaterialIcons',
-                              ),
-                              color: Color.fromARGB(255, 255, 255, 255))),
-                    ),
-                    SizedBox(
-                      width: 25,
-                    ),
-              
-                  ],
-                ),
-              );
-            }),
-      ),
+      body: GridView.builder(
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2, childAspectRatio: 3, crossAxisSpacing: 12),
+          itemCount: _textEditingController.text.isNotEmpty
+              ? icon_nameOnSearch.length
+              : icon_name.length,
+          itemBuilder: (context, index) {
+            print(icon_name[index][1]);
+            return Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                children: [
+                  CircleAvatar(
+                    radius: 58,
+                    backgroundColor: Color.fromARGB(255, 93, 99, 216),
+                    child: IconButton(
+                        iconSize: 30.0,
+                        onPressed: () {
+                          _show(context);
+                        },
+                        icon: Icon(
+                            IconData(
+                              icon_name[index][1],
+                              fontFamily: 'MaterialIcons',
+                            ),
+                            color: Color.fromARGB(255, 255, 255, 255))),
+                  ),
+                  SizedBox(
+                    width: 25,
+                  ),
+                  // Text(
+                  //     _textEditingController!.text.isNotEmpty
+                  //         ? icon_nameOnSearch[index][0]
+                  //         : icon_name[index][0],
+                  //     style: TextStyle(
+                  //         color: Colors.black,
+                  //         fontSize: 15,
+                  //         letterSpacing: .7)),
+                ],
+              ),
+            );
+          }),
     );
   }
 }
