@@ -18,6 +18,7 @@ class _othersSearchState extends State<othersSearch> {
     super.initState();
     Future.delayed(Duration(seconds: 1), () {
       Color.fromARGB(255, 93, 99, 216);
+
       setState(() {
         _loading = false;
       });

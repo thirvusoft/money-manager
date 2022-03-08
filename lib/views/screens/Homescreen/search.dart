@@ -11,6 +11,8 @@ class searchbar extends StatefulWidget {
 }
 
 class _searchbarState extends State<searchbar> {
+  
+
   TextEditingController _textEditingController = TextEditingController();
   bool _loading = true;
   @override
@@ -126,7 +128,6 @@ class _searchbarState extends State<searchbar> {
                     })),
         floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
         floatingActionButton: FloatingActionButton(
-            // isExtended: true,
             child: Icon(
               Icons.add,
               semanticLabel: 'Customise icon',
@@ -193,9 +194,7 @@ void _show(BuildContext ctx) {
                   "Submit",
                   style: TextStyle(color: Colors.white),
                 ),
-                onPressed: () {
-                  // submit();
-                })
+                onPressed: () {})
           ]),
     ),
   );

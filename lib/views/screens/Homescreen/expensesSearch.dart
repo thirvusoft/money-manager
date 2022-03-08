@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
+
 import '../Categories/Expense.dart';
 
 class expenseSearch extends StatefulWidget {
@@ -175,10 +176,13 @@ void _show(BuildContext ctx) {
             TextButton(
               style: TextButton.styleFrom(
                 textStyle: const TextStyle(fontSize: 20),
-              ),
+              ), 
               onPressed: () {},
               child: const Text('Image'),
+             
             ),
+           
+            
             Divider(),
             TextButton(
               style: TextButton.styleFrom(
@@ -209,3 +213,4 @@ void _show(BuildContext ctx) {
     ),
   );
 }
+

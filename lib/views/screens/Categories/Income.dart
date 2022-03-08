@@ -31,7 +31,7 @@ class _customIncomeState extends State<customIncome> {
       body: GridView.builder(
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 2, childAspectRatio: 3, crossAxisSpacing: 12),
-          itemCount: _textEditingController!.text.isNotEmpty
+          itemCount: _textEditingController.text.isNotEmpty
               ? icon_nameOnSearch.length
               : icon_name.length,
           itemBuilder: (context, index) {
