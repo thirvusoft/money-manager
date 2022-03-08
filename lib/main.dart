@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+
+import 'package:money_manager/views/screens/profile.dart';
 import 'package:money_manager/views/screens/splash_screen.dart';
 
 import 'views/screens/Categories/Asset.dart';
