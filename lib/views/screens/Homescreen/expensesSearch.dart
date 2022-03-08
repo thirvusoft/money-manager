@@ -107,48 +107,44 @@ class _expenseSearchState extends State<expenseSearch> {
                     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: 2,
                         childAspectRatio: 3,
-                        crossAxisSpacing: 12),
-                    itemCount: _textEditingController!.text.isNotEmpty
+                        crossAxisSpacing: 20),
+                    itemCount: _textEditingController.text.isNotEmpty
                         ? icon_nameOnSearch.length
                         : icon_name.length,
                     itemBuilder: (context, index) {
-                      return Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Row(
-                          children: [
-                            CircleAvatar(
-                              backgroundColor: Color.fromARGB(255, 93, 99, 216),
-                              child: IconButton(
-                                  onPressed: () {
-                                    _show(context);
-                                  },
-                                  icon: Icon(
-                                      IconData(icon_name[index][1],
-                                          fontFamily: 'MaterialIcons'),
-                                      color:
-                                          Color.fromARGB(255, 255, 255, 255))),
-                            ),
-                            SizedBox(
-                              width: 25,
-                            ),
-                            Text(
-                                _textEditingController!.text.isNotEmpty
-                                    ? icon_nameOnSearch[index][0]
-                                    : icon_name[index][0],
-                                style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 15,
-                                    letterSpacing: .7)),
-                          ],
-                        ),
-                      );
+                      print(icon_name[index][1]);
+                      return Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: Row(
+                            children: [
+                              Center(
+                                  child: TextButton.icon(
+                                      onPressed: () {
+                                        _show(context);
+                                      },
+                                      label: Text(
+                                        _textEditingController.text.isNotEmpty
+                                            ? icon_nameOnSearch[index][0]
+                                            : icon_name[index][0],
+                                        style: TextStyle(
+                                            color: Colors.black,
+                                            fontSize: 15,
+                                            letterSpacing: .7),
+                                      ),
+                                      icon: Icon(
+                                          IconData(icon_name[index][1],
+                                              fontFamily: 'MaterialIcons'),
+                                          color: Color.fromARGB(
+                                              255, 93, 99, 216)))),
+                            ],
+                          ));
                     })),
         floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
         floatingActionButton: FloatingActionButton(
-            child: Icon(
-              Icons.add,
-              semanticLabel: 'Customise icon',
-            ),
+            // isExtended: true,
+            child: Icon(Icons.add, semanticLabel: 'Customise icon'),
             backgroundColor: Color.fromARGB(255, 93, 99, 216),
             onPressed: () {
               Navigator.push(
