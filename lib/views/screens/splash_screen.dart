@@ -28,6 +28,7 @@ const colorizeTextStyle = TextStyle(
 class _splash_screenState extends State<splash_screen> {
   @override
   void initState() {
+    // TODO: implement initState
     super.initState();
     _navigatetohome();
   }
