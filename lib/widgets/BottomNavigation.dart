@@ -26,7 +26,7 @@ class _bottomnavigationState extends State<bottomnavigation> {
     expenseSearch(),
     incomeSearch(),
     othersSearch(),
-    Profiles(),
+    
   ];
   @override
   Widget build(BuildContext context) {
