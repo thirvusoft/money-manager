@@ -84,7 +84,7 @@ class _customExpenseState extends State<customExpense> {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              new Text(
+              Text(
                 "Expense",
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
