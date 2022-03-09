@@ -1,6 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:money_manager/views/screens/Categories/liability.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../Categories/Asset.dart';
 import 'package:http/http.dart' as http;
@@ -23,16 +26,26 @@ class _searchbarState extends State<searchbar> {
   var notescontroller = TextEditingController();
   var amountcontroller = TextEditingController();
   var datecontroller = TextEditingController();
+  String? type;
+  String? iconname;
   bool _loading = true;
   @override
   void initState() {
     super.initState();
+    check();
     Future.delayed(Duration(seconds: 1), () {
       Color.fromARGB(255, 93, 99, 216);
       setState(() {
         _loading = false;
       });
     });
+  }
+
+  check() async {
+    await listapi();
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    type = (prefs.getStringList("ts_subtype") ?? []) as String?;
+    iconname = (prefs.getStringList("ts_subtype") ?? []) as String?;
   }
 
   List icon_nameOnSearch = [];
@@ -293,6 +306,23 @@ class _searchbarState extends State<searchbar> {
           backgroundColor: Colors.red,
         ));
       }
+    }
+  }
+
+  Future listapi() async {
+    print('profile');
+    var response = await http.post(Uri.parse(
+        "http://192.168.24.34:8000/api/method/money_management_backend.custom.py.api.profile?email=barathpalanisamy2002@gmail.com"));
+    print('response');
+    if (response.statusCode == 200) {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      prefs.getStringList("ts_subtype") ?? [];
+      prefs.getStringList("icon_code") ?? [];
+
+      prefs.setString(
+          "icon_code", json.decode(response.body)['message']['icon_code']);
+      prefs.setString(
+          "ts_subtype", json.decode(response.body)['message']['ts_subtype']);
     }
   }
 }
