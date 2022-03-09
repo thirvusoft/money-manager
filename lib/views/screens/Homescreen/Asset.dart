@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:money_manager/views/screens/profile.dart';
+import 'package:money_manager/views/screens/Categories/liability.dart';
 
 import '../Categories/Asset.dart';
 import 'package:http/http.dart' as http;
+
+import '../profile.dart';
 
 class searchbar extends StatefulWidget {
   const searchbar({Key? key}) : super(key: key);
@@ -38,16 +40,14 @@ class _searchbarState extends State<searchbar> {
     ['Gold', 0xf1dd],
     ['Silver', 0xf1dd],
     ['Platinum', 0xf1dd],
-    ['Diamond', 0xf05e7],
     ['Vehicles', 0xee62],
-    ['Home ', 0xf447],
+    ['Home ', 0xe45f],
     ['Machinery', 0xef06],
-    ['Agri Land', 0xf05ce],
     ['Comm Land', 0xf42b],
     ['Residential ', 0xf1af],
   ];
-
   var data;
+  var subtypes;
   get index => null;
   @override
   Widget build(BuildContext context) {
@@ -97,7 +97,7 @@ class _searchbarState extends State<searchbar> {
                   errorBorder: InputBorder.none,
                   focusedBorder: InputBorder.none,
                   contentPadding: EdgeInsets.all(15),
-                  hintText: "search",
+                  hintText: "Search",
                   prefixIcon: Icon(
                     Icons.search,
                     color: Color.fromARGB(255, 93, 99, 216),
@@ -115,7 +115,7 @@ class _searchbarState extends State<searchbar> {
                     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: 2,
                         childAspectRatio: 3,
-                        crossAxisSpacing: 12),
+                        crossAxisSpacing: 20),
                     itemCount: _textEditingController.text.isNotEmpty
                         ? icon_nameOnSearch.length
                         : icon_name.length,
@@ -130,7 +130,9 @@ class _searchbarState extends State<searchbar> {
                               Center(
                                   child: TextButton.icon(
                                       onPressed: () {
-                                        _show(context);
+                                        subtypes = icon_name[index][0];
+                                        _show(context, subtypes);
+                                        print(icon_name[index][0]);
                                       },
                                       label: Text(
                                         _textEditingController.text.isNotEmpty
@@ -151,20 +153,18 @@ class _searchbarState extends State<searchbar> {
                     })),
         floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
         floatingActionButton: FloatingActionButton(
-            child: Icon(
-              Icons.add,
-              semanticLabel: 'Customise icon',
-            ),
+            // isExtended: true,
+            child: Icon(Icons.add, semanticLabel: 'Customise icon'),
             backgroundColor: Color.fromARGB(255, 93, 99, 216),
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => customAsset()),
+                MaterialPageRoute(builder: (context) => customLiability()),
               );
             }));
   }
 
-  void _show(BuildContext ctx) {
+  void _show(BuildContext ctx, subtypes) {
     showModalBottomSheet(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.all(Radius.circular(10.0)),
@@ -182,13 +182,22 @@ class _searchbarState extends State<searchbar> {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text("Asset",
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
-
-              TextField(
-                controller: subtypecontroller,
-                decoration: InputDecoration(labelText: 'SubType'),
+              // TextField(
+              //   controller: subtypecontroller,
+              //   decoration: InputDecoration(labelText: 'SubType'),
+              // ),
+              Align(
+                alignment: Alignment
+                    .center, // Align however you like (i.e .centerRight, centerLeft)
+                child: Text("Liability",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(fontSize: 25)),
               ),
+              Text(subtypes, style: TextStyle(fontSize: 20)),
+              // TextField(
+              //   controller: subtypecontroller,
+              //   decoration: InputDecoration(labelText: 'Subtype'),
+              // ),
               TextField(
                 controller: namecontroller,
                 decoration: InputDecoration(labelText: 'Name'),
@@ -234,37 +243,45 @@ class _searchbarState extends State<searchbar> {
                     style: TextStyle(color: Colors.white),
                   ),
                   onPressed: () {
-                    print(typecontroller.text);
+                    // print(typecontroller.text);
                     dataentry(
-                        typecontroller.text,
-                        subtypecontroller.text,
-                        namecontroller.text,
-                        notescontroller.text,
-                        amountcontroller.text,
-                        datecontroller.text);
+                      typecontroller.text,
+                      subtypes,
+                      namecontroller.text,
+                      notescontroller.text,
+                      amountcontroller.text,
+                      datecontroller.text,
+                    );
                   })
             ]),
       ),
     );
   }
 
-  Future dataentry(type, subtype, name, notes, amount, date) async {
+  Future dataentry(
+    type,
+    subtypes,
+    name,
+    notes,
+    amount,
+    date,
+  ) async {
     if (typecontroller.text.isNotEmpty ||
-        subtypecontroller.text.isNotEmpty ||
         namecontroller.text.isNotEmpty ||
         notescontroller.text.isNotEmpty ||
         amountcontroller.text.isNotEmpty ||
         datecontroller.text.isNotEmpty) {
-      print(subtypecontroller.text);
+      print("check");
       var response = await http.post(Uri.parse(
-          "http://192.168.24.34:8000/api/method/money_management_backend.custom.py.api.daily_entry_submit?Type=Asset&Subtype=${subtype}&Name=${name}&Notes=${notes}&Amount=${amount}&Remainder_date=${date}"));
-      //print(response.statusCode);
+          "http://192.168.24.34:8000/api/method/money_management_backend.custom.py.api.daily_entry_submit?Type=Liability&Subtype=${subtypes}&Name=${name}&Notes=${notes}&Amount=${amount}&Remainder_date=${date}"));
+      print(response.statusCode);
+      print("response");
       if (response.statusCode == 200) {
         print(response.statusCode);
         Navigator.pop(context);
 
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text("submited sucessfully"),
+          content: Text("Submited Sucessfully"),
           backgroundColor: Colors.green,
         ));
       } else {

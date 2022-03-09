@@ -42,6 +42,7 @@ class _othersSearchState extends State<othersSearch> {
     ['Profile', 0xee35],
   ];
   var data;
+  var subtypes;
   get index => null;
   @override
   Widget build(BuildContext context) {
@@ -91,7 +92,7 @@ class _othersSearchState extends State<othersSearch> {
                   errorBorder: InputBorder.none,
                   focusedBorder: InputBorder.none,
                   contentPadding: EdgeInsets.all(15),
-                  hintText: "search",
+                  hintText: "Search",
                   prefixIcon: Icon(
                     Icons.search,
                     color: Color.fromARGB(255, 93, 99, 216),
@@ -124,7 +125,8 @@ class _othersSearchState extends State<othersSearch> {
                               Center(
                                   child: TextButton.icon(
                                       onPressed: () {
-                                        _show(context);
+                                        subtypes = icon_name[index][0];
+                                        _show(context, subtypes);
                                       },
                                       label: Text(
                                         _textEditingController.text.isNotEmpty
@@ -156,7 +158,7 @@ class _othersSearchState extends State<othersSearch> {
             }));
   }
 
-  void _show(BuildContext ctx) {
+  void _show(BuildContext ctx, subtypes) {
     showModalBottomSheet(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.all(Radius.circular(10.0)),
@@ -174,13 +176,18 @@ class _othersSearchState extends State<othersSearch> {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text("Others",
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
-
-              TextField(
-                controller: subtypecontroller,
-                decoration: InputDecoration(labelText: 'SubType'),
+              Align(
+                alignment: Alignment
+                    .center, // Align however you like (i.e .centerRight, centerLeft)
+                child: Text("Others",
+                    style:
+                        TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
               ),
+              Text(subtypes, style: TextStyle(fontSize: 20)),
+              // TextField(
+              //   controller: subtypecontroller,
+              //   decoration: InputDecoration(labelText: 'SubType'),
+              // ),
               TextField(
                 controller: namecontroller,
                 decoration: InputDecoration(labelText: 'Name'),
@@ -229,7 +236,7 @@ class _othersSearchState extends State<othersSearch> {
                     // print(typecontroller.text);
                     dataentry(
                         typecontroller.text,
-                        subtypecontroller.text,
+                        subtypes,
                         namecontroller.text,
                         notescontroller.text,
                         amountcontroller.text,
@@ -240,22 +247,21 @@ class _othersSearchState extends State<othersSearch> {
     );
   }
 
-  Future dataentry(type, subtype, name, notes, amount, date) async {
+  Future dataentry(type, subtypes, name, notes, amount, date) async {
     if (typecontroller.text.isNotEmpty ||
-        subtypecontroller.text.isNotEmpty ||
         namecontroller.text.isNotEmpty ||
         notescontroller.text.isNotEmpty ||
         amountcontroller.text.isNotEmpty ||
         datecontroller.text.isNotEmpty) {
       print(subtypecontroller.text);
       var response = await http.post(Uri.parse(
-          "http://192.168.24.34:8000/api/method/money_management_backend.custom.py.api.daily_entry_submit?Type=Others&Subtype=${subtype}&Name=${name}&Notes=${notes}&Amount=${amount}&Remainder_date=${date}"));
+          "http://192.168.24.34:8000/api/method/money_management_backend.custom.py.api.daily_entry_submit?Type=Others&Subtype=${subtypes}&Name=${name}&Notes=${notes}&Amount=${amount}&Remainder_date=${date}"));
       //print(response.statusCode);
       if (response.statusCode == 200) {
         print(response.statusCode);
         Navigator.pop(context);
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text("submited sucessfully"),
+          content: Text("Submited Sucessfully"),
           backgroundColor: Colors.green,
         ));
       } else {

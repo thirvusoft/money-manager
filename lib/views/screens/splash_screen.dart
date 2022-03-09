@@ -35,7 +35,7 @@ class _splash_screenState extends State<splash_screen> {
   _navigatetohome() async {
     await Future.delayed(Duration(milliseconds: 2250), () {});
     Navigator.pushReplacement(
-        context, MaterialPageRoute(builder: (Context) => bottomnavigation()));
+        context, MaterialPageRoute(builder: (Context) => login_page()));
   }
 
   @override
