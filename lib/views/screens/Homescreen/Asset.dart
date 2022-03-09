@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:money_manager/views/screens/profile.dart';
 
 import '../Categories/Asset.dart';
 import 'package:http/http.dart' as http;
@@ -33,16 +34,16 @@ class _searchbarState extends State<searchbar> {
 
   List icon_nameOnSearch = [];
   List icon_name = [
-    ['Gold', 987727],
-    ['Silver', 987727],
-    ['Platinum', 987727],
+    ['Gold', 0xf1dd],
+    ['Silver', 0xf1dd],
+    ['Platinum', 0xf1dd],
     ['Diamond', 0xf05e7],
     ['Vehicles', 0xee62],
     ['Home ', 0xf447],
     ['Machinery', 0xef06],
-    ['Agri Land', 987215],
+    ['Agri Land', 0xf05ce],
     ['Comm Land', 0xf42b],
-    ['Residential ', 98633],
+    ['Residential ', 0xf1af],
   ];
 
   var data;
@@ -52,9 +53,25 @@ class _searchbarState extends State<searchbar> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
+          actions: [
+            InkWell(
+              onTap: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => Profiles()));
+              },
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Icon(
+                  Icons.account_circle_outlined,
+                  size: 30,
+                ),
+              ),
+            ),
+          ],
           backgroundColor: Color.fromARGB(255, 93, 99, 216),
           automaticallyImplyLeading: false,
           title: Container(
+            width: 330,
             decoration: BoxDecoration(
                 color: Color.fromARGB(255, 255, 255, 255),
                 borderRadius: BorderRadius.circular(10)),
@@ -76,12 +93,15 @@ class _searchbarState extends State<searchbar> {
               },
               controller: _textEditingController,
               decoration: InputDecoration(
-                border: InputBorder.none,
-                errorBorder: InputBorder.none,
-                focusedBorder: InputBorder.none,
-                contentPadding: EdgeInsets.all(15),
-                hintText: "search",
-              ),
+                  border: InputBorder.none,
+                  errorBorder: InputBorder.none,
+                  focusedBorder: InputBorder.none,
+                  contentPadding: EdgeInsets.all(15),
+                  hintText: "search",
+                  prefixIcon: Icon(
+                    Icons.search,
+                    color: Color.fromARGB(255, 93, 99, 216),
+                  )),
             ),
           ),
         ),
@@ -96,42 +116,38 @@ class _searchbarState extends State<searchbar> {
                         crossAxisCount: 2,
                         childAspectRatio: 3,
                         crossAxisSpacing: 12),
-                    itemCount: _textEditingController!.text.isNotEmpty
+                    itemCount: _textEditingController.text.isNotEmpty
                         ? icon_nameOnSearch.length
                         : icon_name.length,
                     itemBuilder: (context, index) {
                       print(icon_name[index][1]);
-                      return Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Row(
-                          children: [
-                            CircleAvatar(
-                              backgroundColor: Color.fromARGB(255, 93, 99, 216),
-                              child: IconButton(
-                                  onPressed: () {
-                                    subtypes = icon_name[index][0];
-                                    _show(context, subtypes);
-                                  },
-                                  icon: Icon(
-                                      IconData(icon_name[index][1],
-                                          fontFamily: 'MaterialIcons'),
-                                      color:
-                                          Color.fromARGB(255, 255, 255, 255))),
-                            ),
-                            SizedBox(
-                              width: 25,
-                            ),
-                            Text(
-                                _textEditingController!.text.isNotEmpty
-                                    ? icon_nameOnSearch[index][0]
-                                    : icon_name[index][0],
-                                style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 15,
-                                    letterSpacing: .7)),
-                          ],
-                        ),
-                      );
+                      return Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: Row(
+                            children: [
+                              Center(
+                                  child: TextButton.icon(
+                                      onPressed: () {
+                                        _show(context, subtypes);
+                                      },
+                                      label: Text(
+                                        _textEditingController.text.isNotEmpty
+                                            ? icon_nameOnSearch[index][0]
+                                            : icon_name[index][0],
+                                        style: TextStyle(
+                                            color: Colors.black,
+                                            fontSize: 15,
+                                            letterSpacing: .7),
+                                      ),
+                                      icon: Icon(
+                                          IconData(icon_name[index][1],
+                                              fontFamily: 'MaterialIcons'),
+                                          color: Color.fromARGB(
+                                              255, 93, 99, 216)))),
+                            ],
+                          ));
                     })),
         floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
         floatingActionButton: FloatingActionButton(

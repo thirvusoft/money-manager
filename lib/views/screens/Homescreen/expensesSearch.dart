@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:money_manager/views/screens/Categories/Expense.dart';
 
 import '../Categories/Asset.dart';
 import 'package:http/http.dart' as http;
+
+import '../profile.dart';
 
 class expenseSearch extends StatefulWidget {
   const expenseSearch({Key? key}) : super(key: key);
@@ -49,7 +52,7 @@ class _expenseSearchState extends State<expenseSearch> {
     ['Health', 0xf0f2],
     ['Beauty', 0xf041],
     ['Electronics', 0xef0d],
-    ['Gift', 986692],
+    ['Gift', 0xef2d],
     ['Education', 0xf33c],
     ['Maintenance', 0xf108],
     ['Social service', 0xf06a4],
@@ -65,9 +68,25 @@ class _expenseSearchState extends State<expenseSearch> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
+          actions: [
+            InkWell(
+              onTap: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => Profiles()));
+              },
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Icon(
+                  Icons.account_circle_outlined,
+                  size: 30,
+                ),
+              ),
+            ),
+          ],
           backgroundColor: Color.fromARGB(255, 93, 99, 216),
           automaticallyImplyLeading: false,
           title: Container(
+            width: 330,
             decoration: BoxDecoration(
                 color: Color.fromARGB(255, 255, 255, 255),
                 borderRadius: BorderRadius.circular(10)),
@@ -89,12 +108,15 @@ class _expenseSearchState extends State<expenseSearch> {
               },
               controller: _textEditingController,
               decoration: InputDecoration(
-                border: InputBorder.none,
-                errorBorder: InputBorder.none,
-                focusedBorder: InputBorder.none,
-                contentPadding: EdgeInsets.all(15),
-                hintText: "search",
-              ),
+                  border: InputBorder.none,
+                  errorBorder: InputBorder.none,
+                  focusedBorder: InputBorder.none,
+                  contentPadding: EdgeInsets.all(15),
+                  hintText: "search",
+                  prefixIcon: Icon(
+                    Icons.search,
+                    color: Color.fromARGB(255, 93, 99, 216),
+                  )),
             ),
           ),
         ),
@@ -151,7 +173,7 @@ class _expenseSearchState extends State<expenseSearch> {
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => customAsset()),
+                MaterialPageRoute(builder: (context) => customExpense()),
               );
             }));
   }

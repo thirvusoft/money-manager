@@ -15,11 +15,12 @@ class _customOthersState extends State<customOthers> {
   var namecontroller = TextEditingController();
   List icon_nameOnSearch = [];
   List icon_name = [
-    ['', 58759],
-    ['', 61190],
-    [' ', 987215],
-    [' ', 62507],
-    ['', 98633],
+    ['', 0xee35],
+    ['', 0xf12f],
+    [' ', 0xef8f],
+    [' ', 0xef2d],
+    ['', 0xee33],
+    ['', 0xf2dd]
   ];
 
   var data;
@@ -119,7 +120,7 @@ class _customOthersState extends State<customOthers> {
   Future cussubmit(type, name) async {
     if (typecontroller.text.isNotEmpty || namecontroller.text.isNotEmpty) {
       var response = await http.post(Uri.parse(
-          "http://192.168.24.34:8000/api/method/money_management_backend.custom.py.api.custom?Type=Others&name=${name}&IconBineryCode=654654"));
+          "http://192.168.24.34:8000/api/method/money_management_backend.custom.py.api.custom?Type=Others&Subtype=${name}&IconBineryCode=654654"));
       print(response.statusCode);
       if (response.statusCode == 200) {
         print(response.statusCode);

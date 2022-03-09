@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:money_manager/views/screens/Categories/Others.dart';
 
 import '../Categories/Asset.dart';
 import 'package:http/http.dart' as http;
+
+import '../profile.dart';
 
 class othersSearch extends StatefulWidget {
   const othersSearch({Key? key}) : super(key: key);
@@ -45,9 +48,25 @@ class _othersSearchState extends State<othersSearch> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
+          actions: [
+            InkWell(
+              onTap: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => Profiles()));
+              },
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Icon(
+                  Icons.account_circle_outlined,
+                  size: 30,
+                ),
+              ),
+            ),
+          ],
           backgroundColor: Color.fromARGB(255, 93, 99, 216),
           automaticallyImplyLeading: false,
           title: Container(
+            width: 330,
             decoration: BoxDecoration(
                 color: Color.fromARGB(255, 255, 255, 255),
                 borderRadius: BorderRadius.circular(10)),
@@ -69,12 +88,15 @@ class _othersSearchState extends State<othersSearch> {
               },
               controller: _textEditingController,
               decoration: InputDecoration(
-                border: InputBorder.none,
-                errorBorder: InputBorder.none,
-                focusedBorder: InputBorder.none,
-                contentPadding: EdgeInsets.all(15),
-                hintText: "search",
-              ),
+                  border: InputBorder.none,
+                  errorBorder: InputBorder.none,
+                  focusedBorder: InputBorder.none,
+                  contentPadding: EdgeInsets.all(15),
+                  hintText: "search",
+                  prefixIcon: Icon(
+                    Icons.search,
+                    color: Color.fromARGB(255, 93, 99, 216),
+                  )),
             ),
           ),
         ),
@@ -131,7 +153,7 @@ class _othersSearchState extends State<othersSearch> {
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => customAsset()),
+                MaterialPageRoute(builder: (context) => customOthers()),
               );
             }));
   }
