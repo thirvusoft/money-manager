@@ -47,6 +47,7 @@ class _searchbarState extends State<searchbar> {
   ];
 
   var data;
+  var subtypes;
   get index => null;
   @override
   Widget build(BuildContext context) {
@@ -109,7 +110,8 @@ class _searchbarState extends State<searchbar> {
                               backgroundColor: Color.fromARGB(255, 93, 99, 216),
                               child: IconButton(
                                   onPressed: () {
-                                    _show(context);
+                                    subtypes = icon_name[index][0];
+                                    _show(context, subtypes);
                                   },
                                   icon: Icon(
                                       IconData(icon_name[index][1],
@@ -147,7 +149,7 @@ class _searchbarState extends State<searchbar> {
             }));
   }
 
-  void _show(BuildContext ctx) {
+  void _show(BuildContext ctx, subtypes) {
     showModalBottomSheet(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.all(Radius.circular(10.0)),
@@ -165,8 +167,12 @@ class _searchbarState extends State<searchbar> {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text("Asset",
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
+              Align(
+                alignment: Alignment
+                    .center, // Align however you like (i.e .centerRight, centerLeft)
+                child: Text("Asset", style: TextStyle(fontSize: 20)),
+              ),
+              Text(subtypes, style: TextStyle(fontSize: 20)),
 
               TextField(
                 controller: subtypecontroller,

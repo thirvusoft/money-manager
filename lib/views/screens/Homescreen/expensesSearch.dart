@@ -59,6 +59,7 @@ class _expenseSearchState extends State<expenseSearch> {
   ];
 
   var data;
+  var subtype;
   get index => null;
   @override
   Widget build(BuildContext context) {
@@ -122,7 +123,8 @@ class _expenseSearchState extends State<expenseSearch> {
                               Center(
                                   child: TextButton.icon(
                                       onPressed: () {
-                                        _show(context);
+                                        subtype = icon_name[index][0];
+                                        _show(context, subtype);
                                       },
                                       label: Text(
                                         _textEditingController.text.isNotEmpty
@@ -154,7 +156,7 @@ class _expenseSearchState extends State<expenseSearch> {
             }));
   }
 
-  void _show(BuildContext ctx) {
+  void _show(BuildContext ctx, subtype) {
     showModalBottomSheet(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.all(Radius.circular(10.0)),
@@ -172,9 +174,16 @@ class _expenseSearchState extends State<expenseSearch> {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text("Expense",
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
+              Align(
+                alignment: Alignment
+                    .center, // Align however you like (i.e .centerRight, centerLeft)
+                child: Text("Expense",
+                    style:
+                        TextStyle(fontWeight: FontWeight.bold, fontSize: 25)),
+              ),
 
+              Text(subtype,
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
               TextField(
                 controller: subtypecontroller,
                 decoration: InputDecoration(labelText: 'SubType'),
