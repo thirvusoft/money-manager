@@ -70,12 +70,6 @@ class _bottomnavigationState extends State<bottomnavigation> {
             title: Text("Others",
                 style: TextStyle(color: Color.fromARGB(255, 93, 99, 217))),
           ),
-          BottomNavyBarItem(
-            icon:
-                Icon(Icons.person_add, color: Color.fromARGB(255, 93, 99, 217)),
-            title: Text("Profile",
-                style: TextStyle(color: Color.fromARGB(255, 93, 99, 217))),
-          ),
         ],
       ),
     );
