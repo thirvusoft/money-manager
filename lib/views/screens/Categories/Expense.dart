@@ -15,11 +15,12 @@ class _customExpenseState extends State<customExpense> {
   var namecontroller = TextEditingController();
   List icon_nameOnSearch = [];
   List icon_name = [
-    ['', 61847],
-    ['', 61190],
-    ['', 987215],
-    ['', 62507],
-    ['', 98633],
+    ['', 0xee35],
+    ['', 0xf12f],
+    [' ', 0xef8f],
+    [' ', 0xef2d],
+    ['', 0xee33],
+    ['', 0xf2dd]
   ];
 
   var data;
@@ -84,7 +85,7 @@ class _customExpenseState extends State<customExpense> {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              new Text(
+              Text(
                 "Expense",
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
