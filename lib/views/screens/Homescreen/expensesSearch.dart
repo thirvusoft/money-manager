@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:money_manager/views/screens/Categories/Expense.dart';
 
 import '../Categories/Asset.dart';
 import 'package:http/http.dart' as http;
@@ -149,7 +150,7 @@ class _expenseSearchState extends State<expenseSearch> {
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => customAsset()),
+                MaterialPageRoute(builder: (context) => customExpense()),
               );
             }));
   }

@@ -4,6 +4,8 @@ import 'package:flutter/rendering.dart';
 import '../Categories/Asset.dart';
 import 'package:http/http.dart' as http;
 
+import '../Categories/liability.dart';
+
 class liabilitySearch extends StatefulWidget {
   const liabilitySearch({Key? key}) : super(key: key);
 
@@ -128,7 +130,7 @@ class _liabilitySearchState extends State<liabilitySearch> {
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => customAsset()),
+                MaterialPageRoute(builder: (context) => customLiability()),
               );
             }));
   }

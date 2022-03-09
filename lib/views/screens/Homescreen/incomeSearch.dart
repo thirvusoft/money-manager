@@ -4,6 +4,8 @@ import 'package:flutter/rendering.dart';
 import '../Categories/Asset.dart';
 import 'package:http/http.dart' as http;
 
+import '../Categories/Income.dart';
+
 class incomeSearch extends StatefulWidget {
   const incomeSearch({Key? key}) : super(key: key);
 
@@ -135,7 +137,7 @@ class _incomeSearchState extends State<incomeSearch> {
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => customAsset()),
+                MaterialPageRoute(builder: (context) => customIncome()),
               );
             }));
   }

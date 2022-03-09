@@ -4,6 +4,8 @@ import 'package:flutter/rendering.dart';
 import '../Categories/Asset.dart';
 import 'package:http/http.dart' as http;
 
+import '../Categories/Others.dart';
+
 class othersSearch extends StatefulWidget {
   const othersSearch({Key? key}) : super(key: key);
 
@@ -129,7 +131,7 @@ class _othersSearchState extends State<othersSearch> {
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => customAsset()),
+                MaterialPageRoute(builder: (context) => customOthers()),
               );
             }));
   }
