@@ -42,9 +42,9 @@ class _searchbarState extends State<searchbar> {
     ['Vehicles', 0xee62],
     ['Home ', 0xf447],
     ['Machinery', 0xef06],
-    ['Agri Land', 987215],
+    ['Agri Land', 0xf05ce],
     ['Comm Land', 0xf42b],
-    ['Residential ', 98633],
+    ['Residential ', 0xf1af],
   ];
 
   var data;

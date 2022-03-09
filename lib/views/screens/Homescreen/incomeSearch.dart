@@ -39,7 +39,7 @@ class _incomeSearchState extends State<incomeSearch> {
   List icon_name = [
     ['Salary', 61505],
     ['Asset Sale', 0xf2ee],
-    ['Scrap Sale', 989624],
+    ['Scrap Sale', 0xf18e],
     ['Rental', 0xf244],
     ['Refunds', 0xf2d6],
     ['Coupons', 0xf3f6],

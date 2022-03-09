@@ -52,7 +52,7 @@ class _expenseSearchState extends State<expenseSearch> {
     ['Health', 0xf0f2],
     ['Beauty', 0xf041],
     ['Electronics', 0xef0d],
-    ['Gift', 986692],
+    ['Gift', 0xef2d],
     ['Education', 0xf33c],
     ['Maintenance', 0xf108],
     ['Social service', 0xf06a4],
