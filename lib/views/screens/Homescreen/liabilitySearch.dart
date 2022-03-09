@@ -91,7 +91,7 @@ class _liabilitySearchState extends State<liabilitySearch> {
                   errorBorder: InputBorder.none,
                   focusedBorder: InputBorder.none,
                   contentPadding: EdgeInsets.all(15),
-                  hintText: "search",
+                  hintText: "Search",
                   prefixIcon: Icon(
                     Icons.search,
                     color: Color.fromARGB(255, 93, 99, 216),
@@ -275,7 +275,7 @@ class _liabilitySearchState extends State<liabilitySearch> {
         Navigator.pop(context);
 
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text("submited sucessfully"),
+          content: Text("Submited Sucessfully"),
           backgroundColor: Colors.green,
         ));
       } else {

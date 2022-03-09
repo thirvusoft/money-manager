@@ -44,7 +44,6 @@ class _incomeSearchState extends State<incomeSearch> {
     ['Refunds', 0xf2d6],
     ['Coupons', 0xf3f6],
     ['Lottery', 0xf3e8],
-    ['Dividends', 0xf0617],
     ['profit', 0xee35],
   ];
 
@@ -101,7 +100,7 @@ class _incomeSearchState extends State<incomeSearch> {
                   errorBorder: InputBorder.none,
                   focusedBorder: InputBorder.none,
                   contentPadding: EdgeInsets.all(15),
-                  hintText: "search",
+                  hintText: "Search",
                   prefixIcon: Icon(
                     Icons.search,
                     color: Color.fromARGB(255, 93, 99, 216),
@@ -270,7 +269,7 @@ class _incomeSearchState extends State<incomeSearch> {
         Navigator.pop(context);
 
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text("submited sucessfully"),
+          content: Text("Submited Sucessfully"),
           backgroundColor: Colors.green,
         ));
       } else {

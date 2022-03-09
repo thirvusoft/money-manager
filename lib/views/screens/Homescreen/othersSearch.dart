@@ -92,7 +92,7 @@ class _othersSearchState extends State<othersSearch> {
                   errorBorder: InputBorder.none,
                   focusedBorder: InputBorder.none,
                   contentPadding: EdgeInsets.all(15),
-                  hintText: "search",
+                  hintText: "Search",
                   prefixIcon: Icon(
                     Icons.search,
                     color: Color.fromARGB(255, 93, 99, 216),
@@ -261,7 +261,7 @@ class _othersSearchState extends State<othersSearch> {
         print(response.statusCode);
         Navigator.pop(context);
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text("submited sucessfully"),
+          content: Text("Submited Sucessfully"),
           backgroundColor: Colors.green,
         ));
       } else {

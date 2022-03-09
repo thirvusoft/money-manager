@@ -42,8 +42,7 @@ class _expenseSearchState extends State<expenseSearch> {
     ['Grocery', 0xf37d],
     ['Entertainment', 0xf3cf],
     ['Shopping', 0xf37f],
-    ['Clothing', 984383],
-    ['Insurance', 0xf05f0],
+    ['Clothing', 0xe15d],
     ['Tax', 0xf24e],
     ['Gas', 0xf076],
     ['Electricity', 0xf016],
@@ -55,10 +54,8 @@ class _expenseSearchState extends State<expenseSearch> {
     ['Gift', 0xef2d],
     ['Education', 0xf33c],
     ['Maintenance', 0xf108],
-    ['Social service', 0xf06a4],
     ['Construction', 0xf109],
     ['Crop', 0xf041],
-    ['Fertilizer', 0xf068b],
   ];
 
   var data;
@@ -112,7 +109,7 @@ class _expenseSearchState extends State<expenseSearch> {
                   errorBorder: InputBorder.none,
                   focusedBorder: InputBorder.none,
                   contentPadding: EdgeInsets.all(15),
-                  hintText: "search",
+                  hintText: "Search",
                   prefixIcon: Icon(
                     Icons.search,
                     color: Color.fromARGB(255, 93, 99, 216),
@@ -135,7 +132,6 @@ class _expenseSearchState extends State<expenseSearch> {
                         ? icon_nameOnSearch.length
                         : icon_name.length,
                     itemBuilder: (context, index) {
-                      print(icon_name[index][1]);
                       return Container(
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(10),
@@ -284,7 +280,7 @@ class _expenseSearchState extends State<expenseSearch> {
         Navigator.pop(context);
 
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text("submited sucessfully"),
+          content: Text("Submited Sucessfully"),
           backgroundColor: Colors.green,
         ));
       } else {
