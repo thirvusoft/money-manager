@@ -35,8 +35,8 @@ class _searchbarState extends State<searchbar> {
   List icon_nameOnSearch = [];
   List icon_name = [
     ['Gold', 0xf1dd],
-    ['Silver', 987727],
-    ['Platinum', 987727],
+    ['Silver', 0xf1dd],
+    ['Platinum', 0xf1dd],
     ['Diamond', 0xf05e7],
     ['Vehicles', 0xee62],
     ['Home ', 0xf447],
