@@ -156,7 +156,7 @@ class _expenseSearchState extends State<expenseSearch> {
             }));
   }
 
-  void _show(BuildContext ctx, subtype) {
+  void _show(BuildContext ctx, subtypes) {
     showModalBottomSheet(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.all(Radius.circular(10.0)),
@@ -184,10 +184,10 @@ class _expenseSearchState extends State<expenseSearch> {
 
               Text(subtype,
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
-              TextField(
-                controller: subtypecontroller,
-                decoration: InputDecoration(labelText: 'SubType'),
-              ),
+              // TextField(
+              //   controller: subtypecontroller,
+              //   decoration: InputDecoration(labelText: 'SubType'),
+              // ),
               TextField(
                 controller: namecontroller,
                 decoration: InputDecoration(labelText: 'Name'),
@@ -236,7 +236,7 @@ class _expenseSearchState extends State<expenseSearch> {
                     // print(typecontroller.text);
                     dataentry(
                         typecontroller.text,
-                        subtypecontroller.text,
+                        subtypes,
                         namecontroller.text,
                         notescontroller.text,
                         amountcontroller.text,
@@ -247,16 +247,15 @@ class _expenseSearchState extends State<expenseSearch> {
     );
   }
 
-  Future dataentry(type, subtype, name, notes, amount, date) async {
+  Future dataentry(type, subtypes, name, notes, amount, date) async {
     if (typecontroller.text.isNotEmpty ||
-        subtypecontroller.text.isNotEmpty ||
         namecontroller.text.isNotEmpty ||
         notescontroller.text.isNotEmpty ||
         amountcontroller.text.isNotEmpty ||
         datecontroller.text.isNotEmpty) {
       print(subtypecontroller.text);
       var response = await http.post(Uri.parse(
-          "http://192.168.24.34:8000/api/method/money_management_backend.custom.py.api.daily_entry_submit?Type=Expense&Subtype=${subtype}&Name=${name}&Notes=${notes}&Amount=${amount}&Remainder_date=${date}"));
+          "http://192.168.24.34:8000/api/method/money_management_backend.custom.py.api.daily_entry_submit?Type=Expense&Subtype=${subtypes}&Name=${name}&Notes=${notes}&Amount=${amount}&Remainder_date=${date}"));
       //print(response.statusCode);
       if (response.statusCode == 200) {
         print(response.statusCode);

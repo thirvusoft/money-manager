@@ -15,7 +15,6 @@ class _searchbarState extends State<searchbar> {
   TextEditingController _textEditingController = TextEditingController();
 
   var typecontroller = TextEditingController();
-  var subtypecontroller = TextEditingController();
   var namecontroller = TextEditingController();
   var notescontroller = TextEditingController();
   var amountcontroller = TextEditingController();
@@ -174,10 +173,10 @@ class _searchbarState extends State<searchbar> {
               ),
               Text(subtypes, style: TextStyle(fontSize: 20)),
 
-              TextField(
-                controller: subtypecontroller,
-                decoration: InputDecoration(labelText: 'SubType'),
-              ),
+              // TextField(
+              //   controller: subtypecontroller,
+              //   decoration: InputDecoration(labelText: 'SubType'),
+              // ),
               TextField(
                 controller: namecontroller,
                 decoration: InputDecoration(labelText: 'Name'),
@@ -224,29 +223,32 @@ class _searchbarState extends State<searchbar> {
                   ),
                   onPressed: () {
                     print(typecontroller.text);
+                    print(subtypes);
+                    print('test');
                     dataentry(
-                        typecontroller.text,
-                        subtypecontroller.text,
-                        namecontroller.text,
-                        notescontroller.text,
-                        amountcontroller.text,
-                        datecontroller.text);
+                      typecontroller.text,
+                      subtypes,
+                      namecontroller.text,
+                      notescontroller.text,
+                      amountcontroller.text,
+                      datecontroller.text,
+                    );
                   })
             ]),
       ),
     );
   }
 
-  Future dataentry(type, subtype, name, notes, amount, date) async {
+  Future dataentry(type, subtypes, name, notes, amount, date) async {
     if (typecontroller.text.isNotEmpty ||
-        subtypecontroller.text.isNotEmpty ||
         namecontroller.text.isNotEmpty ||
         notescontroller.text.isNotEmpty ||
         amountcontroller.text.isNotEmpty ||
         datecontroller.text.isNotEmpty) {
-      print(subtypecontroller.text);
+      print(namecontroller.text);
+      print(subtypes);
       var response = await http.post(Uri.parse(
-          "http://192.168.24.34:8000/api/method/money_management_backend.custom.py.api.daily_entry_submit?Type=Asset&Subtype=${subtype}&Name=${name}&Notes=${notes}&Amount=${amount}&Remainder_date=${date}"));
+          "http://192.168.24.34:8000/api/method/money_management_backend.custom.py.api.daily_entry_submit?Type=Asset&Subtype=${subtypes}&Name=${name}&Notes=${notes}&Amount=${amount}&Remainder_date=${date}"));
       //print(response.statusCode);
       if (response.statusCode == 200) {
         print(response.statusCode);

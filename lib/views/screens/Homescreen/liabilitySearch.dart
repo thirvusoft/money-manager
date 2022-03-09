@@ -166,10 +166,10 @@ class _liabilitySearchState extends State<liabilitySearch> {
                     style: TextStyle(fontSize: 25)),
               ),
               Text(subtypes, style: TextStyle(fontSize: 20)),
-              TextField(
-                controller: subtypecontroller,
-                decoration: InputDecoration(labelText: 'Subtype'),
-              ),
+              // TextField(
+              //   controller: subtypecontroller,
+              //   decoration: InputDecoration(labelText: 'Subtype'),
+              // ),
               TextField(
                 controller: namecontroller,
                 decoration: InputDecoration(labelText: 'Name'),
@@ -218,7 +218,7 @@ class _liabilitySearchState extends State<liabilitySearch> {
                     // print(typecontroller.text);
                     dataentry(
                       typecontroller.text,
-                      subtypecontroller.text,
+                      subtypes,
                       namecontroller.text,
                       notescontroller.text,
                       amountcontroller.text,
@@ -230,16 +230,22 @@ class _liabilitySearchState extends State<liabilitySearch> {
     );
   }
 
-  Future dataentry(type, name, notes, amount, date, subtype) async {
+  Future dataentry(
+    type,
+    subtypes,
+    name,
+    notes,
+    amount,
+    date,
+  ) async {
     if (typecontroller.text.isNotEmpty ||
-        subtypecontroller.text.isNotEmpty ||
         namecontroller.text.isNotEmpty ||
         notescontroller.text.isNotEmpty ||
         amountcontroller.text.isNotEmpty ||
         datecontroller.text.isNotEmpty) {
       print("check");
       var response = await http.post(Uri.parse(
-          "http://192.168.24.34:8000/api/method/money_management_backend.custom.py.api.daily_entry_submit?Type=Liability&Subtype=${subtype}&Name=${name}&Notes=${notes}&Amount=${amount}&Remainder_date=${date}"));
+          "http://192.168.24.34:8000/api/method/money_management_backend.custom.py.api.daily_entry_submit?Type=Liability&Subtype=${subtypes}&Name=${name}&Notes=${notes}&Amount=${amount}&Remainder_date=${date}"));
       print(response.statusCode);
       print("response");
       if (response.statusCode == 200) {
