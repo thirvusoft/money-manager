@@ -70,7 +70,6 @@ class _bottomnavigationState extends State<bottomnavigation> {
             title: Text("Others",
                 style: TextStyle(color: Color.fromARGB(255, 93, 99, 217))),
           ),
-         
         ],
       ),
     );

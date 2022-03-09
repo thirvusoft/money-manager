@@ -170,10 +170,9 @@ class _othersSearchState extends State<othersSearch> {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              TextField(
-                controller: typecontroller,
-                decoration: InputDecoration(labelText: 'Type'),
-              ),
+              Text("Others",
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
+
               TextField(
                 controller: subtypecontroller,
                 decoration: InputDecoration(labelText: 'SubType'),
@@ -246,17 +245,19 @@ class _othersSearchState extends State<othersSearch> {
         datecontroller.text.isNotEmpty) {
       print(subtypecontroller.text);
       var response = await http.post(Uri.parse(
-          "http://192.168.24.34:8000/api/method/money_management_backend.custom.py.api.daily_entry_submit?Type=${type}&Subtype=${subtype}&Name=${name}&Notes=${notes}&Amount=${amount}&Remainder_date=${date}"));
+          "http://192.168.24.34:8000/api/method/money_management_backend.custom.py.api.daily_entry_submit?Type=Others&Subtype=${subtype}&Name=${name}&Notes=${notes}&Amount=${amount}&Remainder_date=${date}"));
       //print(response.statusCode);
       if (response.statusCode == 200) {
         print(response.statusCode);
-
+        Navigator.pop(context);
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text("submited sucessfully"),
           backgroundColor: Colors.green,
         ));
       } else {
         print(response.statusCode);
+        Navigator.pop(context);
+        Navigator.pop(context);
 
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text("Invalid"),
