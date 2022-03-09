@@ -46,7 +46,7 @@ class _bottomnavigationState extends State<bottomnavigation> {
           BottomNavyBarItem(
             icon:
                 Icon(Icons.home_work, color: Color.fromARGB(255, 93, 99, 217)),
-            title: Text("Asrsets",
+            title: Text("Assets",
                 style: TextStyle(color: Color.fromARGB(255, 93, 99, 217))),
           ),
           BottomNavyBarItem(

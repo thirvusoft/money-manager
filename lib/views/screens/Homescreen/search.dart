@@ -11,8 +11,6 @@ class searchbar extends StatefulWidget {
 }
 
 class _searchbarState extends State<searchbar> {
-  
-
   TextEditingController _textEditingController = TextEditingController();
   bool _loading = true;
   @override
@@ -28,7 +26,7 @@ class _searchbarState extends State<searchbar> {
 
   List icon_nameOnSearch = [];
   List icon_name = [
-    ['Gold', 987727],
+    ['Gold', 0xf1dd],
     ['Silver', 987727],
     ['Platinum', 987727],
     ['Diamond', 0xf05e7],
