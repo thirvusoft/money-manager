@@ -84,7 +84,7 @@ class _customLiabilityState extends State<customLiability> {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              new Text(
+              Text(
                 "Liability",
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),

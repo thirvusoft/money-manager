@@ -36,7 +36,6 @@ class _ProfilesState extends State<Profiles> {
 
   checkupdateNeeded() async {
     await profile();
-    login();
     SharedPreferences prefs = await SharedPreferences.getInstance();
     full_name = prefs.getString('mobile_number');
     name = prefs.getString("full_name");
@@ -104,8 +103,6 @@ class _ProfilesState extends State<Profiles> {
     );
   }
 }
-
-void login() {}
 
 class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
   @override

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
 import '../Categories/Asset.dart';
+import 'package:http/http.dart' as http;
 
 class searchbar extends StatefulWidget {
   const searchbar({Key? key}) : super(key: key);
@@ -12,6 +13,13 @@ class searchbar extends StatefulWidget {
 
 class _searchbarState extends State<searchbar> {
   TextEditingController _textEditingController = TextEditingController();
+
+  var typecontroller = TextEditingController();
+  var subtypecontroller = TextEditingController();
+  var namecontroller = TextEditingController();
+  var notescontroller = TextEditingController();
+  var amountcontroller = TextEditingController();
+  var datecontroller = TextEditingController();
   bool _loading = true;
   @override
   void initState() {
@@ -138,62 +146,119 @@ class _searchbarState extends State<searchbar> {
               );
             }));
   }
-}
 
-void _show(BuildContext ctx) {
-  showModalBottomSheet(
-    shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.all(Radius.circular(10.0)),
-    ),
-    isScrollControlled: true,
-    elevation: 5,
-    context: ctx,
-    builder: (ctx) => Padding(
-      padding: EdgeInsets.only(
-          top: 15,
-          left: 15,
-          right: 15,
-          bottom: MediaQuery.of(ctx).viewInsets.bottom + 15),
-      child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            TextField(
-              keyboardType: TextInputType.datetime,
-              decoration: InputDecoration(labelText: 'Date'),
-            ),
-            TextButton(
-              style: TextButton.styleFrom(
-                textStyle: const TextStyle(fontSize: 20),
+  void _show(BuildContext ctx) {
+    showModalBottomSheet(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(Radius.circular(10.0)),
+      ),
+      isScrollControlled: true,
+      elevation: 5,
+      context: ctx,
+      builder: (ctx) => Padding(
+        padding: EdgeInsets.only(
+            top: 15,
+            left: 15,
+            right: 15,
+            bottom: MediaQuery.of(ctx).viewInsets.bottom + 15),
+        child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text("Asset",
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
+
+              TextField(
+                controller: subtypecontroller,
+                decoration: InputDecoration(labelText: 'SubType'),
               ),
-              onPressed: () {},
-              child: const Text('Image'),
-            ),
-            Divider(),
-            TextButton(
-              style: TextButton.styleFrom(
-                textStyle: const TextStyle(fontSize: 20),
+              TextField(
+                controller: namecontroller,
+                decoration: InputDecoration(labelText: 'Name'),
               ),
-              onPressed: () {},
-              child: const Text('File',
-                  style: TextStyle(color: Colors.blueAccent)),
-            ),
-            Divider(),
-            TextField(
-              keyboardType: TextInputType.text,
-              decoration: InputDecoration(labelText: 'Notes'),
-            ),
-            SizedBox(
-              height: 15,
-            ),
-            RaisedButton(
-                color: Color.fromARGB(255, 93, 99, 216),
-                child: Text(
-                  "Submit",
-                  style: TextStyle(color: Colors.white),
-                ),
-                onPressed: () {})
-          ]),
-    ),
-  );
+
+              TextField(
+                controller: notescontroller,
+                decoration: InputDecoration(labelText: 'Notes'),
+              ),
+              TextField(
+                controller: amountcontroller,
+                decoration: InputDecoration(labelText: 'Amount'),
+              ),
+              TextField(
+                controller: datecontroller,
+                decoration: InputDecoration(labelText: 'Remainder date'),
+              ),
+              // TextButton(
+              //   style: TextButton.styleFrom(
+              //     textStyle: const TextStyle(fontSize: 20),
+              //   ),
+              //   onPressed: () {},
+              //   child: const Text('Image'),
+              // ),
+              // Divider(),
+              // TextButton(
+              //   style: TextButton.styleFrom(
+              //     textStyle: const TextStyle(fontSize: 20),
+              //   ),
+              //   onPressed: () {},
+              //   child: const Text('File',
+              //       style: TextStyle(color: Colors.blueAccent)),
+              // ),
+              // Divider(),
+
+              SizedBox(
+                height: 15,
+              ),
+              RaisedButton(
+                  color: Color.fromARGB(255, 93, 99, 216),
+                  child: Text(
+                    "Submit",
+                    style: TextStyle(color: Colors.white),
+                  ),
+                  onPressed: () {
+                    print(typecontroller.text);
+                    dataentry(
+                        typecontroller.text,
+                        subtypecontroller.text,
+                        namecontroller.text,
+                        notescontroller.text,
+                        amountcontroller.text,
+                        datecontroller.text);
+                  })
+            ]),
+      ),
+    );
+  }
+
+  Future dataentry(type, subtype, name, notes, amount, date) async {
+    if (typecontroller.text.isNotEmpty ||
+        subtypecontroller.text.isNotEmpty ||
+        namecontroller.text.isNotEmpty ||
+        notescontroller.text.isNotEmpty ||
+        amountcontroller.text.isNotEmpty ||
+        datecontroller.text.isNotEmpty) {
+      print(subtypecontroller.text);
+      var response = await http.post(Uri.parse(
+          "http://192.168.24.34:8000/api/method/money_management_backend.custom.py.api.daily_entry_submit?Type=Asset&Subtype=${subtype}&Name=${name}&Notes=${notes}&Amount=${amount}&Remainder_date=${date}"));
+      //print(response.statusCode);
+      if (response.statusCode == 200) {
+        print(response.statusCode);
+        Navigator.pop(context);
+
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text("submited sucessfully"),
+          backgroundColor: Colors.green,
+        ));
+      } else {
+        print(response.statusCode);
+        Navigator.pop(context);
+
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text("Invalid"),
+          backgroundColor: Colors.red,
+        ));
+      }
+    }
+  }
 }

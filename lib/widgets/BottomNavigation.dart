@@ -1,13 +1,12 @@
 import 'dart:convert';
 
 import 'package:bottom_navy_bar/bottom_navy_bar.dart';
-import 'package:curved_navigation_bar/curved_navigation_bar.dart';
+import 'package:money_manager/views/screens/Homescreen/Asset.dart';
 import 'package:flutter/material.dart';
 import 'package:money_manager/views/screens/Homescreen/expensesSearch.dart';
 import 'package:money_manager/views/screens/Homescreen/incomeSearch.dart';
 import 'package:money_manager/views/screens/Homescreen/liabilitySearch.dart';
 import 'package:money_manager/views/screens/Homescreen/othersSearch.dart';
-import 'package:money_manager/views/screens/Homescreen/search.dart';
 import 'package:money_manager/views/screens/profile.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
@@ -69,12 +68,6 @@ class _bottomnavigationState extends State<bottomnavigation> {
             icon: Icon(Icons.plus_one_outlined,
                 color: Color.fromARGB(255, 93, 99, 217)),
             title: Text("Others",
-                style: TextStyle(color: Color.fromARGB(255, 93, 99, 217))),
-          ),
-          BottomNavyBarItem(
-            icon:
-                Icon(Icons.person_add, color: Color.fromARGB(255, 93, 99, 217)),
-            title: Text("Profile",
                 style: TextStyle(color: Color.fromARGB(255, 93, 99, 217))),
           ),
         ],

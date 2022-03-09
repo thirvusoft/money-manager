@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:money_manager/views/screens/Homescreen/search.dart';
 import 'package:money_manager/widgets/BottomNavigation.dart';
 import 'Animation/FadeAnimation.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -36,7 +35,7 @@ class _splash_screenState extends State<splash_screen> {
   _navigatetohome() async {
     await Future.delayed(Duration(milliseconds: 2250), () {});
     Navigator.pushReplacement(
-        context, MaterialPageRoute(builder: (Context) => login_page()));
+        context, MaterialPageRoute(builder: (Context) => bottomnavigation()));
   }
 
   @override
