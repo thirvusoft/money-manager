@@ -195,7 +195,7 @@ class _login_pageState extends State<login_page> {
                             child: const Text(
                               'Forget Password ?',
                               style: TextStyle(
-                                  color: Color.fromRGBO(143, 148, 251, 1),
+                                  color: Color.fromARGB(255, 93, 99, 216),
                                   fontSize: 15,
                                   fontFamily: "Roboto",
                                   fontWeight: FontWeight.bold),
@@ -224,7 +224,7 @@ class _login_pageState extends State<login_page> {
           MaterialPageRoute(builder: (context) => bottomnavigation()),
         );
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text("Email Send successful"),
+          content: Text("Logged in successfully"),
           backgroundColor: Colors.green,
         ));
       } else if (response.statusCode == 403) {

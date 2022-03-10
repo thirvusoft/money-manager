@@ -23,6 +23,15 @@ class _othersSearchState extends State<othersSearch> {
   var notescontroller = TextEditingController();
   var amountcontroller = TextEditingController();
   var datecontroller = TextEditingController();
+  final formKey = GlobalKey<FormState>();
+  final dateController = TextEditingController();
+
+  @override
+  void dispose() {
+    dateController.dispose();
+    super.dispose();
+  }
+
   bool _loading = true;
   @override
   void initState() {
@@ -160,91 +169,104 @@ class _othersSearchState extends State<othersSearch> {
 
   void _show(BuildContext ctx, subtypes) {
     showModalBottomSheet(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.all(Radius.circular(10.0)),
-      ),
-      isScrollControlled: true,
-      elevation: 5,
-      context: ctx,
-      builder: (ctx) => Padding(
-        padding: EdgeInsets.only(
-            top: 15,
-            left: 15,
-            right: 15,
-            bottom: MediaQuery.of(ctx).viewInsets.bottom + 15),
-        child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Align(
-                alignment: Alignment
-                    .center, // Align however you like (i.e .centerRight, centerLeft)
-                child: Text("Others",
-                    style:
-                        TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(10.0)),
+        ),
+        isScrollControlled: true,
+        elevation: 5,
+        context: ctx,
+        builder: (ctx) => Padding(
+              padding: EdgeInsets.only(
+                  top: 15,
+                  left: 15,
+                  right: 15,
+                  bottom: MediaQuery.of(ctx).viewInsets.bottom + 15),
+              child: Form(
+                key: formKey,
+                child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Align(
+                        alignment: Alignment
+                            .center, // Align however you like (i.e .centerRight, centerLeft)
+                        child: Text("Others",
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 20)),
+                      ),
+                      Text(subtypes, style: TextStyle(fontSize: 20)),
+                      TextFormField(
+                          controller: namecontroller,
+                          decoration: InputDecoration(labelText: 'Name'),
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return "Please enter the name";
+                            } else {
+                              return null;
+                            }
+                          }),
+                      TextField(
+                        controller: notescontroller,
+                        decoration: InputDecoration(labelText: 'Notes'),
+                      ),
+                      TextField(
+                        controller: amountcontroller,
+                        decoration: InputDecoration(labelText: 'Amount'),
+                        keyboardType: TextInputType.number,
+                      ),
+                      TextField(
+                        readOnly: true,
+                        controller: dateController,
+                        decoration: InputDecoration(labelText: 'Reminder Date'),
+                        style: TextStyle(),
+                        onTap: () async {
+                          var date = await showDatePicker(
+                              context: context,
+                              initialDate: DateTime.now(),
+                              firstDate: DateTime(1950),
+                              lastDate: DateTime(2100));
+                          builder:
+                          (BuildContext context, Widget child) {
+                            return Theme(
+                              data: ThemeData().copyWith(
+                                  colorScheme: ColorScheme.dark(
+                                      primary: Colors.red,
+                                      surface: Colors.red)),
+                              child: child,
+                            );
+                          };
+                          dateController.text =
+                              date.toString().substring(0, 10);
+                        },
+                      ),
+                      SizedBox(
+                        height: 15,
+                      ),
+                      RaisedButton(
+                          color: Color.fromARGB(255, 93, 99, 216),
+                          child: Text(
+                            "Submit",
+                            style: TextStyle(color: Colors.white),
+                          ),
+                          onPressed: () {
+                            if (formKey.currentState!.validate()) {
+                              // print(typecontroller.text);
+                              dataentry(
+                                  typecontroller.text,
+                                  subtypes,
+                                  namecontroller.text,
+                                  notescontroller.text,
+                                  amountcontroller.text,
+                                  datecontroller.text);
+                              namecontroller.clear();
+                              notescontroller.clear();
+                              amountcontroller.clear();
+                              datecontroller.clear();
+                            }
+                          })
+                    ]),
               ),
-              Text(subtypes, style: TextStyle(fontSize: 20)),
-              // TextField(
-              //   controller: subtypecontroller,
-              //   decoration: InputDecoration(labelText: 'SubType'),
-              // ),
-              TextField(
-                controller: namecontroller,
-                decoration: InputDecoration(labelText: 'Name'),
-              ),
-
-              TextField(
-                controller: notescontroller,
-                decoration: InputDecoration(labelText: 'Notes'),
-              ),
-              TextField(
-                controller: amountcontroller,
-                decoration: InputDecoration(labelText: 'Amount'),
-              ),
-              TextField(
-                controller: datecontroller,
-                decoration: InputDecoration(labelText: 'Remainder date'),
-              ),
-              // TextButton(
-              //   style: TextButton.styleFrom(
-              //     textStyle: const TextStyle(fontSize: 20),
-              //   ),
-              //   onPressed: () {},
-              //   child: const Text('Image'),
-              // ),
-              // Divider(),
-              // TextButton(
-              //   style: TextButton.styleFrom(
-              //     textStyle: const TextStyle(fontSize: 20),
-              //   ),
-              //   onPressed: () {},
-              //   child: const Text('File',
-              //       style: TextStyle(color: Colors.blueAccent)),
-              // ),
-              // Divider(),
-
-              SizedBox(
-                height: 15,
-              ),
-              RaisedButton(
-                  color: Color.fromARGB(255, 93, 99, 216),
-                  child: Text(
-                    "Submit",
-                    style: TextStyle(color: Colors.white),
-                  ),
-                  onPressed: () {
-                    // print(typecontroller.text);
-                    dataentry(
-                        typecontroller.text,
-                        subtypes,
-                        namecontroller.text,
-                        notescontroller.text,
-                        amountcontroller.text,
-                        datecontroller.text);
-                  })
-            ]),
-      ),
-    );
+            ));
   }
 
   Future dataentry(type, subtypes, name, notes, amount, date) async {
