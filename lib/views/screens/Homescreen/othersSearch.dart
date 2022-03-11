@@ -1,6 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:money_manager/views/screens/Categories/Others.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../Categories/Asset.dart';
 import 'package:http/http.dart' as http;
@@ -24,9 +27,12 @@ class _othersSearchState extends State<othersSearch> {
   var amountcontroller = TextEditingController();
   var datecontroller = TextEditingController();
   bool _loading = true;
+  List icon_nameOnSearch = [];
+  List icon_name = [];
   @override
   void initState() {
     super.initState();
+    listapi();
     Future.delayed(Duration(seconds: 1), () {
       Color.fromARGB(255, 93, 99, 216);
       setState(() {
@@ -35,12 +41,23 @@ class _othersSearchState extends State<othersSearch> {
     });
   }
 
-  List icon_nameOnSearch = [];
-  List icon_name = [
-    ['Invitation', 0xf12f],
-    ['Visiting Card', 0xef8f],
-    ['Profile', 0xee35],
-  ];
+  Future listapi() async {
+    var response = await http.post(Uri.parse(
+        "http://192.168.24.34:8000/api/method/money_management_backend.custom.py.api.withsubtype?Type=Others"));
+    if (response.statusCode == 200) {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      List<String> liability_icon_list = [];
+      for (var i = 0; i < json.decode(response.body)["Others"].length; i++) {
+        liability_icon_list
+            .add(jsonEncode(json.decode(response.body)["Others"][i]));
+      }
+      prefs.setStringList('liability_icon_list', liability_icon_list);
+      icon_name = prefs.getStringList("liability_icon_list")!;
+      print(icon_name);
+      setState(() => _loading = true);
+    }
+  }
+
   var data;
   var subtypes;
   get index => null;

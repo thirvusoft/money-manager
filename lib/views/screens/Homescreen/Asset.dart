@@ -1,11 +1,19 @@
+// ignore_for_file: avoid_print
+
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:money_manager/views/screens/Categories/liability.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../Categories/Asset.dart';
 import 'package:http/http.dart' as http;
 
 import '../profile.dart';
+
+// var item_name;
+// var decode;
 
 class searchbar extends StatefulWidget {
   const searchbar({Key? key}) : super(key: key);
@@ -23,10 +31,17 @@ class _searchbarState extends State<searchbar> {
   var notescontroller = TextEditingController();
   var amountcontroller = TextEditingController();
   var datecontroller = TextEditingController();
+
   bool _loading = true;
+
+  List icon_nameOnSearch = [];
+  List icon_name = [];
+
   @override
   void initState() {
     super.initState();
+    listapi();
+
     Future.delayed(Duration(seconds: 1), () {
       Color.fromARGB(255, 93, 99, 216);
       setState(() {
@@ -35,20 +50,31 @@ class _searchbarState extends State<searchbar> {
     });
   }
 
-  List icon_nameOnSearch = [];
-  List icon_name = [
-    ['Gold', 0xf1dd],
-    ['Silver', 0xf1dd],
-    ['Platinum', 0xf1dd],
-    ['Vehicles', 0xee62],
-    ['Home ', 0xe45f],
-    ['Machinery', 0xef06],
-    ['Comm Land', 0xf42b],
-    ['Residential ', 0xf1af],
-  ];
+  // @override
+  // void dispose() {
+  //   super.dispose();
+  // }
+  Future listapi() async {
+    var response = await http.post(Uri.parse(
+        "http://192.168.24.34:8000/api/method/money_management_backend.custom.py.api.withsubtype?Type=Asset"));
+    if (response.statusCode == 200) {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      List<String> liability_icon_list = [];
+      for (var i = 0; i < json.decode(response.body)["Asset"].length; i++) {
+        liability_icon_list
+            .add(jsonEncode(json.decode(response.body)["Asset"][i]));
+      }
+      prefs.setStringList('liability_icon_list', liability_icon_list);
+      icon_name = prefs.getStringList("liability_icon_list")!;
+      print(icon_name);
+      setState(() => _loading = true);
+    }
+  }
+
   var data;
   var subtypes;
   get index => null;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -144,8 +170,8 @@ class _searchbarState extends State<searchbar> {
                                             letterSpacing: .7),
                                       ),
                                       icon: Icon(
-                                          IconData(icon_name[index][1],
-                                              fontFamily: 'MaterialIcons'),
+                                          IconData(int.parse(
+                                              jsonDecode(icon_name[index])[1])),
                                           color: Color.fromARGB(
                                               255, 93, 99, 216)))),
                             ],
@@ -215,23 +241,6 @@ class _searchbarState extends State<searchbar> {
                 controller: datecontroller,
                 decoration: InputDecoration(labelText: 'Remainder date'),
               ),
-              // TextButton(
-              //   style: TextButton.styleFrom(
-              //     textStyle: const TextStyle(fontSize: 20),
-              //   ),
-              //   onPressed: () {},
-              //   child: const Text('Image'),
-              // ),
-              // Divider(),
-              // TextButton(
-              //   style: TextButton.styleFrom(
-              //     textStyle: const TextStyle(fontSize: 20),
-              //   ),
-              //   onPressed: () {},
-              //   child: const Text('File',
-              //       style: TextStyle(color: Colors.blueAccent)),
-              // ),
-              // Divider(),
 
               SizedBox(
                 height: 15,
@@ -258,14 +267,7 @@ class _searchbarState extends State<searchbar> {
     );
   }
 
-  Future dataentry(
-    type,
-    subtypes,
-    name,
-    notes,
-    amount,
-    date,
-  ) async {
+  Future dataentry(type, subtypes, name, notes, amount, date) async {
     if (typecontroller.text.isNotEmpty ||
         namecontroller.text.isNotEmpty ||
         notescontroller.text.isNotEmpty ||
@@ -295,4 +297,50 @@ class _searchbarState extends State<searchbar> {
       }
     }
   }
+
+  // Future listapi() async {
+  //   print('profile');
+  //   var response = await http.post(Uri.parse(
+  //       "http://192.168.24.34:8000/api/method/money_management_backend.custom.py.api.withsubtype?Type=Asset"));
+  //   // print(response);
+  //   if (response.statusCode == 200) {
+  //     print(response.statusCode);
+  //     SharedPreferences prefs = await SharedPreferences.getInstance();
+
+  //     // item_name = json.decode(response.body)["Asset"];
+  //     // decode = prefs.getStringList(json.encode(response.body));
+  //     //print(decode);
+  //     // print(prefs.get); // to print json data
+  //     // List list2 = json.decode(response.body)["Asset"];
+  //     // print(list2);
+
+  //     List<dynamic> list1 = jsonDecode(prefs.getString("Asset").toString());
+
+  //     // final item = list1[0];
+  //     // print(item[1](0));
+
+  //   }
+  // }
 }
+
+// var usersDataFromJson = parsedJson['Asset'];
+// List<String> Asset = List<String>.from(usersDataFromJson);
+// print(Asset);
+// final List<String> decode =
+//     prefs.getStringList(response.body)["Asset"];
+//var decode = prefs.setString( "Asset", json.decode(response.body).cast<String, dynamic>());
+// // print(prefs.setStringList(type', json.decode(response.body)["ts_subtype, icon_code"]));
+// print(item['ts_subtype']); // foo
+// print(item['icon_code']); // 1
+//print(item['s']); // f
+// var store = prefs.setStringList("Asset", json.decode(response.body));
+// var sdf = prefs.setStringList( "Asset", json.decode(response.body)['Asset[1]'] ?? [].toList());
+// print(sdf);
+//print(decode);
+//prefs.setStringList("icon_code");
+//prefs.getStringList("ts_subtype") ?? [];
+//prefs.getStringList("icon_code") ?? ["Asset"];
+//prefs.setStringList("icon_code", json.decode(response.body)['Asset[0]']);
+//print(prefs.getString("icon_code"));
+// print(store);
+//prefs.setStringList("ts_subtype", json.decode(response.body)['Asset']['ts_subtype']);

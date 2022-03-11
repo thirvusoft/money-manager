@@ -1,6 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:money_manager/views/screens/Categories/Expense.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../Categories/Asset.dart';
 import 'package:http/http.dart' as http;
@@ -24,9 +27,12 @@ class _expenseSearchState extends State<expenseSearch> {
   var amountcontroller = TextEditingController();
   var datecontroller = TextEditingController();
   bool _loading = true;
+  List icon_nameOnSearch = [];
+  List icon_name = [];
   @override
   void initState() {
     super.initState();
+    listapi();
     Future.delayed(Duration(seconds: 1), () {
       Color.fromARGB(255, 93, 99, 216);
       setState(() {
@@ -35,28 +41,22 @@ class _expenseSearchState extends State<expenseSearch> {
     });
   }
 
-  List icon_nameOnSearch = [];
-  List icon_name = [
-    ['Food', 0xf2e9],
-    ['Travel', 0xf172],
-    ['Grocery', 0xf37d],
-    ['Entertainment', 0xf3cf],
-    ['Shopping', 0xf37f],
-    ['Clothing', 0xe15d],
-    ['Tax', 0xf24e],
-    ['Gas', 0xf076],
-    ['Electricity', 0xf016],
-    ['Telephone', 0xf28c],
-    ['Recharge', 0xf28d],
-    ['Health', 0xf0f2],
-    ['Beauty', 0xf041],
-    ['Electronics', 0xef0d],
-    ['Gift', 0xef2d],
-    ['Education', 0xf33c],
-    ['Maintenance', 0xf108],
-    ['Construction', 0xf109],
-    ['Crop', 0xf041],
-  ];
+  Future listapi() async {
+    var response = await http.post(Uri.parse(
+        "http://192.168.24.34:8000/api/method/money_management_backend.custom.py.api.withsubtype?Type=Expense"));
+    if (response.statusCode == 200) {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      List<String> liability_icon_list = [];
+      for (var i = 0; i < json.decode(response.body)["Expense"].length; i++) {
+        liability_icon_list
+            .add(jsonEncode(json.decode(response.body)["Expense"][i]));
+      }
+      prefs.setStringList('liability_icon_list', liability_icon_list);
+      icon_name = prefs.getStringList("liability_icon_list")!;
+      print(icon_name);
+      setState(() => _loading = true);
+    }
+  }
 
   var data;
   var subtype;
@@ -154,8 +154,8 @@ class _expenseSearchState extends State<expenseSearch> {
                                             letterSpacing: .7),
                                       ),
                                       icon: Icon(
-                                          IconData(icon_name[index][1],
-                                              fontFamily: 'MaterialIcons'),
+                                          IconData(int.parse(
+                                              jsonDecode(icon_name[index])[1])),
                                           color: Color.fromARGB(
                                               255, 93, 99, 216)))),
                             ],
