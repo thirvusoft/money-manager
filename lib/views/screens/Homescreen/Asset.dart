@@ -23,8 +23,6 @@ class _searchbarState extends State<searchbar> {
   var notescontroller = TextEditingController();
   var amountcontroller = TextEditingController();
   var datecontroller = TextEditingController();
-  final formKey = GlobalKey<FormState>();
-
   bool _loading = true;
   @override
   void initState() {
@@ -161,89 +159,103 @@ class _searchbarState extends State<searchbar> {
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => customAsset()),
+                MaterialPageRoute(builder: (context) => customLiability()),
               );
             }));
   }
 
   void _show(BuildContext ctx, subtypes) {
     showModalBottomSheet(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(10.0)),
-        ),
-        isScrollControlled: true,
-        elevation: 5,
-        context: ctx,
-        builder: (ctx) => Padding(
-              padding: EdgeInsets.only(
-                  top: 15,
-                  left: 15,
-                  right: 15,
-                  bottom: MediaQuery.of(ctx).viewInsets.bottom + 15),
-              child: Form(
-                key: formKey,
-                child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Align(
-                        alignment: Alignment.center,
-                        child: Text("Asset",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(fontSize: 25)),
-                      ),
-                      Text(subtypes, style: TextStyle(fontSize: 20)),
-                      TextFormField(
-                          controller: namecontroller,
-                          decoration: InputDecoration(labelText: 'Name'),
-                          validator: (value) {
-                            if (value!.isEmpty) {
-                              return "Please enter the name";
-                            } else {
-                              return null;
-                            }
-                          }),
-                      TextField(
-                        controller: notescontroller,
-                        decoration: InputDecoration(labelText: 'Notes'),
-                      ),
-                      TextField(
-                        controller: amountcontroller,
-                        decoration: InputDecoration(labelText: 'Amount'),
-                        keyboardType: TextInputType.number,
-                      ),
-                      SizedBox(
-                        height: 15,
-                      ),
-                      RaisedButton(
-                          color: Color.fromARGB(255, 93, 99, 216),
-                          child: Text(
-                            "Submit",
-                            style: TextStyle(color: Colors.white),
-                          ),
-                          onPressed: () {
-                            if (formKey.currentState!.validate()) {
-                              // print(typecontroller.text);
-
-                              dataentry(
-                                typecontroller.text,
-                                subtypes,
-                                namecontroller.text,
-                                notescontroller.text,
-                                amountcontroller.text,
-                                datecontroller.text,
-                              );
-
-                              // typecontroller.clear();
-                              namecontroller.clear();
-                              notescontroller.clear();
-                              amountcontroller.clear();
-                              datecontroller.clear();
-                            }
-                          })
-                    ]),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(Radius.circular(10.0)),
+      ),
+      isScrollControlled: true,
+      elevation: 5,
+      context: ctx,
+      builder: (ctx) => Padding(
+        padding: EdgeInsets.only(
+            top: 15,
+            left: 15,
+            right: 15,
+            bottom: MediaQuery.of(ctx).viewInsets.bottom + 15),
+        child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // TextField(
+              //   controller: subtypecontroller,
+              //   decoration: InputDecoration(labelText: 'SubType'),
+              // ),
+              Align(
+                alignment: Alignment
+                    .center, // Align however you like (i.e .centerRight, centerLeft)
+                child: Text("Liability",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(fontSize: 25)),
               ),
-            ));
+              Text(subtypes, style: TextStyle(fontSize: 20)),
+              // TextField(
+              //   controller: subtypecontroller,
+              //   decoration: InputDecoration(labelText: 'Subtype'),
+              // ),
+              TextField(
+                controller: namecontroller,
+                decoration: InputDecoration(labelText: 'Name'),
+              ),
+
+              TextField(
+                controller: notescontroller,
+                decoration: InputDecoration(labelText: 'Notes'),
+              ),
+              TextField(
+                controller: amountcontroller,
+                decoration: InputDecoration(labelText: 'Amount'),
+              ),
+              TextField(
+                controller: datecontroller,
+                decoration: InputDecoration(labelText: 'Remainder date'),
+              ),
+              // TextButton(
+              //   style: TextButton.styleFrom(
+              //     textStyle: const TextStyle(fontSize: 20),
+              //   ),
+              //   onPressed: () {},
+              //   child: const Text('Image'),
+              // ),
+              // Divider(),
+              // TextButton(
+              //   style: TextButton.styleFrom(
+              //     textStyle: const TextStyle(fontSize: 20),
+              //   ),
+              //   onPressed: () {},
+              //   child: const Text('File',
+              //       style: TextStyle(color: Colors.blueAccent)),
+              // ),
+              // Divider(),
+
+              SizedBox(
+                height: 15,
+              ),
+              RaisedButton(
+                  color: Color.fromARGB(255, 93, 99, 216),
+                  child: Text(
+                    "Submit",
+                    style: TextStyle(color: Colors.white),
+                  ),
+                  onPressed: () {
+                    // print(typecontroller.text);
+                    dataentry(
+                      typecontroller.text,
+                      subtypes,
+                      namecontroller.text,
+                      notescontroller.text,
+                      amountcontroller.text,
+                      datecontroller.text,
+                    );
+                  })
+            ]),
+      ),
+    );
   }
 
   Future dataentry(
@@ -261,7 +273,7 @@ class _searchbarState extends State<searchbar> {
         datecontroller.text.isNotEmpty) {
       print("check");
       var response = await http.post(Uri.parse(
-          "http://192.168.24.34:8000/api/method/money_management_backend.custom.py.api.daily_entry_submit?Type=Asset&Subtype=${subtypes}&Name=${name}&Notes=${notes}&Amount=${amount}&Remainder_date=${""}"));
+          "http://192.168.24.34:8000/api/method/money_management_backend.custom.py.api.daily_entry_submit?Type=Liability&Subtype=${subtypes}&Name=${name}&Notes=${notes}&Amount=${amount}&Remainder_date=${date}"));
       print(response.statusCode);
       print("response");
       if (response.statusCode == 200) {

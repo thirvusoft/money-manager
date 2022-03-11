@@ -55,15 +55,8 @@ class _ProfilesState extends State<Profiles> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Divider(),
-            SizedBox(
-              height: 16,
-            ),
             Text(
-              name ?? '',
-            ),
-            SizedBox(
-              height: 16,
+              full_name ?? '',
             ),
             Divider(),
             SizedBox(
@@ -78,7 +71,7 @@ class _ProfilesState extends State<Profiles> {
               height: 16,
             ),
             Text(
-              full_name ?? '',
+              name ?? '',
             ),
             SizedBox(
               height: 16,
