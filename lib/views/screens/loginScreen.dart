@@ -229,7 +229,7 @@ class _login_pageState extends State<login_page> {
           MaterialPageRoute(builder: (context) => bottomnavigation()),
         );
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text("Email Send successful"),
+          content: Text("Logged in successfully"),
           backgroundColor: Colors.green,
         ));
       } else if (response.statusCode == 403) {

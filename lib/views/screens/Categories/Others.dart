@@ -14,13 +14,16 @@ class _customOthersState extends State<customOthers> {
   TextEditingController _textEditingController = TextEditingController();
   var typecontroller = TextEditingController();
   var namecontroller = TextEditingController();
+  final formKey = GlobalKey<FormState>();
+
   List icon_nameOnSearch = [];
   List icon_name = [
-    ['', 58759],
-    ['', 61190],
-    [' ', 987215],
-    [' ', 62507],
-    ['', 98633],
+    ['', 0xee35],
+    ['', 0xf12f],
+    [' ', 0xef8f],
+    [' ', 0xef2d],
+    ['', 0xee33],
+    ['', 0xf2dd]
   ];
 
   var data;
@@ -69,52 +72,62 @@ class _customOthersState extends State<customOthers> {
 
   void _show(BuildContext ctx) {
     showModalBottomSheet(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.all(Radius.circular(10.0)),
-      ),
-      isScrollControlled: true,
-      elevation: 5,
-      context: ctx,
-      builder: (ctx) => Padding(
-        padding: EdgeInsets.only(
-            top: 15,
-            left: 15,
-            right: 15,
-            bottom: MediaQuery.of(ctx).viewInsets.bottom + 15),
-        child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              new Text(
-                "Others",
-                style: TextStyle(fontWeight: FontWeight.bold),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(10.0)),
+        ),
+        isScrollControlled: true,
+        elevation: 5,
+        context: ctx,
+        builder: (ctx) => Padding(
+              padding: EdgeInsets.only(
+                  top: 15,
+                  left: 15,
+                  right: 15,
+                  bottom: MediaQuery.of(ctx).viewInsets.bottom + 15),
+              child: Form(
+                key: formKey,
+                child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      new Text(
+                        "Others",
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      SizedBox(
+                        height: 15,
+                      ),
+                      TextFormField(
+                          controller: namecontroller,
+                          keyboardType: TextInputType.text,
+                          decoration: InputDecoration(labelText: 'Name:'),
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return "Please enter the name";
+                            } else {
+                              return null;
+                            }
+                          }),
+                      SizedBox(
+                        height: 15,
+                      ),
+                      RaisedButton(
+                          color: Color.fromARGB(255, 93, 99, 216),
+                          child: Text(
+                            "Submit",
+                            style: TextStyle(color: Colors.white),
+                          ),
+                          onPressed: () {
+                            if (formKey.currentState!.validate()) {
+                              cussubmit(
+                                typecontroller.text,
+                                namecontroller.text,
+                              );
+                            }
+                          })
+                    ]),
               ),
-              SizedBox(
-                height: 15,
-              ),
-              TextField(
-                controller: namecontroller,
-                keyboardType: TextInputType.text,
-                decoration: InputDecoration(labelText: 'Name:'),
-              ),
-              SizedBox(
-                height: 15,
-              ),
-              RaisedButton(
-                  color: Color.fromARGB(255, 93, 99, 216),
-                  child: Text(
-                    "Submit",
-                    style: TextStyle(color: Colors.white),
-                  ),
-                  onPressed: () {
-                    cussubmit(
-                      typecontroller.text,
-                      namecontroller.text,
-                    );
-                  })
-            ]),
-      ),
-    );
+            ));
   }
 
   Future cussubmit(type, name) async {

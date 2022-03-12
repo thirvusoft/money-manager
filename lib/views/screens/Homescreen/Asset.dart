@@ -85,6 +85,8 @@ class _searchbarState extends State<searchbar> {
   var notescontroller = TextEditingController();
   var amountcontroller = TextEditingController();
   var datecontroller = TextEditingController();
+  final formKey = GlobalKey<FormState>();
+
   bool _loading = true;
   @override
   void initState() {
@@ -98,40 +100,41 @@ class _searchbarState extends State<searchbar> {
   }
   List icon_nameOnSearch = [];
   List icon_name = [
-    ['Gold', 987727],
-    ['Silver', 987727],
-    ['Platinum', 987727],
-    ['Diamond', 0xf05e7],
+    ['Gold', 0xf1dd],
+    ['Silver', 0xf1dd],
+    ['Platinum', 0xf1dd],
     ['Vehicles', 0xee62],
-    ['Home ', 0xf447],
+    ['Home ', 0xe45f],
     ['Machinery', 0xef06],
-    ['Agri Land', 987215],
     ['Comm Land', 0xf42b],
-    ['Residential ', 98633],
+    ['Residential ', 0xf1af],
   ];
   var data;
+  var subtypes;
   get index => null;
   @override
   Widget build(BuildContext context) {
     var file;
     return Scaffold(
         appBar: AppBar(
-          
-          
-        actions: [ InkWell( onTap: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context)=> Profiles()));
-        }, 
-        
-                 child: Padding( 
-                        padding: const EdgeInsets.all(8.0),
-                        child: Icon( Icons.account_circle_outlined, size: 30,), 
-                        ), 
-                  ), 
-],
+          actions: [
+            InkWell(
+              onTap: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => Profiles()));
+              },
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Icon(
+                  Icons.account_circle_outlined,
+                  size: 30,
+                ),
+              ),
+            ),
+          ],
           backgroundColor: Color.fromARGB(255, 93, 99, 216),
           automaticallyImplyLeading: false,
           title: Container(
-            
             width: 330,
             decoration: BoxDecoration(
                 color: Color.fromARGB(255, 255, 255, 255),
@@ -154,15 +157,15 @@ class _searchbarState extends State<searchbar> {
               },
               controller: _textEditingController,
               decoration: InputDecoration(
-                border: InputBorder.none,
-                errorBorder: InputBorder.none,
-                focusedBorder: InputBorder.none,
-                contentPadding: EdgeInsets.all(15),
-                hintText: "search",
-                prefixIcon: Icon(Icons.search,
-                color: Color.fromARGB(
-                                              255, 93, 99, 216),)
-              ),
+                  border: InputBorder.none,
+                  errorBorder: InputBorder.none,
+                  focusedBorder: InputBorder.none,
+                  contentPadding: EdgeInsets.all(15),
+                  hintText: "Search",
+                  prefixIcon: Icon(
+                    Icons.search,
+                    color: Color.fromARGB(255, 93, 99, 216),
+                  )),
             ),
           ),
         ),
@@ -179,7 +182,7 @@ class _searchbarState extends State<searchbar> {
                       
                         crossAxisCount: 2,
                         childAspectRatio: 3,
-                        crossAxisSpacing: 12),
+                        crossAxisSpacing: 20),
                     itemCount: _textEditingController.text.isNotEmpty
                         ? icon_nameOnSearch.length
                         : icon_name.length,
@@ -203,7 +206,9 @@ class _searchbarState extends State<searchbar> {
                                     ),
                                     
                                       onPressed: () {
-                                        _show(context);
+                                        subtypes = icon_name[index][0];
+                                        _show(context, subtypes);
+                                        print(icon_name[index][0]);
                                       },
                                       
                                       label: Text(
@@ -225,10 +230,8 @@ class _searchbarState extends State<searchbar> {
                     }),),
         floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
         floatingActionButton: FloatingActionButton(
-            child: Icon(
-              Icons.add,
-              semanticLabel: 'Customise icon',
-            ),
+            // isExtended: true,
+            child: Icon(Icons.add, semanticLabel: 'Customise icon'),
             backgroundColor: Color.fromARGB(255, 93, 99, 216),
             onPressed: () {
               Navigator.push(
@@ -238,127 +241,95 @@ class _searchbarState extends State<searchbar> {
             }));
   }
 
-  void _show(BuildContext ctx) {
+  void _show(BuildContext ctx, subtypes) {
     showModalBottomSheet(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.all(Radius.circular(10.0)),
-      ),
-      isScrollControlled: true,
-      elevation: 5,
-      context: ctx,
-      builder: (ctx) => Padding(
-        padding: EdgeInsets.only(
-            top: 15,
-            left: 15,
-            right: 15,
-            bottom: MediaQuery.of(ctx).viewInsets.bottom + 15),
-        
-     child: SingleChildScrollView(
-        child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text("Asset",
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(10.0)),
+        ),
+        isScrollControlled: true,
+        elevation: 5,
+        context: ctx,
+        builder: (ctx) => Padding(
+              padding: EdgeInsets.only(
+                  top: 15,
+                  left: 15,
+                  right: 15,
+                  bottom: MediaQuery.of(ctx).viewInsets.bottom + 15),
+              child: Form(
+                key: formKey,
+                child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Align(
+                        alignment: Alignment.center,
+                        child: Text("Asset",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(fontSize: 25)),
+                      ),
+                      Text(subtypes, style: TextStyle(fontSize: 20)),
+                      TextFormField(
+                          controller: namecontroller,
+                          decoration: InputDecoration(labelText: 'Name'),
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return "Please enter the name";
+                            } else {
+                              return null;
+                            }
+                          }),
+                      TextField(
+                        controller: notescontroller,
+                        decoration: InputDecoration(labelText: 'Notes'),
+                      ),
+                      TextField(
+                        controller: amountcontroller,
+                        decoration: InputDecoration(labelText: 'Amount'),
+                        keyboardType: TextInputType.number,
+                      ),
+                      SizedBox(
+                        height: 15,
+                      ),
+                      RaisedButton(
+                          color: Color.fromARGB(255, 93, 99, 216),
+                          child: Text(
+                            "Submit",
+                            style: TextStyle(color: Colors.white),
+                          ),
+                          onPressed: () {
+                            if (formKey.currentState!.validate()) {
+                              // print(typecontroller.text);
 
-              TextField(
-                controller: subtypecontroller,
-                decoration: InputDecoration(labelText: 'SubType'),
-              ),
-              TextField(
-                controller: namecontroller,
-                decoration: InputDecoration(labelText: 'Name'),
-              ),
+                              dataentry(
+                                typecontroller.text,
+                                subtypes,
+                                namecontroller.text,
+                                notescontroller.text,
+                                amountcontroller.text,
+                                datecontroller.text,
+                              );
 
-              TextField(
-                controller: notescontroller,
-                decoration: InputDecoration(labelText: 'Notes'),
+                              // typecontroller.clear();
+                              namecontroller.clear();
+                              notescontroller.clear();
+                              amountcontroller.clear();
+                              datecontroller.clear();
+                            }
+                          })
+                    ]),
               ),
-              TextField(
-                controller: amountcontroller,
-                decoration: InputDecoration(labelText: 'Amount'),
-              ),
-              TextField(
-                controller: datecontroller,
-                decoration: InputDecoration(labelText: 'Remainder date'),
-              ),
-           
-              TextButton(
-                style: TextButton.styleFrom(
-                  textStyle: const TextStyle(fontSize: 20),
-                ),
-                onPressed: () => _onAlertWithCustomContentPressed(context),
-                child: const Text('Upload',                              
-                style: TextStyle(
-                                  color: Color.fromARGB(255, 54, 54, 58),
-                                  fontSize: 15,
-                                  fontFamily: "Roboto",
-                                  fontWeight: FontWeight.bold),
-                                  
-                                  ),
-              ),
-              //Divider(),
-              //  TextButton(
-              //   style: TextButton.styleFrom(
-              //     textStyle: const TextStyle(fontSize: 20),
-              //   ),
-              //   onPressed: () => pickImage(ImageSource.gallery),
-              //   child: const Text('Image',style: TextStyle(
-              //                     color: Color.fromARGB(255, 54, 54, 58),
-              //                     fontSize: 15,
-              //                     fontFamily: "Roboto",
-              //                     fontWeight: FontWeight.bold),),
-              // ),
-              // Divider(),
-              // TextButton(
-              //   style: TextButton.styleFrom(
-              //     textStyle: const TextStyle(fontSize: 20),
-              //   ),
-              //   onPressed: () {
-              //     pickFiles();
-              //   },
-                
-              //   child: const Text('File',style: TextStyle(
-              //                     color: Color.fromARGB(255, 54, 54, 58),
-              //                     fontSize: 15,
-              //                     fontFamily: "Roboto",
-              //                     fontWeight: FontWeight.bold),
-              //       ),
-                    
-              // ),
-              (file == null)? Container():Image.file(File(file!.path.toString()),),
-              
-              SizedBox(
-                height: 15,
-              ),
-              RaisedButton(
-                  color: Color.fromARGB(255, 93, 99, 216),
-                  child: Text(
-                    "Submit",
-                    style: TextStyle(color: Colors.white),
-                  ),
-                  onPressed: () {
-                    print(typecontroller.text);
-                    dataentry(
-                        typecontroller.text,
-                        subtypecontroller.text,
-                        namecontroller.text,
-                        notescontroller.text,
-                        amountcontroller.text,
-                        datecontroller.text);
-                  }),
-                  
-            ]),
-      ),),
-    );
+            ));
   }
 
-  
-
-  Future dataentry(type, subtype, name, notes, amount, date) async {
-
+  Future dataentry(
+    type,
+    subtypes,
+    name,
+    notes,
+    amount,
+    date,
+  ) async {
     if (typecontroller.text.isNotEmpty ||
-        subtypecontroller.text.isNotEmpty ||
         namecontroller.text.isNotEmpty ||
         notescontroller.text.isNotEmpty ||
         amountcontroller.text.isNotEmpty ||
@@ -369,7 +340,7 @@ class _searchbarState extends State<searchbar> {
       // var response = await http.post(Uri.parse(
       //      dotenv.env['API_KEY'] ?? ""));
       var response = await http.post(Uri.parse(
-      '${dotenv.env['API_URL']}/api/method/money_management_backend.custom.py.api.daily_entry_submit?Type=Asset&Subtype=${subtype}&Name=${name}&Notes=${notes}&Amount=${amount}&Remainder_date=${date}'
+      '${dotenv.env['API_URL']}/api/method/money_management_backend.custom.py.api.daily_entry_submit?Type=Asset&Subtype=${subtypes}&Name=${name}&Notes=${notes}&Amount=${amount}&Remainder_date=${date}'
        ));
       //print(response.statusCode);
       print(name);
