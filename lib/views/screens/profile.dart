@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/services.dart';
@@ -155,8 +156,9 @@ class MyClipper extends CustomClipper<Path> {
 
 Future profile() async {
   print('profile');
+  print(dotenv.env['API_URL']);
   var response = await http.post(Uri.parse(
-      "http://192.168.24.34:8000/api/method/money_management_backend.custom.py.api.profile?email=barathpalanisamy2002@gmail.com"));
+      "${dotenv.env['API_URL']}/api/method/money_management_backend.custom.py.api.profile?email=barathpalanisamy2002@gmail.com"));
   print('response');
   if (response.statusCode == 200) {
     SharedPreferences prefs = await SharedPreferences.getInstance();

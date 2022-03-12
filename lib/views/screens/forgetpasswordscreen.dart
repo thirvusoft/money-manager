@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_login/flutter_login.dart';
 import 'package:money_manager/views/screens/Animation/FadeAnimation.dart';
 import 'package:money_manager/views/screens/loginScreen.dart';
@@ -178,10 +179,13 @@ class _forget_passwordState extends State<forget_password> {
   }
 
   Future reset(email) async {
+    print(email);
+          print(dotenv.env['API_URL']);
+
     if (emailcontroller.text.isNotEmpty) {
       var response = await http.post(Uri.parse(
-          "http://192.168.24.34:8000/api/method/frappe.core.doctype.user.user.reset_password?user=${email}"));
-      print(response);
+          "${dotenv.env['API_URL']}/api/method/frappe.core.doctype.user.user.reset_password?user=${email}"));
+      print(response.statusCode);
       if (response.statusCode == 200) {
         Navigator.push(
           context,
