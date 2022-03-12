@@ -1,6 +1,12 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:money_manager/views/screens/Categories/Expense.dart';
+import 'package:file_picker/file_picker.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
 
 import '../Categories/Asset.dart';
 import 'package:http/http.dart' as http;
@@ -15,6 +21,45 @@ class expenseSearch extends StatefulWidget {
 }
 
 class _expenseSearchState extends State<expenseSearch> {
+          var file;
+      File _myImage = File('');
+      pickImage(ImageSource source) async {
+    XFile? image = await picker.pickImage(
+      source: source,
+      imageQuality: 100,
+      maxHeight: MediaQuery.of(context).size.height,
+      maxWidth: MediaQuery.of(context).size.width,
+      preferredCameraDevice: CameraDevice.rear,
+    );
+    setState(() {
+      print(_myImage);
+      if (image == null) {
+        //TODO: Image not selected action.
+        isFileSelected = 0;
+      } else {
+        //TODO: Image selected action.
+        _myImage = File(image.path);
+        isFileSelected = 1;
+      }
+    });
+  }
+    Widget showImage(File file) {
+    if (isFileSelected == 0) {
+      //TODO: Image not selected widget.
+      return Center(child: Text("Image Selected"));
+    } else {
+      //TODO: Image selected widget.
+      return Container(
+        height: MediaQuery.of(context).size.width * 9 / 16,
+        width: MediaQuery.of(context).size.width,
+        child: Image.file(file, fit: BoxFit.contain),
+      );
+    }
+    // ignore: dead_code
+    
+  }
+  int isFileSelected = 0;
+  ImagePicker picker = ImagePicker();
   TextEditingController _textEditingController = TextEditingController();
 
   var typecontroller = TextEditingController();
@@ -65,6 +110,8 @@ class _expenseSearchState extends State<expenseSearch> {
   get index => null;
   @override
   Widget build(BuildContext context) {
+    
+
     return Scaffold(
         appBar: AppBar(
           actions: [ InkWell( onTap: () {
@@ -186,7 +233,8 @@ class _expenseSearchState extends State<expenseSearch> {
             left: 15,
             right: 15,
             bottom: MediaQuery.of(ctx).viewInsets.bottom + 15),
-        child: Column(
+       child: SingleChildScrollView(
+          child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -214,23 +262,52 @@ class _expenseSearchState extends State<expenseSearch> {
                 controller: datecontroller,
                 decoration: InputDecoration(labelText: 'Remainder date'),
               ),
-              // TextButton(
+              TextButton(
+                style: TextButton.styleFrom(
+                  textStyle: const TextStyle(fontSize: 20),
+                ),
+                onPressed: () => _onAlertWithCustomContentPressed(context),
+                //pickImage(ImageSource.camera),
+                child: const Text('Upload',                              
+                // style: TextStyle(
+                //                   color: Color.fromARGB(255, 54, 54, 58),
+                //                   fontSize: 15,
+                //                   fontFamily: "Roboto",
+                //                   fontWeight: FontWeight.bold),
+                                  
+                                  ),
+              ),
+              //Divider(),
+              //  TextButton(
               //   style: TextButton.styleFrom(
               //     textStyle: const TextStyle(fontSize: 20),
               //   ),
-              //   onPressed: () {},
-              //   child: const Text('Image'),
+              //   onPressed: () => pickImage(ImageSource.gallery),
+              //   child: const Text('Image',style: TextStyle(
+              //                     color: Color.fromARGB(255, 54, 54, 58),
+              //                     fontSize: 15,
+              //                     fontFamily: "Roboto",
+              //                     fontWeight: FontWeight.bold),),
               // ),
               // Divider(),
               // TextButton(
               //   style: TextButton.styleFrom(
               //     textStyle: const TextStyle(fontSize: 20),
               //   ),
-              //   onPressed: () {},
-              //   child: const Text('File',
-              //       style: TextStyle(color: Colors.blueAccent)),
+              //   onPressed: () {
+              //     pickFiles();
+              //   },
+                
+              //   child: const Text('File',style: TextStyle(
+              //                     color: Color.fromARGB(255, 54, 54, 58),
+              //                     fontSize: 15,
+              //                     fontFamily: "Roboto",
+              //                     fontWeight: FontWeight.bold),
+              //       ),
+                    
               // ),
-              // Divider(),
+              (file == null)? Container():Image.file(File(file!.path.toString()),),
+ 
 
               SizedBox(
                 height: 15,
@@ -250,8 +327,10 @@ class _expenseSearchState extends State<expenseSearch> {
                         notescontroller.text,
                         amountcontroller.text,
                         datecontroller.text);
+                        print(dotenv.env['API_URL']);
                   })
             ]),
+      ),
       ),
     );
   }
@@ -264,8 +343,9 @@ class _expenseSearchState extends State<expenseSearch> {
         amountcontroller.text.isNotEmpty ||
         datecontroller.text.isNotEmpty) {
       print(subtypecontroller.text);
+      print(dotenv.env['API_URL']);
       var response = await http.post(Uri.parse(
-          "http://192.168.24.34:8000/api/method/money_management_backend.custom.py.api.daily_entry_submit?Type=Expense&Subtype=${subtype}&Name=${name}&Notes=${notes}&Amount=${amount}&Remainder_date=${date}"));
+          "${dotenv.env['API_URL']}/api/method/money_management_backend.custom.py.api.daily_entry_submit?Type=Expense&Subtype=${subtype}&Name=${name}&Notes=${notes}&Amount=${amount}&Remainder_date=${date}"));
       //print(response.statusCode);
       if (response.statusCode == 200) {
         print(response.statusCode);
@@ -286,4 +366,58 @@ class _expenseSearchState extends State<expenseSearch> {
       }
     }
   }
+    _onAlertWithCustomContentPressed(context){
+      var alertStyle=AlertStyle(
+         isCloseButton: false,
+         isOverlayTapDismiss: true,);
+    Alert(context: context,
+    title: "Image",
+    buttons: [
+        
+        DialogButton(
+          color: Color.fromARGB(255, 93, 99, 216),
+          child: Text(
+          "Camera",
+                    style: TextStyle(color: Color.fromARGB(255, 255, 253, 253)),
+        ), onPressed: ()=>pickImage(ImageSource.camera),
+        ),
+        DialogButton(
+          color: Color.fromARGB(255, 93, 99, 216),
+          child: Text(
+          "Image",
+                    style: TextStyle(color: Color.fromARGB(255, 255, 253, 253)),
+        ), onPressed: ()=>pickImage(ImageSource.gallery),
+        ),
+        DialogButton(
+          color: Color.fromARGB(255, 93, 99, 216),
+          child: Text(
+          "File",
+                    style: TextStyle(color: Color.fromARGB(255, 255, 253, 253)),
+        ), onPressed: (){pickFiles();},
+        ),
+      
+      ],
+    
+ 
+    ).show();
+  }
+  
+}
+void pickFiles() async{
+  FilePickerResult? result = await FilePicker.platform.pickFiles(
+    type: FileType.custom,allowedExtensions: 
+    ['pdf','doc'],
+  );
+  if(result == null)
+  return;
+
+  var file = result.files.first;
+  viewFile(file);
+}
+
+void viewFile(PlatformFile file) {
+
+  var OpenFile;
+  OpenFile.open(file.path);
+  print(OpenFile);
 }

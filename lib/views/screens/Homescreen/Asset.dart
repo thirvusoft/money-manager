@@ -1,9 +1,28 @@
+// ignore: file_names
+import 'dart:io';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'dart:async';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:money_manager/views/screens/profile.dart';
-
+import 'package:file_picker/file_picker.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
 import '../Categories/Asset.dart';
 import 'package:http/http.dart' as http;
+
+// class Environment{
+//   static String get fileName {
+    
+//     return '.env';
+//   }
+//   static String get apiUrl{
+//     return dotenv.env['API_URL'] ?? 'API_URL not found';
+//   }
+// }
 
 class searchbar extends StatefulWidget {
   const searchbar({Key? key}) : super(key: key);
@@ -13,6 +32,51 @@ class searchbar extends StatefulWidget {
 }
 
 class _searchbarState extends State<searchbar> {
+  var result;
+    File _myImage = File('');
+  get file => null;
+
+
+      pickImage(ImageSource source) async {
+    XFile? image = await picker.pickImage(
+      source: source,
+      imageQuality: 100,
+      maxHeight: MediaQuery.of(context).size.height,
+      maxWidth: MediaQuery.of(context).size.width,
+      preferredCameraDevice: CameraDevice.rear,
+    );
+    setState(() {
+      print(_myImage);
+      if (image == null) {
+        //TODO: Image not selected action.
+        isFileSelected = 0;
+      } else {
+        //TODO: Image selected action.
+        _myImage = File(image.path);
+        print(_myImage);
+
+        isFileSelected = 1;
+      }
+    }
+    );
+  }
+    Widget showImage(File file) {
+    if (isFileSelected == 0) {
+      //TODO: Image not selected widget.
+      return Center(child: Text("Image Selected"));
+    } else {
+      //TODO: Image selected widget.
+      return Container(
+        height: MediaQuery.of(context).size.width * 9 / 16,
+        width: MediaQuery.of(context).size.width,
+        child: Image.file(file, fit: BoxFit.contain),
+      );
+    }
+    // ignore: dead_code
+    
+  }
+  int isFileSelected = 0;
+  ImagePicker picker = ImagePicker();
   TextEditingController _textEditingController = TextEditingController();
 
   var typecontroller = TextEditingController();
@@ -32,7 +96,6 @@ class _searchbarState extends State<searchbar> {
       });
     });
   }
-
   List icon_nameOnSearch = [];
   List icon_name = [
     ['Gold', 987727],
@@ -46,14 +109,14 @@ class _searchbarState extends State<searchbar> {
     ['Comm Land', 0xf42b],
     ['Residential ', 98633],
   ];
-
   var data;
   get index => null;
   @override
   Widget build(BuildContext context) {
+    var file;
     return Scaffold(
-      
         appBar: AppBar(
+          
           
         actions: [ InkWell( onTap: () {
               Navigator.push(context, MaterialPageRoute(builder: (context)=> Profiles()));
@@ -103,14 +166,17 @@ class _searchbarState extends State<searchbar> {
             ),
           ),
         ),
+
         body: Center(
-            child: _loading
+         child: _loading
                 ? CircularProgressIndicator(
                     valueColor: AlwaysStoppedAnimation<Color>(
                         Color.fromARGB(255, 93, 99, 216)),
                   )
                 : GridView.builder(
+                  
                     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      
                         crossAxisCount: 2,
                         childAspectRatio: 3,
                         crossAxisSpacing: 12),
@@ -120,16 +186,26 @@ class _searchbarState extends State<searchbar> {
                     itemBuilder: (context, index) {
                       print(icon_name[index][1]);
                       return Container(
+                        
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(10),
                           ),
                           child: Row(
+                            
                             children: [
                               Center(
+                                
+                                
+                                
                                   child: TextButton.icon(
+                                    
+                                    style: TextButton.styleFrom(
+                                    ),
+                                    
                                       onPressed: () {
                                         _show(context);
                                       },
+                                      
                                       label: Text(
                                         _textEditingController.text.isNotEmpty
                                             ? icon_nameOnSearch[index][0]
@@ -146,7 +222,7 @@ class _searchbarState extends State<searchbar> {
                                               255, 93, 99, 216)))),
                             ],
                           ));
-                    })),
+                    }),),
         floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
         floatingActionButton: FloatingActionButton(
             child: Icon(
@@ -176,6 +252,8 @@ class _searchbarState extends State<searchbar> {
             left: 15,
             right: 15,
             bottom: MediaQuery.of(ctx).viewInsets.bottom + 15),
+        
+     child: SingleChildScrollView(
         child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -204,24 +282,52 @@ class _searchbarState extends State<searchbar> {
                 controller: datecontroller,
                 decoration: InputDecoration(labelText: 'Remainder date'),
               ),
-              // TextButton(
+           
+              TextButton(
+                style: TextButton.styleFrom(
+                  textStyle: const TextStyle(fontSize: 20),
+                ),
+                onPressed: () => _onAlertWithCustomContentPressed(context),
+                child: const Text('Upload',                              
+                style: TextStyle(
+                                  color: Color.fromARGB(255, 54, 54, 58),
+                                  fontSize: 15,
+                                  fontFamily: "Roboto",
+                                  fontWeight: FontWeight.bold),
+                                  
+                                  ),
+              ),
+              //Divider(),
+              //  TextButton(
               //   style: TextButton.styleFrom(
               //     textStyle: const TextStyle(fontSize: 20),
               //   ),
-              //   onPressed: () {},
-              //   child: const Text('Image'),
+              //   onPressed: () => pickImage(ImageSource.gallery),
+              //   child: const Text('Image',style: TextStyle(
+              //                     color: Color.fromARGB(255, 54, 54, 58),
+              //                     fontSize: 15,
+              //                     fontFamily: "Roboto",
+              //                     fontWeight: FontWeight.bold),),
               // ),
               // Divider(),
               // TextButton(
               //   style: TextButton.styleFrom(
               //     textStyle: const TextStyle(fontSize: 20),
               //   ),
-              //   onPressed: () {},
-              //   child: const Text('File',
-              //       style: TextStyle(color: Colors.blueAccent)),
+              //   onPressed: () {
+              //     pickFiles();
+              //   },
+                
+              //   child: const Text('File',style: TextStyle(
+              //                     color: Color.fromARGB(255, 54, 54, 58),
+              //                     fontSize: 15,
+              //                     fontFamily: "Roboto",
+              //                     fontWeight: FontWeight.bold),
+              //       ),
+                    
               // ),
-              // Divider(),
-
+              (file == null)? Container():Image.file(File(file!.path.toString()),),
+              
               SizedBox(
                 height: 15,
               ),
@@ -240,13 +346,17 @@ class _searchbarState extends State<searchbar> {
                         notescontroller.text,
                         amountcontroller.text,
                         datecontroller.text);
-                  })
+                  }),
+                  
             ]),
-      ),
+      ),),
     );
   }
 
+  
+
   Future dataentry(type, subtype, name, notes, amount, date) async {
+
     if (typecontroller.text.isNotEmpty ||
         subtypecontroller.text.isNotEmpty ||
         namecontroller.text.isNotEmpty ||
@@ -254,15 +364,21 @@ class _searchbarState extends State<searchbar> {
         amountcontroller.text.isNotEmpty ||
         datecontroller.text.isNotEmpty) {
       print(subtypecontroller.text);
+      print(dotenv.env['API_URL']);
+     
+      // var response = await http.post(Uri.parse(
+      //      dotenv.env['API_KEY'] ?? ""));
       var response = await http.post(Uri.parse(
-          "http://192.168.24.34:8000/api/method/money_management_backend.custom.py.api.daily_entry_submit?Type=Asset&Subtype=${subtype}&Name=${name}&Notes=${notes}&Amount=${amount}&Remainder_date=${date}"));
+      '${dotenv.env['API_URL']}/api/method/money_management_backend.custom.py.api.daily_entry_submit?Type=Asset&Subtype=${subtype}&Name=${name}&Notes=${notes}&Amount=${amount}&Remainder_date=${date}'
+       ));
       //print(response.statusCode);
+      print(name);
       if (response.statusCode == 200) {
         print(response.statusCode);
         Navigator.pop(context);
 
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text("submited sucessfully"),
+          content: Text("Submited sucessfully"),
           backgroundColor: Colors.green,
         ));
       } else {
@@ -276,4 +392,68 @@ class _searchbarState extends State<searchbar> {
       }
     }
   }
+    _onAlertWithCustomContentPressed(context){
+      var alertStyle=AlertStyle(
+         isCloseButton: false,
+         isOverlayTapDismiss: true,);
+    Alert(context: context,
+    title: "Image",
+      buttons: [
+        
+        DialogButton(
+          color: Color.fromARGB(255, 93, 99, 216),
+          child: Text(
+          "Camera",
+                    style: TextStyle(color: Color.fromARGB(255, 255, 253, 253)),
+        ), onPressed: ()=>pickImage(ImageSource.camera),
+        ),
+        DialogButton(
+          color: Color.fromARGB(255, 93, 99, 216),
+          child: Text(
+          "Image",
+                    style: TextStyle(color: Color.fromARGB(255, 255, 253, 253)),
+        ), onPressed: ()=>pickImage(ImageSource.gallery),
+        ),
+        DialogButton(
+          color: Color.fromARGB(255, 93, 99, 216),
+          child: Text(
+          "File",
+                    style: TextStyle(color: Color.fromARGB(255, 255, 253, 253)),
+        ), onPressed: (){pickFiles();},
+        ),
+      
+      ],
+   
+    ).show();
+  }
+ 
+
+
+
+void pickFiles() async{
+  FilePickerResult? result = await FilePicker.platform.pickFiles(
+    type: FileType.custom,allowedExtensions: 
+    ['pdf','doc'],
+  );
+  if(result == null)
+  return;
+
+  var file = result.files.first;
+  viewFile(file);
 }
+
+void viewFile(PlatformFile file) {
+
+  var OpenFile;
+  OpenFile.open(file.path);
+  
+}
+}
+// Future<File> getImageFileFromAssets(String myImage) async {
+//   final byteData = await rootBundle.load('assets/$myImage');
+
+//   final file = File('${(await getTemporaryDirectory()).path}/$myImage');
+//   await file.writeAsBytes(byteData.buffer.asUint8List(byteData.offsetInBytes, byteData.lengthInBytes));
+// print(file);
+//   return file;
+// }

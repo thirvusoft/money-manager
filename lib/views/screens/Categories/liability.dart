@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 
 class customLiability extends StatefulWidget {
@@ -118,8 +119,9 @@ class _customLiabilityState extends State<customLiability> {
 
   Future cussubmit(type, name) async {
     if (typecontroller.text.isNotEmpty || namecontroller.text.isNotEmpty) {
+      print(dotenv.env['API_URL']);
       var response = await http.post(Uri.parse(
-          "http://192.168.24.34:8000/api/method/money_management_backend.custom.py.api.custom?Type=Liability&Subtype=${name}&IconBineryCode=654654"));
+          "${dotenv.env['API_URL']}/api/method/money_management_backend.custom.py.api.custom?Type=Liability&Subtype=${name}&IconBineryCode=654654"));
       if (response.statusCode == 200) {
         print(response.statusCode);
         Navigator.pop(context);
