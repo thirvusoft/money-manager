@@ -1,6 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:money_manager/views/screens/Categories/Others.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../Categories/Asset.dart';
 import 'package:http/http.dart' as http;
@@ -25,17 +28,27 @@ class _othersSearchState extends State<othersSearch> {
   var datecontroller = TextEditingController();
   final formKey = GlobalKey<FormState>();
   final dateController = TextEditingController();
-
+  bool _loading = true;
+  List icon_nameOnSearch = [];
+  List icon_name = [];
+  var hexcode_dict = <String, int>{
+    ' 0xf12f': 0xf12f,
+    ' 0xef8f': 0xef8f,
+    '0xee35': 0xee35,
+    '0xef2d': 0xef2d,
+    '0xee33': 0xee33,
+    ' 0xf2dd': 0xf2dd,
+  };
   @override
   void dispose() {
     dateController.dispose();
     super.dispose();
   }
 
-  bool _loading = true;
   @override
   void initState() {
     super.initState();
+    listapi();
     Future.delayed(Duration(seconds: 1), () {
       Color.fromARGB(255, 93, 99, 216);
       setState(() {
@@ -44,12 +57,23 @@ class _othersSearchState extends State<othersSearch> {
     });
   }
 
-  List icon_nameOnSearch = [];
-  List icon_name = [
-    ['Invitation', 0xf12f],
-    ['Visiting Card', 0xef8f],
-    ['Profile', 0xee35],
-  ];
+  Future listapi() async {
+    var response = await http.post(Uri.parse(
+        "http://192.168.24.34:8000/api/method/money_management_backend.custom.py.api.withsubtype?Type=Others"));
+
+    if (response.statusCode == 200) {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      List<String> liability_icon_list = [];
+      for (var i = 0; i < json.decode(response.body)["Others"].length; i++) {
+        liability_icon_list
+            .add(jsonEncode(json.decode(response.body)["Others"][i]));
+      }
+      prefs.setStringList('liability_icon_list', liability_icon_list);
+      icon_name = prefs.getStringList("liability_icon_list")!;
+      setState(() => _loading = true);
+    }
+  }
+
   var data;
   var subtypes;
   get index => null;
@@ -134,20 +158,24 @@ class _othersSearchState extends State<othersSearch> {
                               Center(
                                   child: TextButton.icon(
                                       onPressed: () {
-                                        subtypes = icon_name[index][0];
+                                        subtypes =
+                                            jsonDecode(icon_name[index])[0];
                                         _show(context, subtypes);
                                       },
                                       label: Text(
                                         _textEditingController.text.isNotEmpty
-                                            ? icon_nameOnSearch[index][0]
-                                            : icon_name[index][0],
+                                            ? jsonDecode(icon_name[index])[0]
+                                            : jsonDecode(icon_name[index])[0],
                                         style: TextStyle(
                                             color: Colors.black,
                                             fontSize: 15,
                                             letterSpacing: .7),
                                       ),
                                       icon: Icon(
-                                          IconData(icon_name[index][1],
+                                          IconData(
+                                              hexcode_dict[jsonDecode(
+                                                      icon_name[index])[1]] ??
+                                                  0XF155,
                                               fontFamily: 'MaterialIcons'),
                                           color: Color.fromARGB(
                                               255, 93, 99, 216)))),

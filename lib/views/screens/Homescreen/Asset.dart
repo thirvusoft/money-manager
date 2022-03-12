@@ -1,6 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:money_manager/views/screens/Categories/liability.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../Categories/Asset.dart';
 import 'package:http/http.dart' as http;
@@ -26,9 +29,28 @@ class _searchbarState extends State<searchbar> {
   final formKey = GlobalKey<FormState>();
 
   bool _loading = true;
+  List icon_nameOnSearch = [];
+  List icon_name = [];
+  var hexcode_dict = <String, int>{
+    ' 0xf1dd': 0xf1dd,
+    ' 0xf1dd': 0xf1dd,
+    '0xf1dd': 0xf1dd,
+    '0xf05e7': 0xf05e7,
+    '0xee62': 0xee62,
+    '0xf447': 0xf447,
+    '0xef06': 0xef06,
+    '0xf05ce': 0xf05ce,
+    '0xf42b': 0xf42b,
+    '0xf1af': 0xf1af,
+    '0xee35': 0xee35,
+    '0xf2e9': 0xf2e9,
+    '0xf108': 0xf108,
+    '0xf05ce': 0xf05ce
+  };
   @override
   void initState() {
     super.initState();
+    listapi();
     Future.delayed(Duration(seconds: 1), () {
       Color.fromARGB(255, 93, 99, 216);
       setState(() {
@@ -37,17 +59,23 @@ class _searchbarState extends State<searchbar> {
     });
   }
 
-  List icon_nameOnSearch = [];
-  List icon_name = [
-    ['Gold', 0xf1dd],
-    ['Silver', 0xf1dd],
-    ['Platinum', 0xf1dd],
-    ['Vehicles', 0xee62],
-    ['Home ', 0xe45f],
-    ['Machinery', 0xef06],
-    ['Comm Land', 0xf42b],
-    ['Residential ', 0xf1af],
-  ];
+  Future listapi() async {
+    var response = await http.post(Uri.parse(
+        "http://192.168.24.34:8000/api/method/money_management_backend.custom.py.api.withsubtype?Type=Asset"));
+
+    if (response.statusCode == 200) {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      List<String> liability_icon_list = [];
+      for (var i = 0; i < json.decode(response.body)["Asset"].length; i++) {
+        liability_icon_list
+            .add(jsonEncode(json.decode(response.body)["Asset"][i]));
+      }
+      prefs.setStringList('liability_icon_list', liability_icon_list);
+      icon_name = prefs.getStringList("liability_icon_list")!;
+      setState(() => _loading = true);
+    }
+  }
+
   var data;
   var subtypes;
   get index => null;
@@ -132,21 +160,25 @@ class _searchbarState extends State<searchbar> {
                               Center(
                                   child: TextButton.icon(
                                       onPressed: () {
-                                        subtypes = icon_name[index][0];
+                                        subtypes =
+                                            jsonDecode(icon_name[index])[0];
                                         _show(context, subtypes);
                                         print(icon_name[index][0]);
                                       },
                                       label: Text(
                                         _textEditingController.text.isNotEmpty
-                                            ? icon_nameOnSearch[index][0]
-                                            : icon_name[index][0],
+                                            ? jsonDecode(icon_name[index])[0]
+                                            : jsonDecode(icon_name[index])[0],
                                         style: TextStyle(
                                             color: Colors.black,
                                             fontSize: 15,
                                             letterSpacing: .7),
                                       ),
                                       icon: Icon(
-                                          IconData(icon_name[index][1],
+                                          IconData(
+                                              hexcode_dict[jsonDecode(
+                                                      icon_name[index])[1]] ??
+                                                  0XF155,
                                               fontFamily: 'MaterialIcons'),
                                           color: Color.fromARGB(
                                               255, 93, 99, 216)))),

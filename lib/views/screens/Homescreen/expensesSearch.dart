@@ -1,6 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:money_manager/views/screens/Categories/Expense.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../Categories/Asset.dart';
 import 'package:http/http.dart' as http;
@@ -24,18 +27,39 @@ class _expenseSearchState extends State<expenseSearch> {
   var amountcontroller = TextEditingController();
   var datecontroller = TextEditingController();
   final formKey = GlobalKey<FormState>();
-  // final dateController = TextEditingController();
-
-  // @override
-  // void dispose() {
-  //   dateController.dispose();
-  //   super.dispose();
-  // }
 
   bool _loading = true;
+  List icon_nameOnSearch = [];
+  List icon_name = [];
+  var hexcode_dict = <String, int>{
+    ' 0xf2e9': 0xf2e9,
+    ' 0xf172': 0xf172,
+    '0xf37d': 0xf37d,
+    '0xf3cf': 0xf3cf,
+    '0xf37f': 0xf37f,
+    ' 0xef2d': 0xef2d,
+    ' 0xf05f0': 0xf05f0,
+    '0xef4c': 0xef4c,
+    '0xf24e': 0xf24e,
+    '0xf076': 0xf076,
+    '0xf37f': 0xf37f,
+    ' 0xf28c': 0xf28c,
+    ' 0xf28d': 0xf28d,
+    '0xf0f2': 0xf0f2,
+    '0xf041': 0xf041,
+    '0xef0d': 0xef0d,
+    '0xf33c': 0xf33c,
+    ' 0xf108': 0xf108,
+    ' 0xf06a4': 0xf06a4,
+    '0xf109': 0xf109,
+    '0xe2e4': 0xe2e4,
+    '0xf068b': 0xf068b,
+  };
+
   @override
   void initState() {
     super.initState();
+    listapi();
     Future.delayed(Duration(seconds: 1), () {
       Color.fromARGB(255, 93, 99, 216);
       setState(() {
@@ -44,28 +68,22 @@ class _expenseSearchState extends State<expenseSearch> {
     });
   }
 
-  List icon_nameOnSearch = [];
-  List icon_name = [
-    ['Food', 0xf2e9],
-    ['Travel', 0xf172],
-    ['Grocery', 0xf37d],
-    ['Entertainment', 0xf3cf],
-    ['Shopping', 0xf37f],
-    ['Clothing', 0xe15d],
-    ['Tax', 0xf24e],
-    ['Gas', 0xf076],
-    ['Electricity', 0xf016],
-    ['Telephone', 0xf28c],
-    ['Recharge', 0xf28d],
-    ['Health', 0xf0f2],
-    ['Beauty', 0xf041],
-    ['Electronics', 0xef0d],
-    ['Gift', 0xef2d],
-    ['Education', 0xf33c],
-    ['Maintenance', 0xf108],
-    ['Construction', 0xf109],
-    ['Crop', 0xf041],
-  ];
+  Future listapi() async {
+    var response = await http.post(Uri.parse(
+        "http://192.168.24.34:8000/api/method/money_management_backend.custom.py.api.withsubtype?Type=Expense"));
+
+    if (response.statusCode == 200) {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      List<String> liability_icon_list = [];
+      for (var i = 0; i < json.decode(response.body)["Expense"].length; i++) {
+        liability_icon_list
+            .add(jsonEncode(json.decode(response.body)["Expense"][i]));
+      }
+      prefs.setStringList('liability_icon_list', liability_icon_list);
+      icon_name = prefs.getStringList("liability_icon_list")!;
+      setState(() => _loading = true);
+    }
+  }
 
   var data;
   var subtype;
@@ -150,20 +168,24 @@ class _expenseSearchState extends State<expenseSearch> {
                               Center(
                                   child: TextButton.icon(
                                       onPressed: () {
-                                        subtype = icon_name[index][0];
+                                        subtype =
+                                            jsonDecode(icon_name[index])[0];
                                         _show(context, subtype);
                                       },
                                       label: Text(
                                         _textEditingController.text.isNotEmpty
-                                            ? icon_nameOnSearch[index][0]
-                                            : icon_name[index][0],
+                                            ? jsonDecode(icon_name[index])[0]
+                                            : jsonDecode(icon_name[index])[0],
                                         style: TextStyle(
                                             color: Colors.black,
                                             fontSize: 15,
                                             letterSpacing: .7),
                                       ),
                                       icon: Icon(
-                                          IconData(icon_name[index][1],
+                                          IconData(
+                                              hexcode_dict[jsonDecode(
+                                                      icon_name[index])[1]] ??
+                                                  0XF155,
                                               fontFamily: 'MaterialIcons'),
                                           color: Color.fromARGB(
                                               255, 93, 99, 216)))),

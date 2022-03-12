@@ -1,6 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class customIncome extends StatefulWidget {
   const customIncome({Key? key}) : super(key: key);
@@ -15,15 +18,42 @@ class _customIncomeState extends State<customIncome> {
   var namecontroller = TextEditingController();
   final formKey = GlobalKey<FormState>();
 
+  bool _loading = true;
+  var code;
   List icon_nameOnSearch = [];
-  List icon_name = [
-    ['', 0xee35],
-    ['', 0xf12f],
-    [' ', 0xef8f],
-    [' ', 0xef2d],
-    ['', 0xee33],
-    ['', 0xf2dd]
-  ];
+  List icon_name = [];
+  var hexcode_dict = <String, int>{
+    ' 0xf04e1': 0xf04e1,
+    ' 0xf2ee': 0xf2ee,
+    '0xf18e': 0xf18e,
+    '0xf244': 0xf244,
+    '0xf2d6': 0xf2d6,
+    ' 0xf3f6': 0xf3f6,
+    ' 0xf3e8': 0xf3e8,
+    '0xf0617': 0xf0617,
+    '0xee35': 0xee35,
+  };
+  @override
+  void initState() {
+    super.initState();
+    listapi();
+  }
+
+  Future listapi() async {
+    var response = await http.post(Uri.parse(
+        "http://192.168.24.34:8000/api/method/money_management_backend.custom.py.api.withsubtype?Type=Asset"));
+
+    if (response.statusCode == 200) {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      List<String> liability_icon_list = [];
+      for (var i = 0; i < json.decode(response.body)["Asset"].length; i++) {
+        liability_icon_list
+            .add(jsonEncode(json.decode(response.body)["Asset"][i]));
+      }
+      prefs.setStringList('liability_icon_list', liability_icon_list);
+      icon_name = prefs.getStringList("liability_icon_list")!;
+    }
+  }
 
   var data;
   get index => null;
@@ -41,6 +71,8 @@ class _customIncomeState extends State<customIncome> {
               ? icon_nameOnSearch.length
               : icon_name.length,
           itemBuilder: (context, index) {
+            code = icon_name[index][1];
+
             print(icon_name[index][1]);
             return Padding(
               padding: const EdgeInsets.all(8.0),
@@ -55,7 +87,7 @@ class _customIncomeState extends State<customIncome> {
                           _show(context);
                         },
                         icon: Icon(
-                            IconData(icon_name[index][1],
+                            IconData(jsonDecode(icon_name[index])[1],
                                 fontFamily: 'MaterialIcons'),
                             color: Color.fromARGB(255, 255, 255, 255))),
                   ),
@@ -121,6 +153,7 @@ class _customIncomeState extends State<customIncome> {
                               cussubmit(
                                 typecontroller.text,
                                 namecontroller.text,
+                                code,
                               );
                             }
                           })
@@ -129,10 +162,10 @@ class _customIncomeState extends State<customIncome> {
             ));
   }
 
-  Future cussubmit(type, name) async {
+  Future cussubmit(type, name, code) async {
     if (typecontroller.text.isNotEmpty || namecontroller.text.isNotEmpty) {
       var response = await http.post(Uri.parse(
-          "http://192.168.24.34:8000/api/method/money_management_backend.custom.py.api.custom?Type=Income&Subtype=${name}&IconBineryCode=654654"));
+          "http://192.168.24.34:8000/api/method/money_management_backend.custom.py.api.custom?Type=Income&Subtype=${name}&IconBineryCode=${code}"));
       if (response.statusCode == 200) {
         print(response.statusCode);
         Navigator.pop(context);

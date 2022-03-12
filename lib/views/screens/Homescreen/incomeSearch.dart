@@ -1,6 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:money_manager/views/screens/Categories/Income.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../Categories/Asset.dart';
 import 'package:http/http.dart' as http;
@@ -24,10 +27,24 @@ class _incomeSearchState extends State<incomeSearch> {
   var amountcontroller = TextEditingController();
   var datecontroller = TextEditingController();
   final formKey = GlobalKey<FormState>();
-
   bool _loading = true;
+  List icon_nameOnSearch = [];
+  List icon_name = [];
+  var hexcode_dict = <String, int>{
+    ' 0xf04e1': 0xf04e1,
+    ' 0xf2ee': 0xf2ee,
+    '0xf18e': 0xf18e,
+    '0xf244': 0xf244,
+    '0xf2d6': 0xf2d6,
+    ' 0xf3f6': 0xf3f6,
+    ' 0xf3e8': 0xf3e8,
+    '0xf0617': 0xf0617,
+    '0xee35': 0xee35,
+  };
+
   @override
   void initState() {
+    listapi();
     super.initState();
     Future.delayed(Duration(seconds: 1), () {
       Color.fromARGB(255, 93, 99, 216);
@@ -37,17 +54,22 @@ class _incomeSearchState extends State<incomeSearch> {
     });
   }
 
-  List icon_nameOnSearch = [];
-  List icon_name = [
-    ['Salary', 61505],
-    ['Asset Sale', 0xf2ee],
-    ['Scrap Sale', 0xf18e],
-    ['Rental', 0xf244],
-    ['Refunds', 0xf2d6],
-    ['Coupons', 0xf3f6],
-    ['Lottery', 0xf3e8],
-    ['profit', 0xee35],
-  ];
+  Future listapi() async {
+    var response = await http.post(Uri.parse(
+        "http://192.168.24.34:8000/api/method/money_management_backend.custom.py.api.withsubtype?Type=Income"));
+
+    if (response.statusCode == 200) {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      List<String> liability_icon_list = [];
+      for (var i = 0; i < json.decode(response.body)["Income"].length; i++) {
+        liability_icon_list
+            .add(jsonEncode(json.decode(response.body)["Income"][i]));
+      }
+      prefs.setStringList('liability_icon_list', liability_icon_list);
+      icon_name = prefs.getStringList("liability_icon_list")!;
+      setState(() => _loading = true);
+    }
+  }
 
   var data;
   var subtypes;
@@ -134,20 +156,24 @@ class _incomeSearchState extends State<incomeSearch> {
                               Center(
                                   child: TextButton.icon(
                                       onPressed: () {
-                                        subtypes = icon_name[index][0];
+                                        subtypes =
+                                            jsonDecode(icon_name[index])[0];
                                         _show(context, subtypes);
                                       },
                                       label: Text(
                                         _textEditingController.text.isNotEmpty
-                                            ? icon_nameOnSearch[index][0]
-                                            : icon_name[index][0],
+                                            ? jsonDecode(icon_name[index])[0]
+                                            : jsonDecode(icon_name[index])[0],
                                         style: TextStyle(
                                             color: Colors.black,
                                             fontSize: 15,
                                             letterSpacing: .7),
                                       ),
                                       icon: Icon(
-                                          IconData(icon_name[index][1],
+                                          IconData(
+                                              hexcode_dict[jsonDecode(
+                                                      icon_name[index])[1]] ??
+                                                  0XF155,
                                               fontFamily: 'MaterialIcons'),
                                           color: Color.fromARGB(
                                               255, 93, 99, 216)))),
