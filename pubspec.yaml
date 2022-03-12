@@ -49,13 +49,9 @@ dependencies:
   animated_text_kit: ^4.2.1
   bottom_navy_bar: ^6.0.0
   anim_search_bar: ^2.0.2
-<<<<<<< HEAD
   file_picker: ^4.5.0
   flutter_dotenv: ^5.0.2
   flutter_config: ^2.0.0
-=======
- 
->>>>>>> 453c310d01efd7beeaca53491b98e4f2c2bcdf42
 dev_dependencies:
   flutter_test:
     sdk: flutter
