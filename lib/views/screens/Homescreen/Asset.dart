@@ -14,16 +14,6 @@ import 'package:rflutter_alert/rflutter_alert.dart';
 import '../Categories/Asset.dart';
 import 'package:http/http.dart' as http;
 
-// class Environment{
-//   static String get fileName {
-    
-//     return '.env';
-//   }
-//   static String get apiUrl{
-//     return dotenv.env['API_URL'] ?? 'API_URL not found';
-//   }
-// }
-
 class searchbar extends StatefulWidget {
   const searchbar({Key? key}) : super(key: key);
 
@@ -33,11 +23,10 @@ class searchbar extends StatefulWidget {
 
 class _searchbarState extends State<searchbar> {
   var result;
-    File _myImage = File('');
+  File _myImage = File('');
   get file => null;
 
-
-      pickImage(ImageSource source) async {
+  pickImage(ImageSource source) async {
     XFile? image = await picker.pickImage(
       source: source,
       imageQuality: 100,
@@ -57,10 +46,10 @@ class _searchbarState extends State<searchbar> {
 
         isFileSelected = 1;
       }
-    }
-    );
+    });
   }
-    Widget showImage(File file) {
+
+  Widget showImage(File file) {
     if (isFileSelected == 0) {
       //TODO: Image not selected widget.
       return Center(child: Text("Image Selected"));
@@ -73,8 +62,8 @@ class _searchbarState extends State<searchbar> {
       );
     }
     // ignore: dead_code
-    
   }
+
   int isFileSelected = 0;
   ImagePicker picker = ImagePicker();
   TextEditingController _textEditingController = TextEditingController();
@@ -98,6 +87,7 @@ class _searchbarState extends State<searchbar> {
       });
     });
   }
+
   List icon_nameOnSearch = [];
   List icon_name = [
     ['Gold', 0xf1dd],
@@ -169,65 +159,54 @@ class _searchbarState extends State<searchbar> {
             ),
           ),
         ),
-
         body: Center(
-         child: _loading
-                ? CircularProgressIndicator(
-                    valueColor: AlwaysStoppedAnimation<Color>(
-                        Color.fromARGB(255, 93, 99, 216)),
-                  )
-                : GridView.builder(
-                  
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      
-                        crossAxisCount: 2,
-                        childAspectRatio: 3,
-                        crossAxisSpacing: 20),
-                    itemCount: _textEditingController.text.isNotEmpty
-                        ? icon_nameOnSearch.length
-                        : icon_name.length,
-                    itemBuilder: (context, index) {
-                      print(icon_name[index][1]);
-                      return Container(
-                        
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: Row(
-                            
-                            children: [
-                              Center(
-                                
-                                
-                                
-                                  child: TextButton.icon(
-                                    
-                                    style: TextButton.styleFrom(
+          child: _loading
+              ? CircularProgressIndicator(
+                  valueColor: AlwaysStoppedAnimation<Color>(
+                      Color.fromARGB(255, 93, 99, 216)),
+                )
+              : GridView.builder(
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      childAspectRatio: 3,
+                      crossAxisSpacing: 20),
+                  itemCount: _textEditingController.text.isNotEmpty
+                      ? icon_nameOnSearch.length
+                      : icon_name.length,
+                  itemBuilder: (context, index) {
+                    print(icon_name[index][1]);
+                    return Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Row(
+                          children: [
+                            Center(
+                                child: TextButton.icon(
+                                    style: TextButton.styleFrom(),
+                                    onPressed: () {
+                                      subtypes = icon_name[index][0];
+                                      _show(context, subtypes);
+                                      print(icon_name[index][0]);
+                                    },
+                                    label: Text(
+                                      _textEditingController.text.isNotEmpty
+                                          ? icon_nameOnSearch[index][0]
+                                          : icon_name[index][0],
+                                      style: TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 15,
+                                          letterSpacing: .7),
                                     ),
-                                    
-                                      onPressed: () {
-                                        subtypes = icon_name[index][0];
-                                        _show(context, subtypes);
-                                        print(icon_name[index][0]);
-                                      },
-                                      
-                                      label: Text(
-                                        _textEditingController.text.isNotEmpty
-                                            ? icon_nameOnSearch[index][0]
-                                            : icon_name[index][0],
-                                        style: TextStyle(
-                                            color: Colors.black,
-                                            fontSize: 15,
-                                            letterSpacing: .7),
-                                      ),
-                                      icon: Icon(
-                                          IconData(icon_name[index][1],
-                                              fontFamily: 'MaterialIcons'),
-                                          color: Color.fromARGB(
-                                              255, 93, 99, 216)))),
-                            ],
-                          ));
-                    }),),
+                                    icon: Icon(
+                                        IconData(icon_name[index][1],
+                                            fontFamily: 'MaterialIcons'),
+                                        color:
+                                            Color.fromARGB(255, 93, 99, 216)))),
+                          ],
+                        ));
+                  }),
+        ),
         floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
         floatingActionButton: FloatingActionButton(
             // isExtended: true,
@@ -278,15 +257,30 @@ class _searchbarState extends State<searchbar> {
                               return null;
                             }
                           }),
-                      TextField(
+                      TextFormField(
                         controller: notescontroller,
                         decoration: InputDecoration(labelText: 'Notes'),
                       ),
-                      TextField(
-                        controller: amountcontroller,
-                        decoration: InputDecoration(labelText: 'Amount'),
-                        keyboardType: TextInputType.number,
-                      ),
+                      TextFormField(
+                          controller: amountcontroller,
+                          decoration: InputDecoration(labelText: 'Amount'),
+                          keyboardType: TextInputType.number,
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return "Please enter the amount";
+                            } else {
+                              return null;
+                            }
+                          }),
+                      TextButton(
+                          onPressed: () {
+                            _onAlertWithCustomContentPressed;
+                          },
+                          child: Text(
+                            "Upload",
+                            style:
+                                TextStyle(color: Color.fromARGB(255, 0, 0, 0)),
+                          )),
                       SizedBox(
                         height: 15,
                       ),
@@ -336,12 +330,11 @@ class _searchbarState extends State<searchbar> {
         datecontroller.text.isNotEmpty) {
       print(subtypecontroller.text);
       print(dotenv.env['API_URL']);
-     
+
       // var response = await http.post(Uri.parse(
       //      dotenv.env['API_KEY'] ?? ""));
       var response = await http.post(Uri.parse(
-      '${dotenv.env['API_URL']}/api/method/money_management_backend.custom.py.api.daily_entry_submit?Type=Asset&Subtype=${subtypes}&Name=${name}&Notes=${notes}&Amount=${amount}&Remainder_date=${date}'
-       ));
+          '${dotenv.env['API_URL']}/api/method/money_management_backend.custom.py.api.daily_entry_submit?Type=Asset&Subtype=${subtypes}&Name=${name}&Notes=${notes}&Amount=${amount}&Remainder_date=${date}'));
       //print(response.statusCode);
       print(name);
       if (response.statusCode == 200) {
@@ -363,62 +356,61 @@ class _searchbarState extends State<searchbar> {
       }
     }
   }
-    _onAlertWithCustomContentPressed(context){
-      var alertStyle=AlertStyle(
-         isCloseButton: false,
-         isOverlayTapDismiss: true,);
-    Alert(context: context,
-    title: "Image",
+
+  _onAlertWithCustomContentPressed(context) {
+    var alertStyle = AlertStyle(
+      isCloseButton: false,
+      isOverlayTapDismiss: true,
+    );
+    Alert(
+      context: context,
+      title: "Image",
       buttons: [
-        
         DialogButton(
           color: Color.fromARGB(255, 93, 99, 216),
           child: Text(
-          "Camera",
-                    style: TextStyle(color: Color.fromARGB(255, 255, 253, 253)),
-        ), onPressed: ()=>pickImage(ImageSource.camera),
+            "Camera",
+            style: TextStyle(color: Color.fromARGB(255, 255, 253, 253)),
+          ),
+          onPressed: () => pickImage(ImageSource.camera),
         ),
         DialogButton(
           color: Color.fromARGB(255, 93, 99, 216),
           child: Text(
-          "Image",
-                    style: TextStyle(color: Color.fromARGB(255, 255, 253, 253)),
-        ), onPressed: ()=>pickImage(ImageSource.gallery),
+            "Image",
+            style: TextStyle(color: Color.fromARGB(255, 255, 253, 253)),
+          ),
+          onPressed: () => pickImage(ImageSource.gallery),
         ),
         DialogButton(
           color: Color.fromARGB(255, 93, 99, 216),
           child: Text(
-          "File",
-                    style: TextStyle(color: Color.fromARGB(255, 255, 253, 253)),
-        ), onPressed: (){pickFiles();},
+            "File",
+            style: TextStyle(color: Color.fromARGB(255, 255, 253, 253)),
+          ),
+          onPressed: () {
+            pickFiles();
+          },
         ),
-      
       ],
-   
     ).show();
   }
- 
 
+  void pickFiles() async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles(
+      type: FileType.custom,
+      allowedExtensions: ['pdf', 'doc'],
+    );
+    if (result == null) return;
 
+    var file = result.files.first;
+    viewFile(file);
+  }
 
-void pickFiles() async{
-  FilePickerResult? result = await FilePicker.platform.pickFiles(
-    type: FileType.custom,allowedExtensions: 
-    ['pdf','doc'],
-  );
-  if(result == null)
-  return;
-
-  var file = result.files.first;
-  viewFile(file);
-}
-
-void viewFile(PlatformFile file) {
-
-  var OpenFile;
-  OpenFile.open(file.path);
-  
-}
+  void viewFile(PlatformFile file) {
+    var OpenFile;
+    OpenFile.open(file.path);
+  }
 }
 // Future<File> getImageFileFromAssets(String myImage) async {
 //   final byteData = await rootBundle.load('assets/$myImage');

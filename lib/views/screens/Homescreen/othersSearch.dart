@@ -22,8 +22,8 @@ class othersSearch extends StatefulWidget {
 
 class _othersSearchState extends State<othersSearch> {
   var file;
-        File _myImage = File('');
-      pickImage(ImageSource source) async {
+  File _myImage = File('');
+  pickImage(ImageSource source) async {
     XFile? image = await picker.pickImage(
       source: source,
       imageQuality: 100,
@@ -43,7 +43,8 @@ class _othersSearchState extends State<othersSearch> {
       }
     });
   }
-    Widget showImage(File file) {
+
+  Widget showImage(File file) {
     if (isFileSelected == 0) {
       //TODO: Image not selected widget.
       return Center(child: Text("Image Selected"));
@@ -56,8 +57,8 @@ class _othersSearchState extends State<othersSearch> {
       );
     }
     // ignore: dead_code
-    
   }
+
   int isFileSelected = 0;
   ImagePicker picker = ImagePicker();
   TextEditingController _textEditingController = TextEditingController();
@@ -100,7 +101,7 @@ class _othersSearchState extends State<othersSearch> {
   get index => null;
   @override
   Widget build(BuildContext context) {
-        var file;
+    var file;
 
     return Scaffold(
         appBar: AppBar(
@@ -252,40 +253,68 @@ class _othersSearchState extends State<othersSearch> {
                               return null;
                             }
                           }),
-                      TextField(
-                        controller: notescontroller,
-                        decoration: InputDecoration(labelText: 'Notes'),
-                      ),
-                      TextField(
-                        controller: amountcontroller,
-                        decoration: InputDecoration(labelText: 'Amount'),
-                        keyboardType: TextInputType.number,
-                      ),
-                      TextField(
-                        readOnly: true,
-                        controller: dateController,
-                        decoration: InputDecoration(labelText: 'Reminder Date'),
-                        style: TextStyle(),
-                        onTap: () async {
-                          var date = await showDatePicker(
-                              context: context,
-                              initialDate: DateTime.now(),
-                              firstDate: DateTime(1950),
-                              lastDate: DateTime(2100));
-                          builder:
-                          (BuildContext context, Widget child) {
-                            return Theme(
-                              data: ThemeData().copyWith(
-                                  colorScheme: ColorScheme.dark(
-                                      primary: Colors.red,
-                                      surface: Colors.red)),
-                              child: child,
-                            );
-                          };
-                          dateController.text =
-                              date.toString().substring(0, 10);
-                        },
-                      ),
+                      TextFormField(
+                          controller: notescontroller,
+                          decoration: InputDecoration(labelText: 'Notes'),
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return "Please enter the notes";
+                            } else {
+                              return null;
+                            }
+                          }),
+                      TextFormField(
+                          controller: amountcontroller,
+                          decoration: InputDecoration(labelText: 'Amount'),
+                          keyboardType: TextInputType.number,
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return "Please enter the amount";
+                            } else {
+                              return null;
+                            }
+                          }),
+                      TextFormField(
+                          readOnly: true,
+                          controller: dateController,
+                          decoration:
+                              InputDecoration(labelText: 'Reminder Date'),
+                          style: TextStyle(),
+                          onTap: () async {
+                            var date = await showDatePicker(
+                                context: context,
+                                initialDate: DateTime.now(),
+                                firstDate: DateTime(1950),
+                                lastDate: DateTime(2100));
+                            builder:
+                            (BuildContext context, Widget child) {
+                              return Theme(
+                                data: ThemeData().copyWith(
+                                    colorScheme: ColorScheme.dark(
+                                        primary: Colors.red,
+                                        surface: Colors.red)),
+                                child: child,
+                              );
+                            };
+                            dateController.text =
+                                date.toString().substring(0, 10);
+                          },
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return "Please enter the date";
+                            } else {
+                              return null;
+                            }
+                          }),
+                      TextButton(
+                          onPressed: () {
+                            _onAlertWithCustomContentPressed;
+                          },
+                          child: Text(
+                            "Upload",
+                            style:
+                                TextStyle(color: Color.fromARGB(255, 0, 0, 0)),
+                          )),
                       SizedBox(
                         height: 15,
                       ),
@@ -323,7 +352,7 @@ class _othersSearchState extends State<othersSearch> {
         amountcontroller.text.isNotEmpty ||
         datecontroller.text.isNotEmpty) {
       print(subtypecontroller.text);
-            print(dotenv.env['API_URL']);
+      print(dotenv.env['API_URL']);
 
       var response = await http.post(Uri.parse(
           "${dotenv.env['API_URL']}/api/method/money_management_backend.custom.py.api.daily_entry_submit?Type=Others&Subtype=${subtypes}&Name=${name}&Notes=${notes}&Amount=${amount}&Remainder_date=${date}"));
@@ -347,56 +376,59 @@ class _othersSearchState extends State<othersSearch> {
       }
     }
   }
-    _onAlertWithCustomContentPressed(context){
-      var alertStyle=AlertStyle(
-         isCloseButton: false,
-         isOverlayTapDismiss: true,);
-    Alert(context: context,
-    title: "Image",
-    buttons: [
-        
+
+  _onAlertWithCustomContentPressed(context) {
+    var alertStyle = AlertStyle(
+      isCloseButton: false,
+      isOverlayTapDismiss: true,
+    );
+    Alert(
+      context: context,
+      title: "Image",
+      buttons: [
         DialogButton(
           color: Color.fromARGB(255, 93, 99, 216),
           child: Text(
-          "Camera",
-                    style: TextStyle(color: Color.fromARGB(255, 255, 253, 253)),
-        ), onPressed: ()=>pickImage(ImageSource.camera),
+            "Camera",
+            style: TextStyle(color: Color.fromARGB(255, 255, 253, 253)),
+          ),
+          onPressed: () => pickImage(ImageSource.camera),
         ),
         DialogButton(
           color: Color.fromARGB(255, 93, 99, 216),
           child: Text(
-          "Image",
-                    style: TextStyle(color: Color.fromARGB(255, 255, 253, 253)),
-        ), onPressed: ()=>pickImage(ImageSource.gallery),
+            "Image",
+            style: TextStyle(color: Color.fromARGB(255, 255, 253, 253)),
+          ),
+          onPressed: () => pickImage(ImageSource.gallery),
         ),
         DialogButton(
           color: Color.fromARGB(255, 93, 99, 216),
           child: Text(
-          "File",
-                    style: TextStyle(color: Color.fromARGB(255, 255, 253, 253)),
-        ), onPressed: (){pickFiles();},
+            "File",
+            style: TextStyle(color: Color.fromARGB(255, 255, 253, 253)),
+          ),
+          onPressed: () {
+            pickFiles();
+          },
         ),
-      
       ],
-    
- 
     ).show();
   }
 }
-void pickFiles() async{
+
+void pickFiles() async {
   FilePickerResult? result = await FilePicker.platform.pickFiles(
-    type: FileType.custom,allowedExtensions: 
-    ['pdf','doc'],
+    type: FileType.custom,
+    allowedExtensions: ['pdf', 'doc'],
   );
-  if(result == null)
-  return;
+  if (result == null) return;
 
   var file = result.files.first;
   viewFile(file);
 }
 
 void viewFile(PlatformFile file) {
-
   var OpenFile;
   OpenFile.open(file.path);
   print(OpenFile);
