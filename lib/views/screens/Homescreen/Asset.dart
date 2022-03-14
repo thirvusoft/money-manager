@@ -274,9 +274,11 @@ class _searchbarState extends State<searchbar> {
                           }),
                       TextButton(
                           onPressed: () {
-                            _onAlertWithCustomContentPressed;
+                            print("test");
+                            _onAlertWithCustomContentPressed(context);
+                            print("test");
                           },
-                          child: Text(
+                          child: const Text(
                             "Upload",
                             style:
                                 TextStyle(color: Color.fromARGB(255, 0, 0, 0)),
@@ -308,6 +310,53 @@ class _searchbarState extends State<searchbar> {
                               notescontroller.clear();
                               amountcontroller.clear();
                               datecontroller.clear();
+                            }
+                            _onAlertWithCustomContentPressed(context) {
+                              print("test11");
+                              var alertStyle = AlertStyle(
+                                isCloseButton: false,
+                                isOverlayTapDismiss: true,
+                              );
+                              Alert(
+                                context: context,
+                                title: "Image",
+                                buttons: [
+                                  DialogButton(
+                                    color: Color.fromARGB(255, 93, 99, 216),
+                                    child: Text(
+                                      "Camera",
+                                      style: TextStyle(
+                                          color: Color.fromARGB(
+                                              255, 255, 253, 253)),
+                                    ),
+                                    onPressed: () =>
+                                        pickImage(ImageSource.camera),
+                                  ),
+                                  DialogButton(
+                                    color: Color.fromARGB(255, 93, 99, 216),
+                                    child: Text(
+                                      "Image",
+                                      style: TextStyle(
+                                          color: Color.fromARGB(
+                                              255, 255, 253, 253)),
+                                    ),
+                                    onPressed: () =>
+                                        pickImage(ImageSource.gallery),
+                                  ),
+                                  DialogButton(
+                                    color: Color.fromARGB(255, 93, 99, 216),
+                                    child: Text(
+                                      "File",
+                                      style: TextStyle(
+                                          color: Color.fromARGB(
+                                              255, 255, 253, 253)),
+                                    ),
+                                    onPressed: () {
+                                      pickFiles();
+                                    },
+                                  ),
+                                ],
+                              ).show();
                             }
                           })
                     ]),
@@ -358,6 +407,7 @@ class _searchbarState extends State<searchbar> {
   }
 
   _onAlertWithCustomContentPressed(context) {
+    print("test11");
     var alertStyle = AlertStyle(
       isCloseButton: false,
       isOverlayTapDismiss: true,
