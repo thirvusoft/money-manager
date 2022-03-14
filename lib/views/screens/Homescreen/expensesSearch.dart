@@ -21,9 +21,9 @@ class expenseSearch extends StatefulWidget {
 }
 
 class _expenseSearchState extends State<expenseSearch> {
-          var file;
-      File _myImage = File('');
-      pickImage(ImageSource source) async {
+  var file;
+  File _myImage = File('');
+  pickImage(ImageSource source) async {
     XFile? image = await picker.pickImage(
       source: source,
       imageQuality: 100,
@@ -43,7 +43,8 @@ class _expenseSearchState extends State<expenseSearch> {
       }
     });
   }
-    Widget showImage(File file) {
+
+  Widget showImage(File file) {
     if (isFileSelected == 0) {
       //TODO: Image not selected widget.
       return Center(child: Text("Image Selected"));
@@ -56,8 +57,8 @@ class _expenseSearchState extends State<expenseSearch> {
       );
     }
     // ignore: dead_code
-    
   }
+
   int isFileSelected = 0;
   ImagePicker picker = ImagePicker();
   TextEditingController _textEditingController = TextEditingController();
@@ -69,13 +70,6 @@ class _expenseSearchState extends State<expenseSearch> {
   var amountcontroller = TextEditingController();
   var datecontroller = TextEditingController();
   final formKey = GlobalKey<FormState>();
-  // final dateController = TextEditingController();
-
-  // @override
-  // void dispose() {
-  //   dateController.dispose();
-  //   super.dispose();
-  // }
 
   bool _loading = true;
   @override
@@ -117,8 +111,6 @@ class _expenseSearchState extends State<expenseSearch> {
   get index => null;
   @override
   Widget build(BuildContext context) {
-    
-
     return Scaffold(
         appBar: AppBar(
           actions: [
@@ -274,11 +266,26 @@ class _expenseSearchState extends State<expenseSearch> {
                         controller: notescontroller,
                         decoration: InputDecoration(labelText: 'Notes'),
                       ),
-                      TextField(
-                        controller: amountcontroller,
-                        decoration: InputDecoration(labelText: 'Amount'),
-                        keyboardType: TextInputType.number,
-                      ),
+                      TextFormField(
+                          controller: amountcontroller,
+                          decoration: InputDecoration(labelText: 'Amount'),
+                          keyboardType: TextInputType.number,
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return "Please enter the amount";
+                            } else {
+                              return null;
+                            }
+                          }),
+                      TextButton(
+                          onPressed: () {
+                            _onAlertWithCustomContentPressed;
+                          },
+                          child: Text(
+                            "Upload",
+                            style:
+                                TextStyle(color: Color.fromARGB(255, 0, 0, 0)),
+                          )),
                       SizedBox(
                         height: 15,
                       ),
@@ -338,57 +345,59 @@ class _expenseSearchState extends State<expenseSearch> {
       }
     }
   }
-    _onAlertWithCustomContentPressed(context){
-      var alertStyle=AlertStyle(
-         isCloseButton: false,
-         isOverlayTapDismiss: true,);
-    Alert(context: context,
-    title: "Image",
-    buttons: [
-        
+
+  _onAlertWithCustomContentPressed(context) {
+    var alertStyle = AlertStyle(
+      isCloseButton: false,
+      isOverlayTapDismiss: true,
+    );
+    Alert(
+      context: context,
+      title: "Image",
+      buttons: [
         DialogButton(
           color: Color.fromARGB(255, 93, 99, 216),
           child: Text(
-          "Camera",
-                    style: TextStyle(color: Color.fromARGB(255, 255, 253, 253)),
-        ), onPressed: ()=>pickImage(ImageSource.camera),
+            "Camera",
+            style: TextStyle(color: Color.fromARGB(255, 255, 253, 253)),
+          ),
+          onPressed: () => pickImage(ImageSource.camera),
         ),
         DialogButton(
           color: Color.fromARGB(255, 93, 99, 216),
           child: Text(
-          "Image",
-                    style: TextStyle(color: Color.fromARGB(255, 255, 253, 253)),
-        ), onPressed: ()=>pickImage(ImageSource.gallery),
+            "Image",
+            style: TextStyle(color: Color.fromARGB(255, 255, 253, 253)),
+          ),
+          onPressed: () => pickImage(ImageSource.gallery),
         ),
         DialogButton(
           color: Color.fromARGB(255, 93, 99, 216),
           child: Text(
-          "File",
-                    style: TextStyle(color: Color.fromARGB(255, 255, 253, 253)),
-        ), onPressed: (){pickFiles();},
+            "File",
+            style: TextStyle(color: Color.fromARGB(255, 255, 253, 253)),
+          ),
+          onPressed: () {
+            pickFiles();
+          },
         ),
-      
       ],
-    
- 
     ).show();
   }
-  
 }
-void pickFiles() async{
+
+void pickFiles() async {
   FilePickerResult? result = await FilePicker.platform.pickFiles(
-    type: FileType.custom,allowedExtensions: 
-    ['pdf','doc'],
+    type: FileType.custom,
+    allowedExtensions: ['pdf', 'doc'],
   );
-  if(result == null)
-  return;
+  if (result == null) return;
 
   var file = result.files.first;
   viewFile(file);
 }
 
 void viewFile(PlatformFile file) {
-
   var OpenFile;
   OpenFile.open(file.path);
   print(OpenFile);

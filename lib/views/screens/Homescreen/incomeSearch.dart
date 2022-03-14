@@ -21,9 +21,9 @@ class incomeSearch extends StatefulWidget {
 }
 
 class _incomeSearchState extends State<incomeSearch> {
-   var file;
-        File _myImage = File('');
-      pickImage(ImageSource source) async {
+  var file;
+  File _myImage = File('');
+  pickImage(ImageSource source) async {
     XFile? image = await picker.pickImage(
       source: source,
       imageQuality: 100,
@@ -43,7 +43,8 @@ class _incomeSearchState extends State<incomeSearch> {
       }
     });
   }
-    Widget showImage(File file) {
+
+  Widget showImage(File file) {
     if (isFileSelected == 0) {
       //TODO: Image not selected widget.
       return Center(child: Text("Image Selected"));
@@ -56,8 +57,8 @@ class _incomeSearchState extends State<incomeSearch> {
       );
     }
     // ignore: dead_code
-    
   }
+
   int isFileSelected = 0;
   ImagePicker picker = ImagePicker();
   TextEditingController _textEditingController = TextEditingController();
@@ -99,9 +100,9 @@ class _incomeSearchState extends State<incomeSearch> {
   get index => null;
   @override
   Widget build(BuildContext context) {
-                 var file;
+    var file;
 
-File _myImage = File('');
+    File _myImage = File('');
     return Scaffold(
         appBar: AppBar(
           actions: [
@@ -257,18 +258,26 @@ File _myImage = File('');
                         controller: notescontroller,
                         decoration: InputDecoration(labelText: 'Notes'),
                       ),
-                      TextField(
-                        controller: amountcontroller,
-                        decoration: InputDecoration(labelText: 'Amount'),
-                        keyboardType: TextInputType.number,
-                      ),
-                      TextField(
-                        controller: datecontroller,
-                        decoration: InputDecoration(
-                            labelText: 'Remainder date',
-                            hintText: "yyyy-mm-dd"),
-                        keyboardType: TextInputType.datetime,
-                      ),
+                      TextFormField(
+                          controller: amountcontroller,
+                          decoration: InputDecoration(labelText: 'Amount'),
+                          keyboardType: TextInputType.number,
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return "Please enter the amount";
+                            } else {
+                              return null;
+                            }
+                          }),
+                      TextButton(
+                          onPressed: () {
+                            _onAlertWithCustomContentPressed;
+                          },
+                          child: Text(
+                            "Upload",
+                            style:
+                                TextStyle(color: Color.fromARGB(255, 0, 0, 0)),
+                          )),
                       SizedBox(
                         height: 15,
                       ),
@@ -306,7 +315,7 @@ File _myImage = File('');
         amountcontroller.text.isNotEmpty ||
         datecontroller.text.isNotEmpty) {
       print(subtypecontroller.text);
-            print(dotenv.env['API_URL']);
+      print(dotenv.env['API_URL']);
 
       var response = await http.post(Uri.parse(
           "${dotenv.env['API_URL']}/api/method/money_management_backend.custom.py.api.daily_entry_submit?Type=Income&Subtype=${subtypes}&Name=${name}&Notes=${notes}&Amount=${amount}&Remainder_date=${date}"));
@@ -330,56 +339,59 @@ File _myImage = File('');
       }
     }
   }
-    _onAlertWithCustomContentPressed(context){
-      var alertStyle=AlertStyle(
-         isCloseButton: false,
-         isOverlayTapDismiss: true,);
-    Alert(context: context,
-    title: "Image",
-    buttons: [
-        
+
+  _onAlertWithCustomContentPressed(context) {
+    var alertStyle = AlertStyle(
+      isCloseButton: false,
+      isOverlayTapDismiss: true,
+    );
+    Alert(
+      context: context,
+      title: "Image",
+      buttons: [
         DialogButton(
           color: Color.fromARGB(255, 93, 99, 216),
           child: Text(
-          "Camera",
-                    style: TextStyle(color: Color.fromARGB(255, 255, 253, 253)),
-        ), onPressed: ()=>pickImage(ImageSource.camera),
+            "Camera",
+            style: TextStyle(color: Color.fromARGB(255, 255, 253, 253)),
+          ),
+          onPressed: () => pickImage(ImageSource.camera),
         ),
         DialogButton(
           color: Color.fromARGB(255, 93, 99, 216),
           child: Text(
-          "Image",
-                    style: TextStyle(color: Color.fromARGB(255, 255, 253, 253)),
-        ), onPressed: ()=>pickImage(ImageSource.gallery),
+            "Image",
+            style: TextStyle(color: Color.fromARGB(255, 255, 253, 253)),
+          ),
+          onPressed: () => pickImage(ImageSource.gallery),
         ),
         DialogButton(
           color: Color.fromARGB(255, 93, 99, 216),
           child: Text(
-          "File",
-                    style: TextStyle(color: Color.fromARGB(255, 255, 253, 253)),
-        ), onPressed: (){pickFiles();},
+            "File",
+            style: TextStyle(color: Color.fromARGB(255, 255, 253, 253)),
+          ),
+          onPressed: () {
+            pickFiles();
+          },
         ),
-      
       ],
-    
- 
     ).show();
   }
 }
-void pickFiles() async{
+
+void pickFiles() async {
   FilePickerResult? result = await FilePicker.platform.pickFiles(
-    type: FileType.custom,allowedExtensions: 
-    ['pdf','doc'],
+    type: FileType.custom,
+    allowedExtensions: ['pdf', 'doc'],
   );
-  if(result == null)
-  return;
+  if (result == null) return;
 
   var file = result.files.first;
   viewFile(file);
 }
 
 void viewFile(PlatformFile file) {
-
   var OpenFile;
   OpenFile.open(file.path);
   print(OpenFile);
