@@ -8,6 +8,7 @@ import 'dart:math' as math;
 import 'dart:async';
 import 'package:money_manager/views/screens/loginScreen.dart';
 import 'package:money_manager/views/screens/splash_screen.dart';
+import 'package:money_manager/views/screens/Homescreen/API.dart';
 
 class Profiles extends StatefulWidget {
   Profiles({Key? key}) : super(key: key);
@@ -26,6 +27,7 @@ class _ProfilesState extends State<Profiles> {
   @override
   void initState() {
     checkupdateNeeded();
+    profile();
 
     super.initState();
   }
@@ -151,24 +153,5 @@ class MyClipper extends CustomClipper<Path> {
   @override
   bool shouldReclip(CustomClipper<Path> oldClipper) {
     return true;
-  }
-}
-
-Future profile() async {
-  print('profile');
-  print(dotenv.env['API_URL']);
-  var response = await http.post(Uri.parse(
-      "${dotenv.env['API_URL']}/api/method/money_management_backend.custom.py.api.profile?email=barathpalanisamy2002@gmail.com"));
-  print('response');
-  if (response.statusCode == 200) {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setString("mobile_number",
-        json.decode(response.body)['message']['mobile_number']);
-    prefs.setString(
-        "full_name", json.decode(response.body)['message']['full_name']);
-    prefs.setString("email", json.decode(response.body)['message']['email']);
-    print(prefs.getString("full_name"));
-    print(prefs.getString("mobile_number"));
-    print(prefs.getString("email"));
   }
 }

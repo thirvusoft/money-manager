@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:money_manager/widgets/BottomNavigation.dart';
 import 'Animation/FadeAnimation.dart';
-import 'package:google_fonts/google_fonts.dart';
+// import 'package:google_fonts/google_fonts.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'loginScreen.dart';
 
@@ -63,13 +63,13 @@ class _splash_screenState extends State<splash_screen> {
                   padding: EdgeInsets.only(top: 15),
                   child: Text(
                     "Money  Manager",
-                    style: GoogleFonts.lato(
-                      textStyle: TextStyle(
-                          color: Colors.white,
-                          letterSpacing: 5,
-                          fontSize: 25,
-                          fontWeight: FontWeight.bold),
-                    ),
+                    // style: GoogleFonts.lato(
+                    //   textStyle: TextStyle(
+                    //       color: Colors.white,
+                    //       letterSpacing: 5,
+                    //       fontSize: 25,
+                    //       fontWeight: FontWeight.bold),
+                    // ),
                   ),
                 ),
               ),
@@ -81,10 +81,10 @@ class _splash_screenState extends State<splash_screen> {
                 Container(
                   child: Text(
                     "Powered By",
-                    style: GoogleFonts.mcLaren(
-                      textStyle: TextStyle(
-                          color: Colors.white, letterSpacing: .5, fontSize: 20),
-                    ),
+                    // style: GoogleFonts.mcLaren(
+                    //   textStyle: TextStyle(
+                    //       color: Colors.white, letterSpacing: .5, fontSize: 20),
+                    // ),
                   ),
                 ),
               ),

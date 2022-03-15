@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_login/flutter_login.dart';
 import 'package:money_manager/views/screens/Animation/FadeAnimation.dart';
+import 'package:money_manager/views/screens/Homescreen/API.dart';
 import 'package:money_manager/views/screens/loginScreen.dart';
 import 'package:http/http.dart' as http;
 import 'package:rounded_loading_button/rounded_loading_button.dart';
@@ -18,6 +19,7 @@ class forget_password extends StatefulWidget {
 class _forget_passwordState extends State<forget_password> {
   final formKey = GlobalKey<FormState>();
   var emailcontroller = TextEditingController();
+  var res;
   final RoundedLoadingButtonController _btnController =
       RoundedLoadingButtonController();
   void _doSomething() async {
@@ -128,19 +130,48 @@ class _forget_passwordState extends State<forget_password> {
                     FadeAnimation(
                       1.5,
                       RoundedLoadingButton(
-                        color: Color.fromRGBO(143, 148, 251, 1),
-                        child: Text('Send Email',
-                            style: TextStyle(color: Colors.white)),
-                        controller: _btnController,
-                        onPressed: () {
-                          _doSomething();
-                          if (formKey.currentState!.validate()) {
-                            reset(
-                              emailcontroller.text,
-                            );
-                          }
-                        },
-                      ),
+                          color: Color.fromRGBO(143, 148, 251, 1),
+                          child: Text('Send Email',
+                              style: TextStyle(color: Colors.white)),
+                          controller: _btnController,
+                          onPressed: () {
+                            _doSomething();
+                            if (formKey.currentState!.validate()) {
+                              res = reset(
+                                emailcontroller.text,
+                              );
+                              if (res.statusCode == 200) {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => login_page()),
+                                );
+                                ScaffoldMessenger.of(context)
+                                    .showSnackBar(SnackBar(
+                                  content: Text("Email Send successful"),
+                                  backgroundColor: Colors.green,
+                                ));
+                              } else if (res.statusCode == 403) {
+                                ScaffoldMessenger.of(context)
+                                    .showSnackBar(SnackBar(
+                                  content: Text(" Access Denied."),
+                                  backgroundColor: Colors.red,
+                                ));
+                              } else if (res.statusCode == 503) {
+                                ScaffoldMessenger.of(context)
+                                    .showSnackBar(SnackBar(
+                                  content: Text("service unavailable"),
+                                  backgroundColor: Colors.red,
+                                ));
+                              } else {
+                                ScaffoldMessenger.of(context)
+                                    .showSnackBar(SnackBar(
+                                  content: Text("Invalid"),
+                                  backgroundColor: Colors.red,
+                                ));
+                              }
+                            }
+                          }),
                     ),
                     const SizedBox(
                       height: 70,
@@ -176,41 +207,5 @@ class _forget_passwordState extends State<forget_password> {
         ),
       ),
     );
-  }
-
-  Future reset(email) async {
-    print(email);
-          print(dotenv.env['API_URL']);
-
-    if (emailcontroller.text.isNotEmpty) {
-      var response = await http.post(Uri.parse(
-          "${dotenv.env['API_URL']}/api/method/frappe.core.doctype.user.user.reset_password?user=${email}"));
-      print(response.statusCode);
-      if (response.statusCode == 200) {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => login_page()),
-        );
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text("Email Send successful"),
-          backgroundColor: Colors.green,
-        ));
-      } else if (response.statusCode == 403) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text(" Access Denied."),
-          backgroundColor: Colors.red,
-        ));
-      } else if (response.statusCode == 503) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text("service unavailable"),
-          backgroundColor: Colors.red,
-        ));
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text("Invalid"),
-          backgroundColor: Colors.red,
-        ));
-      }
-    }
   }
 }

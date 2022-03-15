@@ -39,6 +39,7 @@ class _expenseSearchState extends State<expenseSearch> {
       } else {
         //TODO: Image selected action.
         _myImage = File(image.path);
+        print(_myImage);
         isFileSelected = 1;
       }
     });

@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:money_manager/views/screens/Animation/FadeAnimation.dart';
+import 'package:money_manager/views/screens/Homescreen/API.dart';
 import 'package:money_manager/views/screens/forgetpasswordscreen.dart';
 import 'package:http/http.dart' as http;
 import 'package:rounded_loading_button/rounded_loading_button.dart';
@@ -22,6 +23,8 @@ class _login_pageState extends State<login_page> {
   final formKey = GlobalKey<FormState>();
   var emailcontroller = TextEditingController();
   var passwordcontroller = TextEditingController();
+  var res;
+  //final Function callback;
   final RoundedLoadingButtonController _btnController =
       RoundedLoadingButtonController();
   void _doSomething() async {
@@ -164,18 +167,54 @@ class _login_pageState extends State<login_page> {
                       FadeAnimation(
                         2,
                         RoundedLoadingButton(
-                          color: Color.fromRGBO(143, 148, 251, 1),
-                          child: Text('Login',
-                              style: TextStyle(color: Colors.white)),
-                          controller: _btnController,
-                          onPressed: () {
-                            _doSomething();
-                            if (formKey.currentState!.validate()) {
-                              login(emailcontroller.text,
-                                  passwordcontroller.text);
-                            }
-                          },
-                        ),
+                            color: Color.fromRGBO(143, 148, 251, 1),
+                            child: Text('Login',
+                                style: TextStyle(color: Colors.white)),
+                            controller: _btnController,
+                            onPressed: () {
+                              print("test");
+                              _doSomething();
+                              print("test");
+                              if (formKey.currentState!.validate()) {
+                                res = login(emailcontroller.text,
+                                    passwordcontroller.text);
+                                print("ert");
+                                print(res);
+
+                                if (res.statusCode == 200) {
+                                  print(res);
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            bottomnavigation()),
+                                  );
+                                  ScaffoldMessenger.of(context)
+                                      .showSnackBar(SnackBar(
+                                    content: Text("Logged in successfully"),
+                                    backgroundColor: Colors.green,
+                                  ));
+                                }
+                              } else if (res.statusCode == 403) {
+                                ScaffoldMessenger.of(context)
+                                    .showSnackBar(SnackBar(
+                                  content: Text(" Access Denied."),
+                                  backgroundColor: Colors.red,
+                                ));
+                              } else if (res.statusCode == 503) {
+                                ScaffoldMessenger.of(context)
+                                    .showSnackBar(SnackBar(
+                                  content: Text("service unavailable"),
+                                  backgroundColor: Colors.red,
+                                ));
+                              } else {
+                                ScaffoldMessenger.of(context)
+                                    .showSnackBar(SnackBar(
+                                  content: Text("Invalid"),
+                                  backgroundColor: Colors.red,
+                                ));
+                              }
+                            }),
                       ),
                       SizedBox(
                         height: 70,
@@ -212,42 +251,5 @@ class _login_pageState extends State<login_page> {
             ),
           ),
         ));
-  }
-
-  Future login(email, password) async {
-    if (passwordcontroller.text.isNotEmpty || emailcontroller.text.isNotEmpty) {
-      print('email');
-            print(dotenv.env['API_URL']);
-
-      var response = await http.post(Uri.parse(
-        
-          "${dotenv.env['API_URL']}/api/method/money_management_backend.custom.py.api.login?email=${email}&password=${password}"));
-          print(response.statusCode);
-      if (response.statusCode == 200) {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => bottomnavigation()),
-        );
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text("Logged in successfully"),
-          backgroundColor: Colors.green,
-        ));
-      } else if (response.statusCode == 403) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text(" Access Denied."),
-          backgroundColor: Colors.red,
-        ));
-      } else if (response.statusCode == 503) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text("service unavailable"),
-          backgroundColor: Colors.red,
-        ));
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text("Invalid"),
-          backgroundColor: Colors.red,
-        ));
-      }
-    }
   }
 }
