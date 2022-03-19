@@ -54,6 +54,7 @@ class _expenseSearchState extends State<expenseSearch> {
     '0xf109': 0xf109,
     '0xe2e4': 0xe2e4,
     '0xf068b': 0xf068b,
+    '0xf05ce': 0xf05ce
   };
 
   @override

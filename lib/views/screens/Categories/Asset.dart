@@ -44,7 +44,7 @@ class _customAssetState extends State<customAsset> {
 
   Future listapi() async {
     var response = await http.post(Uri.parse(
-        "http://192.168.24.34:8000/api/method/money_management_backend.custom.py.api.withsubtype?Type=Asset"));
+        "{{host}}/api/method/money_management_backend.custom.py.api.withoutsubtype?Type=Asset"));
 
     if (response.statusCode == 200) {
       SharedPreferences prefs = await SharedPreferences.getInstance();

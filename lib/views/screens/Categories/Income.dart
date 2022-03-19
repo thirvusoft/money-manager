@@ -41,14 +41,14 @@ class _customIncomeState extends State<customIncome> {
 
   Future listapi() async {
     var response = await http.post(Uri.parse(
-        "http://192.168.24.34:8000/api/method/money_management_backend.custom.py.api.withsubtype?Type=Asset"));
+        "http://192.168.24.34:8000/api/method/money_management_backend.custom.py.api.withsubtype?Type=Income"));
 
     if (response.statusCode == 200) {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       List<String> liability_icon_list = [];
-      for (var i = 0; i < json.decode(response.body)["Asset"].length; i++) {
+      for (var i = 0; i < json.decode(response.body)["Income"].length; i++) {
         liability_icon_list
-            .add(jsonEncode(json.decode(response.body)["Asset"][i]));
+            .add(jsonEncode(json.decode(response.body)["Income"][i]));
       }
       prefs.setStringList('liability_icon_list', liability_icon_list);
       icon_name = prefs.getStringList("liability_icon_list")!;
