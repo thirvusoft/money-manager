@@ -229,17 +229,42 @@ class _login_pageState extends State<login_page> {
           MaterialPageRoute(builder: (context) => bottomnavigation()),
         );
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text("Logged in successfully"),
+          content: Text(jsonDecode('message')),
           backgroundColor: Colors.green,
+        ));
+      } else if (response.statusCode == 401) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(jsonDecode('message')),
+          backgroundColor: Colors.red,
         ));
       } else if (response.statusCode == 403) {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text(" Access Denied."),
+          content: Text(jsonDecode('message')),
+          backgroundColor: Colors.red,
+        ));
+      } else if (response.statusCode == 417) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(jsonDecode('message')),
+          backgroundColor: Colors.red,
+        ));
+      } else if (response.statusCode == 500) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(jsonDecode('message')),
           backgroundColor: Colors.red,
         ));
       } else if (response.statusCode == 503) {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text("service unavailable"),
+          content: Text(jsonDecode('message')),
+          backgroundColor: Colors.red,
+        ));
+      } else if (response.statusCode == 409) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(jsonDecode('message')),
+          backgroundColor: Colors.red,
+        ));
+      } else if (response.statusCode == 404) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(jsonDecode('message')),
           backgroundColor: Colors.red,
         ));
       } else {
