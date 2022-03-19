@@ -64,10 +64,54 @@ class _incomeSearchState extends State<incomeSearch> {
       for (var i = 0; i < json.decode(response.body)["Income"].length; i++) {
         liability_icon_list
             .add(jsonEncode(json.decode(response.body)["Income"][i]));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(jsonDecode('message')),
+          backgroundColor: Colors.green,
+        ));
       }
       prefs.setStringList('liability_icon_list', liability_icon_list);
       icon_name = prefs.getStringList("liability_icon_list")!;
       setState(() => _loading = true);
+    } else if (response.statusCode == 401) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(jsonDecode('message')),
+        backgroundColor: Colors.red,
+      ));
+    } else if (response.statusCode == 403) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(jsonDecode('message')),
+        backgroundColor: Colors.red,
+      ));
+    } else if (response.statusCode == 417) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(jsonDecode('message')),
+        backgroundColor: Colors.red,
+      ));
+    } else if (response.statusCode == 500) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(jsonDecode('message')),
+        backgroundColor: Colors.red,
+      ));
+    } else if (response.statusCode == 503) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(jsonDecode('message')),
+        backgroundColor: Colors.red,
+      ));
+    } else if (response.statusCode == 409) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(jsonDecode('message')),
+        backgroundColor: Colors.red,
+      ));
+    } else if (response.statusCode == 404) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(jsonDecode('message')),
+        backgroundColor: Colors.red,
+      ));
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text("Invalid"),
+        backgroundColor: Colors.red,
+      ));
     }
   }
 
@@ -292,11 +336,46 @@ class _incomeSearchState extends State<incomeSearch> {
         Navigator.pop(context);
 
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text("Submited Sucessfully"),
+          content: Text(jsonDecode('message')),
           backgroundColor: Colors.green,
         ));
+      } else if (response.statusCode == 401) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(jsonDecode('message')),
+          backgroundColor: Colors.red,
+        ));
+      } else if (response.statusCode == 403) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(jsonDecode('message')),
+          backgroundColor: Colors.red,
+        ));
+      } else if (response.statusCode == 417) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(jsonDecode('message')),
+          backgroundColor: Colors.red,
+        ));
+      } else if (response.statusCode == 500) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(jsonDecode('message')),
+          backgroundColor: Colors.red,
+        ));
+      } else if (response.statusCode == 503) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(jsonDecode('message')),
+          backgroundColor: Colors.red,
+        ));
+      } else if (response.statusCode == 409) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(jsonDecode('message')),
+          backgroundColor: Colors.red,
+        ));
+      } else if (response.statusCode == 404) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(jsonDecode('message')),
+          backgroundColor: Colors.red,
+        ));
       } else {
-        print(response.statusCode);
+        Navigator.pop(context);
         Navigator.pop(context);
 
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(

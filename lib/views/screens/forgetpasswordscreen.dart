@@ -188,17 +188,42 @@ class _forget_passwordState extends State<forget_password> {
           MaterialPageRoute(builder: (context) => login_page()),
         );
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text("Email Send successful"),
+          content: Text(jsonDecode('message')),
           backgroundColor: Colors.green,
+        ));
+      } else if (response.statusCode == 401) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(jsonDecode('message')),
+          backgroundColor: Colors.red,
         ));
       } else if (response.statusCode == 403) {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text(" Access Denied."),
+          content: Text(jsonDecode('message')),
+          backgroundColor: Colors.red,
+        ));
+      } else if (response.statusCode == 417) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(jsonDecode('message')),
+          backgroundColor: Colors.red,
+        ));
+      } else if (response.statusCode == 500) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(jsonDecode('message')),
           backgroundColor: Colors.red,
         ));
       } else if (response.statusCode == 503) {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text("service unavailable"),
+          content: Text(jsonDecode('message')),
+          backgroundColor: Colors.red,
+        ));
+      } else if (response.statusCode == 409) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(jsonDecode('message')),
+          backgroundColor: Colors.red,
+        ));
+      } else if (response.statusCode == 404) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(jsonDecode('message')),
           backgroundColor: Colors.red,
         ));
       } else {

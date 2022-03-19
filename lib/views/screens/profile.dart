@@ -154,10 +154,9 @@ class MyClipper extends CustomClipper<Path> {
 }
 
 Future profile() async {
-  print('profile');
   var response = await http.post(Uri.parse(
       "http://192.168.24.34:8000/api/method/money_management_backend.custom.py.api.profile?email=barathpalanisamy2002@gmail.com"));
-  print('response');
+
   if (response.statusCode == 200) {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setString("mobile_number",
@@ -165,8 +164,5 @@ Future profile() async {
     prefs.setString(
         "full_name", json.decode(response.body)['message']['full_name']);
     prefs.setString("email", json.decode(response.body)['message']['email']);
-    print(prefs.getString("full_name"));
-    print(prefs.getString("mobile_number"));
-    print(prefs.getString("email"));
   }
 }
