@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -103,12 +104,20 @@ class _customAssetState extends State<customAsset> {
   get index => null;
   @override
   Widget build(BuildContext context) {
+    // Size size = MediaQuery.of(context).size;
+    // double height = MediaQuery.of(context).size.height;
+    // double width = MediaQuery.of(context).size.width;
+    // print(width);
+    // print(height);
+    // print(size);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Color.fromARGB(255, 93, 99, 216),
         title: Text('Asset Customise Icons'),
       ),
       body: Container(
+        // height: height/5,
+        // width: width/1.5,
         child: GridView.builder(
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2, childAspectRatio: 3, crossAxisSpacing: 12),
@@ -212,9 +221,10 @@ class _customAssetState extends State<customAsset> {
 //DataEntry API
   Future cussubmit(type, name, code) async {
     if (namecontroller.text.isNotEmpty) {
+      print(dotenv.env['API_URL']);
       var response = await http.post(Uri.parse(
-          "http://192.168.24.34:8000/api/method/money_management_backend.custom.py.api.custom?Type=Asset&Subtype=${name}&IconBineryCode=${code}"));
-
+          "${dotenv.env['API_URL']}/api/method/money_management_backend.custom.py.api.custom?Type=Expense&Subtype=${name}&IconBineryCode=654654"));
+      print(namecontroller.text);
       if (response.statusCode == 200) {
         Navigator.pop(context);
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(

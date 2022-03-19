@@ -1,9 +1,15 @@
 import 'dart:convert';
 
+import 'dart:io';
+
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:money_manager/views/screens/Categories/Others.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
 
 import '../Categories/Asset.dart';
 import 'package:http/http.dart' as http;
@@ -18,6 +24,46 @@ class othersSearch extends StatefulWidget {
 }
 
 class _othersSearchState extends State<othersSearch> {
+  var file;
+  File _myImage = File('');
+  pickImage(ImageSource source) async {
+    XFile? image = await picker.pickImage(
+      source: source,
+      imageQuality: 100,
+      maxHeight: MediaQuery.of(context).size.height,
+      maxWidth: MediaQuery.of(context).size.width,
+      preferredCameraDevice: CameraDevice.rear,
+    );
+    setState(() {
+      print(_myImage);
+      if (image == null) {
+        //TODO: Image not selected action.
+        isFileSelected = 0;
+      } else {
+        //TODO: Image selected action.
+        _myImage = File(image.path);
+        isFileSelected = 1;
+      }
+    });
+  }
+
+  Widget showImage(File file) {
+    if (isFileSelected == 0) {
+      //TODO: Image not selected widget.
+      return Center(child: Text("Image Selected"));
+    } else {
+      //TODO: Image selected widget.
+      return Container(
+        height: MediaQuery.of(context).size.width * 9 / 16,
+        width: MediaQuery.of(context).size.width,
+        child: Image.file(file, fit: BoxFit.contain),
+      );
+    }
+    // ignore: dead_code
+  }
+
+  int isFileSelected = 0;
+  ImagePicker picker = ImagePicker();
   TextEditingController _textEditingController = TextEditingController();
 
   var typecontroller = TextEditingController();
@@ -123,6 +169,8 @@ class _othersSearchState extends State<othersSearch> {
   get index => null;
   @override
   Widget build(BuildContext context) {
+    var file;
+
     return Scaffold(
         appBar: AppBar(
           actions: [
@@ -277,40 +325,68 @@ class _othersSearchState extends State<othersSearch> {
                               return null;
                             }
                           }),
-                      TextField(
-                        controller: notescontroller,
-                        decoration: InputDecoration(labelText: 'Notes'),
-                      ),
-                      TextField(
-                        controller: amountcontroller,
-                        decoration: InputDecoration(labelText: 'Amount'),
-                        keyboardType: TextInputType.number,
-                      ),
-                      TextField(
-                        readOnly: true,
-                        controller: dateController,
-                        decoration: InputDecoration(labelText: 'Reminder Date'),
-                        style: TextStyle(),
-                        onTap: () async {
-                          var date = await showDatePicker(
-                              context: context,
-                              initialDate: DateTime.now(),
-                              firstDate: DateTime(1950),
-                              lastDate: DateTime(2100));
-                          builder:
-                          (BuildContext context, Widget child) {
-                            return Theme(
-                              data: ThemeData().copyWith(
-                                  colorScheme: ColorScheme.dark(
-                                      primary: Colors.red,
-                                      surface: Colors.red)),
-                              child: child,
-                            );
-                          };
-                          dateController.text =
-                              date.toString().substring(0, 10);
-                        },
-                      ),
+                      TextFormField(
+                          controller: notescontroller,
+                          decoration: InputDecoration(labelText: 'Notes'),
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return "Please enter the notes";
+                            } else {
+                              return null;
+                            }
+                          }),
+                      TextFormField(
+                          controller: amountcontroller,
+                          decoration: InputDecoration(labelText: 'Amount'),
+                          keyboardType: TextInputType.number,
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return "Please enter the amount";
+                            } else {
+                              return null;
+                            }
+                          }),
+                      TextFormField(
+                          readOnly: true,
+                          controller: dateController,
+                          decoration:
+                              InputDecoration(labelText: 'Reminder Date'),
+                          style: TextStyle(),
+                          onTap: () async {
+                            var date = await showDatePicker(
+                                context: context,
+                                initialDate: DateTime.now(),
+                                firstDate: DateTime(1950),
+                                lastDate: DateTime(2100));
+                            builder:
+                            (BuildContext context, Widget child) {
+                              return Theme(
+                                data: ThemeData().copyWith(
+                                    colorScheme: ColorScheme.dark(
+                                        primary: Colors.red,
+                                        surface: Colors.red)),
+                                child: child,
+                              );
+                            };
+                            dateController.text =
+                                date.toString().substring(0, 10);
+                          },
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return "Please enter the date";
+                            } else {
+                              return null;
+                            }
+                          }),
+                      TextButton(
+                          onPressed: () {
+                            _onAlertWithCustomContentPressed;
+                          },
+                          child: Text(
+                            "Upload",
+                            style:
+                                TextStyle(color: Color.fromARGB(255, 0, 0, 0)),
+                          )),
                       SizedBox(
                         height: 15,
                       ),
@@ -348,8 +424,10 @@ class _othersSearchState extends State<othersSearch> {
         amountcontroller.text.isNotEmpty ||
         datecontroller.text.isNotEmpty) {
       print(subtypecontroller.text);
+      print(dotenv.env['API_URL']);
+
       var response = await http.post(Uri.parse(
-          "http://192.168.24.34:8000/api/method/money_management_backend.custom.py.api.daily_entry_submit?Type=Others&Subtype=${subtypes}&Name=${name}&Notes=${notes}&Amount=${amount}&Remainder_date=${date}"));
+          "${dotenv.env['API_URL']}/api/method/money_management_backend.custom.py.api.daily_entry_submit?Type=Others&Subtype=${subtypes}&Name=${name}&Notes=${notes}&Amount=${amount}&Remainder_date=${date}"));
       //print(response.statusCode);
       if (response.statusCode == 200) {
         Navigator.pop(context);
@@ -403,4 +481,60 @@ class _othersSearchState extends State<othersSearch> {
       }
     }
   }
+
+  _onAlertWithCustomContentPressed(context) {
+    var alertStyle = AlertStyle(
+      isCloseButton: false,
+      isOverlayTapDismiss: true,
+    );
+    Alert(
+      context: context,
+      title: "Image",
+      buttons: [
+        DialogButton(
+          color: Color.fromARGB(255, 93, 99, 216),
+          child: Text(
+            "Camera",
+            style: TextStyle(color: Color.fromARGB(255, 255, 253, 253)),
+          ),
+          onPressed: () => pickImage(ImageSource.camera),
+        ),
+        DialogButton(
+          color: Color.fromARGB(255, 93, 99, 216),
+          child: Text(
+            "Image",
+            style: TextStyle(color: Color.fromARGB(255, 255, 253, 253)),
+          ),
+          onPressed: () => pickImage(ImageSource.gallery),
+        ),
+        DialogButton(
+          color: Color.fromARGB(255, 93, 99, 216),
+          child: Text(
+            "File",
+            style: TextStyle(color: Color.fromARGB(255, 255, 253, 253)),
+          ),
+          onPressed: () {
+            pickFiles();
+          },
+        ),
+      ],
+    ).show();
+  }
+}
+
+void pickFiles() async {
+  FilePickerResult? result = await FilePicker.platform.pickFiles(
+    type: FileType.custom,
+    allowedExtensions: ['pdf', 'doc'],
+  );
+  if (result == null) return;
+
+  var file = result.files.first;
+  viewFile(file);
+}
+
+void viewFile(PlatformFile file) {
+  var OpenFile;
+  OpenFile.open(file.path);
+  print(OpenFile);
 }

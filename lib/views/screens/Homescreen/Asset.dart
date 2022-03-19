@@ -5,10 +5,21 @@ import 'package:flutter/rendering.dart';
 import 'package:money_manager/views/screens/Categories/liability.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+// ignore: file_names
+import 'dart:io';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'dart:async';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:money_manager/views/screens/profile.dart';
+import 'package:file_picker/file_picker.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
 import '../Categories/Asset.dart';
 import 'package:http/http.dart' as http;
-
-import '../profile.dart';
 
 class searchbar extends StatefulWidget {
   const searchbar({Key? key}) : super(key: key);
@@ -18,6 +29,50 @@ class searchbar extends StatefulWidget {
 }
 
 class _searchbarState extends State<searchbar> {
+  var result;
+  File _myImage = File('');
+  get file => null;
+
+  pickImage(ImageSource source) async {
+    XFile? image = await picker.pickImage(
+      source: source,
+      imageQuality: 100,
+      maxHeight: MediaQuery.of(context).size.height,
+      maxWidth: MediaQuery.of(context).size.width,
+      preferredCameraDevice: CameraDevice.rear,
+    );
+    setState(() {
+      print(_myImage);
+      if (image == null) {
+        //TODO: Image not selected action.
+        isFileSelected = 0;
+      } else {
+        //TODO: Image selected action.
+        _myImage = File(image.path);
+        print(_myImage);
+
+        isFileSelected = 1;
+      }
+    });
+  }
+
+  Widget showImage(File file) {
+    if (isFileSelected == 0) {
+      //TODO: Image not selected widget.
+      return Center(child: Text("Image Selected"));
+    } else {
+      //TODO: Image selected widget.
+      return Container(
+        height: MediaQuery.of(context).size.width * 9 / 16,
+        width: MediaQuery.of(context).size.width,
+        child: Image.file(file, fit: BoxFit.contain),
+      );
+    }
+    // ignore: dead_code
+  }
+
+  int isFileSelected = 0;
+  ImagePicker picker = ImagePicker();
   TextEditingController _textEditingController = TextEditingController();
 
   var typecontroller = TextEditingController();
@@ -126,6 +181,7 @@ class _searchbarState extends State<searchbar> {
   get index => null;
   @override
   Widget build(BuildContext context) {
+    var file;
     return Scaffold(
         appBar: AppBar(
           actions: [
@@ -280,15 +336,32 @@ class _searchbarState extends State<searchbar> {
                               return null;
                             }
                           }),
-                      TextField(
+                      TextFormField(
                         controller: notescontroller,
                         decoration: InputDecoration(labelText: 'Notes'),
                       ),
-                      TextField(
-                        controller: amountcontroller,
-                        decoration: InputDecoration(labelText: 'Amount'),
-                        keyboardType: TextInputType.number,
-                      ),
+                      TextFormField(
+                          controller: amountcontroller,
+                          decoration: InputDecoration(labelText: 'Amount'),
+                          keyboardType: TextInputType.number,
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return "Please enter the amount";
+                            } else {
+                              return null;
+                            }
+                          }),
+                      TextButton(
+                          onPressed: () {
+                            print("test");
+                            _onAlertWithCustomContentPressed(context);
+                            print("test");
+                          },
+                          child: const Text(
+                            "Upload",
+                            style:
+                                TextStyle(color: Color.fromARGB(255, 0, 0, 0)),
+                          )),
                       SizedBox(
                         height: 15,
                       ),
@@ -317,6 +390,53 @@ class _searchbarState extends State<searchbar> {
                               amountcontroller.clear();
                               datecontroller.clear();
                             }
+                            _onAlertWithCustomContentPressed(context) {
+                              print("test11");
+                              var alertStyle = AlertStyle(
+                                isCloseButton: false,
+                                isOverlayTapDismiss: true,
+                              );
+                              Alert(
+                                context: context,
+                                title: "Image",
+                                buttons: [
+                                  DialogButton(
+                                    color: Color.fromARGB(255, 93, 99, 216),
+                                    child: Text(
+                                      "Camera",
+                                      style: TextStyle(
+                                          color: Color.fromARGB(
+                                              255, 255, 253, 253)),
+                                    ),
+                                    onPressed: () =>
+                                        pickImage(ImageSource.camera),
+                                  ),
+                                  DialogButton(
+                                    color: Color.fromARGB(255, 93, 99, 216),
+                                    child: Text(
+                                      "Image",
+                                      style: TextStyle(
+                                          color: Color.fromARGB(
+                                              255, 255, 253, 253)),
+                                    ),
+                                    onPressed: () =>
+                                        pickImage(ImageSource.gallery),
+                                  ),
+                                  DialogButton(
+                                    color: Color.fromARGB(255, 93, 99, 216),
+                                    child: Text(
+                                      "File",
+                                      style: TextStyle(
+                                          color: Color.fromARGB(
+                                              255, 255, 253, 253)),
+                                    ),
+                                    onPressed: () {
+                                      pickFiles();
+                                    },
+                                  ),
+                                ],
+                              ).show();
+                            }
                           })
                     ]),
               ),
@@ -337,9 +457,15 @@ class _searchbarState extends State<searchbar> {
         notescontroller.text.isNotEmpty ||
         amountcontroller.text.isNotEmpty ||
         datecontroller.text.isNotEmpty) {
-      var response = await http.post(Uri.parse(
-          "http://192.168.24.34:8000/api/method/money_management_backend.custom.py.api.daily_entry_submit?Type=Asset&Subtype=${subtypes}&Name=${name}&Notes=${notes}&Amount=${amount}&Remainder_date=${""}"));
+      print(subtypecontroller.text);
+      print(dotenv.env['API_URL']);
 
+      // var response = await http.post(Uri.parse(
+      //      dotenv.env['API_KEY'] ?? ""));
+      var response = await http.post(Uri.parse(
+          '${dotenv.env['API_URL']}/api/method/money_management_backend.custom.py.api.daily_entry_submit?Type=Asset&Subtype=${subtypes}&Name=${name}&Notes=${notes}&Amount=${amount}&Remainder_date=${date}'));
+      //print(response.statusCode);
+      print(name);
       if (response.statusCode == 200) {
         Navigator.pop(context);
 
@@ -393,4 +519,68 @@ class _searchbarState extends State<searchbar> {
       }
     }
   }
+
+  _onAlertWithCustomContentPressed(context) {
+    print("test11");
+    var alertStyle = AlertStyle(
+      isCloseButton: false,
+      isOverlayTapDismiss: true,
+    );
+    Alert(
+      context: context,
+      title: "Image",
+      buttons: [
+        DialogButton(
+          color: Color.fromARGB(255, 93, 99, 216),
+          child: Text(
+            "Camera",
+            style: TextStyle(color: Color.fromARGB(255, 255, 253, 253)),
+          ),
+          onPressed: () => pickImage(ImageSource.camera),
+        ),
+        DialogButton(
+          color: Color.fromARGB(255, 93, 99, 216),
+          child: Text(
+            "Image",
+            style: TextStyle(color: Color.fromARGB(255, 255, 253, 253)),
+          ),
+          onPressed: () => pickImage(ImageSource.gallery),
+        ),
+        DialogButton(
+          color: Color.fromARGB(255, 93, 99, 216),
+          child: Text(
+            "File",
+            style: TextStyle(color: Color.fromARGB(255, 255, 253, 253)),
+          ),
+          onPressed: () {
+            pickFiles();
+          },
+        ),
+      ],
+    ).show();
+  }
+
+  void pickFiles() async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles(
+      type: FileType.custom,
+      allowedExtensions: ['pdf', 'doc'],
+    );
+    if (result == null) return;
+
+    var file = result.files.first;
+    viewFile(file);
+  }
+
+  void viewFile(PlatformFile file) {
+    var OpenFile;
+    OpenFile.open(file.path);
+  }
 }
+// Future<File> getImageFileFromAssets(String myImage) async {
+//   final byteData = await rootBundle.load('assets/$myImage');
+
+//   final file = File('${(await getTemporaryDirectory()).path}/$myImage');
+//   await file.writeAsBytes(byteData.buffer.asUint8List(byteData.offsetInBytes, byteData.lengthInBytes));
+// print(file);
+//   return file;
+// }

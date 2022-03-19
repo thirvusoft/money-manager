@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:money_manager/views/screens/Animation/FadeAnimation.dart';
 import 'package:money_manager/views/screens/forgetpasswordscreen.dart';
 import 'package:http/http.dart' as http;
@@ -216,8 +217,12 @@ class _login_pageState extends State<login_page> {
   Future login(email, password) async {
     if (passwordcontroller.text.isNotEmpty || emailcontroller.text.isNotEmpty) {
       print('email');
+            print(dotenv.env['API_URL']);
+
       var response = await http.post(Uri.parse(
-          "http://192.168.24.34:8000/api/method/money_management_backend.custom.py.api.login?email=${email}&password=${password}"));
+        
+          "${dotenv.env['API_URL']}/api/method/money_management_backend.custom.py.api.login?email=${email}&password=${password}"));
+          print(response.statusCode);
       if (response.statusCode == 200) {
         Navigator.push(
           context,
