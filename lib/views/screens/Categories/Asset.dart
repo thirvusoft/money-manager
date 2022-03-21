@@ -45,8 +45,14 @@ class _customAssetState extends State<customAsset> {
 
 //Icon API
   Future listapi() async {
-    var response = await http.post(Uri.parse(
-        "{{host}}/api/method/money_management_backend.custom.py.api.withoutsubtype?Type=Asset"));
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    print(prefs.getString('token'));
+    var response = await http.post(
+        Uri.parse(
+            "http://192.168.24.34:8000/api/method/money_management_backend.custom.py.api.withsubtype?Type=Asset"),
+        headers: {"Authorization": prefs.getString('token') ?? ""});
+    print(response.statusCode);
+    print('status API');
 
     if (response.statusCode == 200) {
       SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -205,6 +211,7 @@ class _customAssetState extends State<customAsset> {
                             style: TextStyle(color: Colors.white),
                           ),
                           onPressed: () {
+                            print("uyguu23");
                             if (formKey.currentState!.validate()) {
                               cussubmit(
                                 typecontroller.text,

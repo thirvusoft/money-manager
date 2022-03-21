@@ -12,7 +12,7 @@ void main() async {
   await dotenv.load(fileName: ".env");
   print('Test');
   print(dotenv.env);
- print(dotenv.env['API_KEY']);
+  print(dotenv.env['API_KEY']);
   runApp(MyApp());
 }
 

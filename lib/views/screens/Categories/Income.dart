@@ -42,8 +42,14 @@ class _customIncomeState extends State<customIncome> {
 
 //Icon API
   Future listapi() async {
-    var response = await http.post(Uri.parse(
-        "http://192.168.24.34:8000/api/method/money_management_backend.custom.py.api.withsubtype?Type=Income"));
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    print(prefs.getString('token'));
+    var response = await http.post(
+        Uri.parse(
+            "http://192.168.24.34:8000/api/method/money_management_backend.custom.py.api.withsubtype?Type=Income"),
+        headers: {"Authorization": prefs.getString('token') ?? ""});
+    print(response.statusCode);
+    print('status API');
 
     if (response.statusCode == 200) {
       SharedPreferences prefs = await SharedPreferences.getInstance();

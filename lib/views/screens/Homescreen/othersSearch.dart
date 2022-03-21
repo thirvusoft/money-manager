@@ -104,8 +104,14 @@ class _othersSearchState extends State<othersSearch> {
   }
 
   Future listapi() async {
-    var response = await http.post(Uri.parse(
-        "http://192.168.24.34:8000/api/method/money_management_backend.custom.py.api.withsubtype?Type=Others"));
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    print(prefs.getString('token'));
+    var response = await http.post(
+        Uri.parse(
+            "http://192.168.24.34:8000/api/method/money_management_backend.custom.py.api.withsubtype?Type=Others"),
+        headers: {"Authorization": prefs.getString('token') ?? ""});
+    print(response.statusCode);
+    print('status API');
 
     if (response.statusCode == 200) {
       SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -117,43 +123,43 @@ class _othersSearchState extends State<othersSearch> {
       prefs.setStringList('liability_icon_list', liability_icon_list);
       icon_name = prefs.getStringList("liability_icon_list")!;
       setState(() => _loading = true);
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text(jsonDecode('message')),
-        backgroundColor: Colors.red,
-      ));
+      // ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      //   content: Text(json.decode(response.body)['message']),
+      //   backgroundColor: Colors.red,
+      // ));
     } else if (response.statusCode == 401) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text(jsonDecode('message')),
+        content: Text(json.decode(response.body)['message']),
         backgroundColor: Colors.red,
       ));
     } else if (response.statusCode == 403) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text(jsonDecode('message')),
+        content: Text(json.decode(response.body)['message']),
         backgroundColor: Colors.red,
       ));
     } else if (response.statusCode == 417) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text(jsonDecode('message')),
+        content: Text(json.decode(response.body)['message']),
         backgroundColor: Colors.red,
       ));
     } else if (response.statusCode == 500) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text(jsonDecode('message')),
+        content: Text(json.decode(response.body)['message']),
         backgroundColor: Colors.red,
       ));
     } else if (response.statusCode == 503) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text(jsonDecode('message')),
+        content: Text(json.decode(response.body)['message']),
         backgroundColor: Colors.red,
       ));
     } else if (response.statusCode == 409) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text(jsonDecode('message')),
+        content: Text(json.decode(response.body)['message']),
         backgroundColor: Colors.red,
       ));
     } else if (response.statusCode == 404) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text(jsonDecode('message')),
+        content: Text(json.decode(response.body)['message']),
         backgroundColor: Colors.red,
       ));
     } else {
@@ -432,42 +438,42 @@ class _othersSearchState extends State<othersSearch> {
       if (response.statusCode == 200) {
         Navigator.pop(context);
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text(jsonDecode('message')),
+          content: Text(json.decode(response.body)['message']),
           backgroundColor: Colors.green,
         ));
       } else if (response.statusCode == 401) {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text(jsonDecode('message')),
+          content: Text(json.decode(response.body)['message']),
           backgroundColor: Colors.red,
         ));
       } else if (response.statusCode == 403) {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text(jsonDecode('message')),
+          content: Text(json.decode(response.body)['message']),
           backgroundColor: Colors.red,
         ));
       } else if (response.statusCode == 417) {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text(jsonDecode('message')),
+          content: Text(json.decode(response.body)['message']),
           backgroundColor: Colors.red,
         ));
       } else if (response.statusCode == 500) {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text(jsonDecode('message')),
+          content: Text(json.decode(response.body)['message']),
           backgroundColor: Colors.red,
         ));
       } else if (response.statusCode == 503) {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text(jsonDecode('message')),
+          content: Text(json.decode(response.body)['message']),
           backgroundColor: Colors.red,
         ));
       } else if (response.statusCode == 409) {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text(jsonDecode('message')),
+          content: Text(json.decode(response.body)['message']),
           backgroundColor: Colors.red,
         ));
       } else if (response.statusCode == 404) {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text(jsonDecode('message')),
+          content: Text(json.decode(response.body)['message']),
           backgroundColor: Colors.red,
         ));
       } else {

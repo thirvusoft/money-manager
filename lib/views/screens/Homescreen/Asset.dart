@@ -116,9 +116,14 @@ class _searchbarState extends State<searchbar> {
 
 //Icon API
   Future listapi() async {
-    var response = await http.post(Uri.parse(
-        "http://192.168.24.34:8000/api/method/money_management_backend.custom.py.api.withsubtype?Type=Asset"));
-
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    print(prefs.getString('token'));
+    var response = await http.post(
+        Uri.parse(
+            "http://192.168.24.34:8000/api/method/money_management_backend.custom.py.api.withsubtype?Type=Asset"),
+        headers: {"Authorization": prefs.getString('token') ?? ""});
+    print(response.statusCode);
+    print('status API');
     if (response.statusCode == 200) {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       List<String> liability_icon_list = [];
@@ -129,43 +134,43 @@ class _searchbarState extends State<searchbar> {
       prefs.setStringList('liability_icon_list', liability_icon_list);
       icon_name = prefs.getStringList("liability_icon_list")!;
       setState(() => _loading = true);
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text(jsonDecode('message')),
-        backgroundColor: Colors.green,
-      ));
+      // ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      //   content: Text(json.decode(response.body)['message']),
+      //   backgroundColor: Colors.green,
+      // ));
     } else if (response.statusCode == 401) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text(jsonDecode('message')),
+        content: Text(json.decode(response.body)['message']),
         backgroundColor: Colors.red,
       ));
     } else if (response.statusCode == 403) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text(jsonDecode('message')),
+        content: Text(json.decode(response.body)['message']),
         backgroundColor: Colors.red,
       ));
     } else if (response.statusCode == 417) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text(jsonDecode('message')),
+        content: Text(json.decode(response.body)['message']),
         backgroundColor: Colors.red,
       ));
     } else if (response.statusCode == 500) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text(jsonDecode('message')),
+        content: Text(json.decode(response.body)['message']),
         backgroundColor: Colors.red,
       ));
     } else if (response.statusCode == 503) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text(jsonDecode('message')),
+        content: Text(json.decode(response.body)['message']),
         backgroundColor: Colors.red,
       ));
     } else if (response.statusCode == 409) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text(jsonDecode('message')),
+        content: Text(json.decode(response.body)['message']),
         backgroundColor: Colors.red,
       ));
     } else if (response.statusCode == 404) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text(jsonDecode('message')),
+        content: Text(json.decode(response.body)['message']),
         backgroundColor: Colors.red,
       ));
     } else {
@@ -261,10 +266,11 @@ class _searchbarState extends State<searchbar> {
                               Center(
                                   child: TextButton.icon(
                                       onPressed: () {
-                                        subtypes =
-                                            jsonDecode(icon_name[index])[0];
-                                        _show(context, subtypes);
-                                        print(icon_name[index][0]);
+                                        print(jsonDecode(icon_name[index]));
+                                        // subtypes =
+                                        //     jsonDecode(icon_name[index])[0];
+                                        // _show(context, subtypes);
+                                        // print(icon_name[index][0]);
                                       },
                                       label: Text(
                                         _textEditingController.text.isNotEmpty
@@ -372,17 +378,16 @@ class _searchbarState extends State<searchbar> {
                             style: TextStyle(color: Colors.white),
                           ),
                           onPressed: () {
+                            print("uyguu");
                             if (formKey.currentState!.validate()) {
                               // print(typecontroller.text);
 
                               dataentry(
-                                typecontroller.text,
-                                subtypes,
-                                namecontroller.text,
-                                notescontroller.text,
-                                amountcontroller.text,
-                                datecontroller.text,
-                              );
+                                  typecontroller.text,
+                                  subtypes,
+                                  namecontroller.text,
+                                  notescontroller.text,
+                                  amountcontroller.text);
 
                               // typecontroller.clear();
                               namecontroller.clear();
@@ -443,80 +448,88 @@ class _searchbarState extends State<searchbar> {
             ));
   }
 
-//Dataentry API
-  Future dataentry(
-    type,
-    subtypes,
-    name,
-    notes,
-    amount,
-    date,
-  ) async {
+  Future dataentry(type, subtypes, name, notes, amount) async {
+    print(type);
+    print(subtypes);
+    print(name);
+    print(notes);
+    print(amount);
+
     if (typecontroller.text.isNotEmpty ||
         namecontroller.text.isNotEmpty ||
         notescontroller.text.isNotEmpty ||
-        amountcontroller.text.isNotEmpty ||
-        datecontroller.text.isNotEmpty) {
+        amountcontroller.text.isNotEmpty) {
       print(subtypecontroller.text);
       print(dotenv.env['API_URL']);
 
       // var response = await http.post(Uri.parse(
       //      dotenv.env['API_KEY'] ?? ""));
-      var response = await http.post(Uri.parse(
-          '${dotenv.env['API_URL']}/api/method/money_management_backend.custom.py.api.daily_entry_submit?Type=Asset&Subtype=${subtypes}&Name=${name}&Notes=${notes}&Amount=${amount}&Remainder_date=${date}'));
+      // var response = await http.post(Uri.parse(
+      //     '${dotenv.env['API_URL']}/api/method/money_management_backend.custom.py.api.daily_entry_submit?Type=Asset&Subtype=${subtypes}&Name=${name}&Notes=${notes}&Amount=${amount}&Remainder_date=${date}'),
+      //     headers: {}
+      //     );
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      print(prefs.getString('token'));
+      var response = await http.post(
+          Uri.parse(
+              '${dotenv.env['API_URL']}/api/method/money_management_backend.custom.py.api.daily_entry_submit?Type=Asset&Subtype=${subtypes}&Name=${name}&Notes=${notes}&Amount=${amount}'),
+          headers: {"Authorization": prefs.getString('token') ?? ""});
       //print(response.statusCode);
       print(name);
-      if (response.statusCode == 200) {
-        Navigator.pop(context);
+      print(response.statusCode);
+      print(json.decode(response.body));
+      // if (response.statusCode == 200) {
+      //   print(response.statusCode);
+      //   Navigator.pop(context);
 
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text(jsonDecode('message')),
-          backgroundColor: Colors.green,
-        ));
-      } else if (response.statusCode == 401) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text(jsonDecode('message')),
-          backgroundColor: Colors.red,
-        ));
-      } else if (response.statusCode == 403) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text(jsonDecode('message')),
-          backgroundColor: Colors.red,
-        ));
-      } else if (response.statusCode == 417) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text(jsonDecode('message')),
-          backgroundColor: Colors.red,
-        ));
-      } else if (response.statusCode == 500) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text(jsonDecode('message')),
-          backgroundColor: Colors.red,
-        ));
-      } else if (response.statusCode == 503) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text(jsonDecode('message')),
-          backgroundColor: Colors.red,
-        ));
-      } else if (response.statusCode == 409) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text(jsonDecode('message')),
-          backgroundColor: Colors.red,
-        ));
-      } else if (response.statusCode == 404) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text(jsonDecode('message')),
-          backgroundColor: Colors.red,
-        ));
-      } else {
-        Navigator.pop(context);
-        Navigator.pop(context);
+      //   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      //     content: Text(json.decode(response.body)['message']),
+      //     backgroundColor: Colors.green,
+      //   ));
+      // } else if (response.statusCode == 401) {
+      //   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      //     content: Text(json.decode(response.body)['message']),
+      //     backgroundColor: Colors.red,
+      //   ));
+      // } else if (response.statusCode == 403) {
+      //   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      //     content: Text(json.decode(response.body)['message']),
+      //     backgroundColor: Colors.red,
+      //   ));
+      // } else if (response.statusCode == 417) {
+      //   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      //     content: Text(json.decode(response.body)['message']),
+      //     backgroundColor: Colors.red,
+      //   ));
+      // } else if (response.statusCode == 500) {
+      //   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      //     content: Text(json.decode(response.body)['message']),
+      //     backgroundColor: Colors.red,
+      //   ));
+      // } else if (response.statusCode == 503) {
+      //   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      //     content: Text(json.decode(response.body)['message']),
+      //     backgroundColor: Colors.red,
+      //   ));
+      // } else if (response.statusCode == 409) {
+      //   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      //     content: Text(json.decode(response.body)['message']),
+      //     backgroundColor: Colors.red,
+      //   ));
+      // } else if (response.statusCode == 404) {
+      //   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      //     content: Text(json.decode(response.body)['message']),
+      //     backgroundColor: Colors.red,
+      //   ));
+      // } else {
+      //   Navigator.pop(context);
+      //   Navigator.pop(context);
 
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text("Invalid"),
-          backgroundColor: Colors.red,
-        ));
-      }
+      //   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      //     content: Text("Invalid"),
+      //     backgroundColor: Colors.red,
+      //   ));
+      // }
     }
   }
 
