@@ -1,4 +1,7 @@
+import 'dart:convert';
+import 'dart:io'as Io;
 import 'dart:io';
+
 
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -6,6 +9,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:money_manager/views/screens/Categories/Expense.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:open_file/open_file.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 
 import '../Categories/Asset.dart';
@@ -31,35 +35,42 @@ class _expenseSearchState extends State<expenseSearch> {
       maxWidth: MediaQuery.of(context).size.width,
       preferredCameraDevice: CameraDevice.rear,
     );
+
     setState(() {
+      
+   
       print(_myImage);
       if (image == null) {
-        //TODO: Image not selected action.
         isFileSelected = 0;
       } else {
-        //TODO: Image selected action.
         _myImage = File(image.path);
+        final bytes = Io.File(image.path).readAsBytesSync();
+
+        String img64 = base64Encode(bytes);
+        print(img64);
+        print(_myImage);
         isFileSelected = 1;
       }
-    });
+     });
   }
     Widget showImage(File file) {
     if (isFileSelected == 0) {
-      //TODO: Image not selected widget.
       return Center(child: Text("Image Selected"));
     } else {
-      //TODO: Image selected widget.
       return Container(
         height: MediaQuery.of(context).size.width * 9 / 16,
         width: MediaQuery.of(context).size.width,
         child: Image.file(file, fit: BoxFit.contain),
       );
     }
-    // ignore: dead_code
+
     
   }
   int isFileSelected = 0;
   ImagePicker picker = ImagePicker();
+
+
+
   TextEditingController _textEditingController = TextEditingController();
 
   var typecontroller = TextEditingController();
@@ -139,7 +150,6 @@ class _expenseSearchState extends State<expenseSearch> {
           backgroundColor: Color.fromARGB(255, 93, 99, 216),
           automaticallyImplyLeading: false,
           title: Container(
-            width: 330,
             decoration: BoxDecoration(
                 color: Color.fromARGB(255, 255, 255, 255),
                 borderRadius: BorderRadius.circular(10)),
@@ -205,7 +215,7 @@ class _expenseSearchState extends State<expenseSearch> {
                                             ? icon_nameOnSearch[index][0]
                                             : icon_name[index][0],
                                         style: TextStyle(
-                                            color: Colors.black,
+                                            color: Colors.black, 
                                             fontSize: 15,
                                             letterSpacing: .7),
                                       ),
@@ -279,9 +289,18 @@ class _expenseSearchState extends State<expenseSearch> {
                         decoration: InputDecoration(labelText: 'Amount'),
                         keyboardType: TextInputType.number,
                       ),
+                                          TextButton(
+              
+                 onPressed: () {_onAlertWithCustomContentPressed(context);},
+                child: const Text('Upload',
+                     style: TextStyle(color: Color.fromARGB(255, 0, 0, 0))),
+               ),
                       SizedBox(
                         height: 15,
                       ),
+               
+               
+
                       RaisedButton(
                           color: Color.fromARGB(255, 93, 99, 216),
                           child: Text(
@@ -363,33 +382,37 @@ class _expenseSearchState extends State<expenseSearch> {
         DialogButton(
           color: Color.fromARGB(255, 93, 99, 216),
           child: Text(
-          "File",
+          "Image",
                     style: TextStyle(color: Color.fromARGB(255, 255, 253, 253)),
-        ), onPressed: (){pickFiles();},
+        ), onPressed: () async{
+     
+
+
+print("object");
+              final result = await FilePicker.platform.pickFiles();
+             if(result == null)
+         
+              return;
+  var img;
+              img = result.files.first;
+             final bytes = Io.File(img.path).readAsBytesSync();
+
+String img64 = base64Encode(bytes);
+print(img64);
+
+    openFile(img);
+         
+            }, 
         ),
+        
       
       ],
-    
- 
+   
     ).show();
   }
-  
-}
-void pickFiles() async{
-  FilePickerResult? result = await FilePicker.platform.pickFiles(
-    type: FileType.custom,allowedExtensions: 
-    ['pdf','doc'],
-  );
-  if(result == null)
-  return;
+   void openFile(PlatformFile img) {
+      OpenFile.open(img.path!);
+   
+  }
 
-  var file = result.files.first;
-  viewFile(file);
-}
-
-void viewFile(PlatformFile file) {
-
-  var OpenFile;
-  OpenFile.open(file.path);
-  print(OpenFile);
 }

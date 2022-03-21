@@ -1,3 +1,5 @@
+import 'dart:convert';
+import 'dart:io'as Io;
 import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
@@ -6,6 +8,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:money_manager/views/screens/Categories/liability.dart';
+import 'package:open_file/open_file.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 
 import '../Categories/Asset.dart';
@@ -39,6 +42,10 @@ class _liabilitySearchState extends State<liabilitySearch> {
       } else {
         //TODO: Image selected action.
         _myImage = File(image.path);
+        final bytes = Io.File(image.path).readAsBytesSync();
+
+        String img64 = base64Encode(bytes);
+        print(img64);
         isFileSelected = 1;
       }
     });
@@ -286,6 +293,12 @@ class _liabilitySearchState extends State<liabilitySearch> {
                               date.toString().substring(0, 10);
                         },
                       ),
+                      TextButton(
+              
+                 onPressed: () {_onAlertWithCustomContentPressed(context);},
+                child: const Text('Upload',
+                     style: TextStyle(color: Color.fromARGB(255, 0, 0, 0))),
+               ),
                       SizedBox(
                         height: 15,
                       ),
@@ -379,32 +392,37 @@ class _liabilitySearchState extends State<liabilitySearch> {
         DialogButton(
           color: Color.fromARGB(255, 93, 99, 216),
           child: Text(
-          "File",
+          "Image",
                     style: TextStyle(color: Color.fromARGB(255, 255, 253, 253)),
-        ), onPressed: (){pickFiles();},
+        ), onPressed: () async{
+     
+
+
+print("object");
+              final result = await FilePicker.platform.pickFiles();
+             if(result == null)
+         
+              return;
+  var img;
+              img = result.files.first;
+             final bytes = Io.File(img.path).readAsBytesSync();
+
+String img64 = base64Encode(bytes);
+print(img64);
+
+    openFile(img);
+         
+            }, 
         ),
+        
       
       ],
-    
- 
+   
     ).show();
   }
-}
-void pickFiles() async{
-  FilePickerResult? result = await FilePicker.platform.pickFiles(
-    type: FileType.custom,allowedExtensions: 
-    ['pdf','doc'],
-  );
-  if(result == null)
-  return;
+   void openFile(PlatformFile img) {
+      OpenFile.open(img.path!);
+   
+  }
 
-  var file = result.files.first;
-  viewFile(file);
-}
-
-void viewFile(PlatformFile file) {
-
-  var OpenFile;
-  OpenFile.open(file.path);
-  print(OpenFile);
 }

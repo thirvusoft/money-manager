@@ -1,9 +1,11 @@
 // ignore: file_names
+import 'dart:convert';
 import 'dart:io';
+import 'dart:io'as Io;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'dart:async';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:path_provider/path_provider.dart';
+import 'package:open_file/open_file.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -13,6 +15,16 @@ import 'package:file_picker/file_picker.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import '../Categories/Asset.dart';
 import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'dart:io'as Io;
+import 'dart:io';
+import 'dart:typed_data';
+import 'package:open_file/open_file.dart';
+import 'package:file_picker/file_picker.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:path_provider/path_provider.dart';
+
 
 // class Environment{
 //   static String get fileName {
@@ -34,7 +46,6 @@ class searchbar extends StatefulWidget {
 class _searchbarState extends State<searchbar> {
   var result;
     File _myImage = File('');
-  get file => null;
 
 
       pickImage(ImageSource source) async {
@@ -53,6 +64,10 @@ class _searchbarState extends State<searchbar> {
       } else {
         //TODO: Image selected action.
         _myImage = File(image.path);
+        final bytes = Io.File(image.path).readAsBytesSync();
+
+        String img64 = base64Encode(bytes);
+        print(img64);
         print(_myImage);
 
         isFileSelected = 1;
@@ -135,7 +150,7 @@ class _searchbarState extends State<searchbar> {
           backgroundColor: Color.fromARGB(255, 93, 99, 216),
           automaticallyImplyLeading: false,
           title: Container(
-            width: 330,
+
             decoration: BoxDecoration(
                 color: Color.fromARGB(255, 255, 255, 255),
                 borderRadius: BorderRadius.circular(10)),
@@ -287,9 +302,18 @@ class _searchbarState extends State<searchbar> {
                         decoration: InputDecoration(labelText: 'Amount'),
                         keyboardType: TextInputType.number,
                       ),
+                      
+               
+               TextButton(
+              
+                 onPressed: () async {_onAlertWithCustomContentPressed(context);},
+                child: const Text('Upload',
+                     style: TextStyle(color: Color.fromARGB(255, 0, 0, 0))),
+               ),
                       SizedBox(
                         height: 15,
                       ),
+                      
                       RaisedButton(
                           color: Color.fromARGB(255, 93, 99, 216),
                           child: Text(
@@ -385,46 +409,65 @@ class _searchbarState extends State<searchbar> {
                     style: TextStyle(color: Color.fromARGB(255, 255, 253, 253)),
         ), onPressed: ()=>pickImage(ImageSource.gallery),
         ),
-        DialogButton(
+       DialogButton(
           color: Color.fromARGB(255, 93, 99, 216),
           child: Text(
-          "File",
+          "Image",
                     style: TextStyle(color: Color.fromARGB(255, 255, 253, 253)),
-        ), onPressed: (){pickFiles();},
+        ), onPressed: () async{
+     
+
+
+print("object");
+              final result = await FilePicker.platform.pickFiles();
+             if(result == null)
+         
+              return;
+  var img;
+              img = result.files.first;
+             final bytes = Io.File(img.path).readAsBytesSync();
+
+String img64 = base64Encode(bytes);
+print(img64);
+
+    openFile(img);
+         
+            }, 
         ),
+        
       
       ],
    
     ).show();
   }
- 
+   void openFile(PlatformFile img) {
+      OpenFile.open(img.path!);
+   
+  }
+  Future uploadimage(File img64) async {
+    var bytes = img64.readAsBytesSync();
+    print(bytes);
 
+    var response = await http.post(
+      Uri.parse(
+          "http://192.168.24.34:8000/api/method/money_management_backend.custom.py.api.upload_profile_image"),
+      
+     // headers: {"Authorization",token f2438cbb8b260d5:8484dfdb326fe79},
+      body: {"file", bytes},
+      encoding: Encoding.getByName("utf-8"),
+    );
+    return response.body;
+  }
 
+   
 
-void pickFiles() async{
-  FilePickerResult? result = await FilePicker.platform.pickFiles(
-    type: FileType.custom,allowedExtensions: 
-    ['pdf','doc'],
-  );
-  if(result == null)
-  return;
-
-  var file = result.files.first;
-  viewFile(file);
-}
-
-void viewFile(PlatformFile file) {
-
-  var OpenFile;
-  OpenFile.open(file.path);
   
-}
-}
-// Future<File> getImageFileFromAssets(String myImage) async {
-//   final byteData = await rootBundle.load('assets/$myImage');
+   
 
-//   final file = File('${(await getTemporaryDirectory()).path}/$myImage');
-//   await file.writeAsBytes(byteData.buffer.asUint8List(byteData.offsetInBytes, byteData.lengthInBytes));
-// print(file);
-//   return file;
-// }
+
+
+
+
+}
+
+

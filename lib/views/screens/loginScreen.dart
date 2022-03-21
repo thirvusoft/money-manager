@@ -35,7 +35,7 @@ class _login_pageState extends State<login_page> {
     return Scaffold(
         backgroundColor: Colors.white,
         body: SingleChildScrollView(
-          child: Container(
+          
             child: Column(
               children: [
                 Container(
@@ -211,7 +211,7 @@ class _login_pageState extends State<login_page> {
               ],
             ),
           ),
-        ));
+        );
   }
 
   Future login(email, password) async {
@@ -224,6 +224,10 @@ class _login_pageState extends State<login_page> {
           "${dotenv.env['API_URL']}/api/method/money_management_backend.custom.py.api.login?email=${email}&password=${password}"));
           print(response.statusCode);
       if (response.statusCode == 200) {
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString("token",
+        json.decode(response.body)['token']['token']);
+        print(prefs.getString("token"));
         Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => bottomnavigation()),
