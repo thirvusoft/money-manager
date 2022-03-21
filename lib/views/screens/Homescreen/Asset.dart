@@ -1,3 +1,10 @@
+import 'dart:convert';
+
+import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
+import 'package:money_manager/views/screens/Categories/liability.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
 // ignore: file_names
 import 'dart:convert';
 import 'dart:io';
@@ -26,16 +33,6 @@ import 'package:flutter/services.dart';
 import 'package:path_provider/path_provider.dart';
 
 
-// class Environment{
-//   static String get fileName {
-    
-//     return '.env';
-//   }
-//   static String get apiUrl{
-//     return dotenv.env['API_URL'] ?? 'API_URL not found';
-//   }
-// }
-
 class searchbar extends StatefulWidget {
   const searchbar({Key? key}) : super(key: key);
 
@@ -47,8 +44,7 @@ class _searchbarState extends State<searchbar> {
   var result;
     File _myImage = File('');
 
-
-      pickImage(ImageSource source) async {
+  pickImage(ImageSource source) async {
     XFile? image = await picker.pickImage(
       source: source,
       imageQuality: 100,
@@ -72,10 +68,10 @@ class _searchbarState extends State<searchbar> {
 
         isFileSelected = 1;
       }
-    }
-    );
+    });
   }
-    Widget showImage(File file) {
+
+  Widget showImage(File file) {
     if (isFileSelected == 0) {
       //TODO: Image not selected widget.
       return Center(child: Text("Image Selected"));
@@ -88,8 +84,8 @@ class _searchbarState extends State<searchbar> {
       );
     }
     // ignore: dead_code
-    
   }
+
   int isFileSelected = 0;
   ImagePicker picker = ImagePicker();
   TextEditingController _textEditingController = TextEditingController();
@@ -103,9 +99,28 @@ class _searchbarState extends State<searchbar> {
   final formKey = GlobalKey<FormState>();
 
   bool _loading = true;
+  List icon_nameOnSearch = [];
+  List icon_name = [];
+  var hexcode_dict = <String, int>{
+    ' 0xf1dd': 0xf1dd,
+    ' 0xf1dd': 0xf1dd,
+    '0xf1dd': 0xf1dd,
+    '0xf05e7': 0xf05e7,
+    '0xee62': 0xee62,
+    '0xf447': 0xf447,
+    '0xef06': 0xef06,
+    '0xf05ce': 0xf05ce,
+    '0xf42b': 0xf42b,
+    '0xf1af': 0xf1af,
+    '0xee35': 0xee35,
+    '0xf2e9': 0xf2e9,
+    '0xf108': 0xf108,
+    '0xf05ce': 0xf05ce
+  };
   @override
   void initState() {
     super.initState();
+    listapi();
     Future.delayed(Duration(seconds: 1), () {
       Color.fromARGB(255, 93, 99, 216);
       setState(() {
@@ -113,17 +128,74 @@ class _searchbarState extends State<searchbar> {
       });
     });
   }
-  List icon_nameOnSearch = [];
-  List icon_name = [
-    ['Gold', 0xf1dd],
-    ['Silver', 0xf1dd],
-    ['Platinum', 0xf1dd],
-    ['Vehicles', 0xee62],
-    ['Home ', 0xe45f],
-    ['Machinery', 0xef06],
-    ['Comm Land', 0xf42b],
-    ['Residential ', 0xf1af],
-  ];
+
+//Icon API
+  Future listapi() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    print(prefs.getString('token'));
+    var response = await http.post(
+        Uri.parse(
+            "http://192.168.24.34:8000/api/method/money_management_backend.custom.py.api.withsubtype?Type=Asset"),
+        headers: {"Authorization": prefs.getString('token') ?? ""});
+    print(response.statusCode);
+    print('status API');
+    if (response.statusCode == 200) {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      List<String> liability_icon_list = [];
+      for (var i = 0; i < json.decode(response.body)["Asset"].length; i++) {
+        liability_icon_list
+            .add(jsonEncode(json.decode(response.body)["Asset"][i]));
+      }
+      prefs.setStringList('liability_icon_list', liability_icon_list);
+      icon_name = prefs.getStringList("liability_icon_list")!;
+      setState(() => _loading = true);
+      // ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      //   content: Text(json.decode(response.body)['message']),
+      //   backgroundColor: Colors.green,
+      // ));
+    } else if (response.statusCode == 401) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(json.decode(response.body)['message']),
+        backgroundColor: Colors.red,
+      ));
+    } else if (response.statusCode == 403) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(json.decode(response.body)['message']),
+        backgroundColor: Colors.red,
+      ));
+    } else if (response.statusCode == 417) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(json.decode(response.body)['message']),
+        backgroundColor: Colors.red,
+      ));
+    } else if (response.statusCode == 500) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(json.decode(response.body)['message']),
+        backgroundColor: Colors.red,
+      ));
+    } else if (response.statusCode == 503) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(json.decode(response.body)['message']),
+        backgroundColor: Colors.red,
+      ));
+    } else if (response.statusCode == 409) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(json.decode(response.body)['message']),
+        backgroundColor: Colors.red,
+      ));
+    } else if (response.statusCode == 404) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(json.decode(response.body)['message']),
+        backgroundColor: Colors.red,
+      ));
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text("Invalid"),
+        backgroundColor: Colors.red,
+      ));
+    }
+  }
+
   var data;
   var subtypes;
   get index => null;
@@ -184,17 +256,14 @@ class _searchbarState extends State<searchbar> {
             ),
           ),
         ),
-
         body: Center(
-         child: _loading
+            child: _loading
                 ? CircularProgressIndicator(
                     valueColor: AlwaysStoppedAnimation<Color>(
                         Color.fromARGB(255, 93, 99, 216)),
                   )
                 : GridView.builder(
-                  
                     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      
                         crossAxisCount: 2,
                         childAspectRatio: 3,
                         crossAxisSpacing: 20),
@@ -204,45 +273,40 @@ class _searchbarState extends State<searchbar> {
                     itemBuilder: (context, index) {
                       print(icon_name[index][1]);
                       return Container(
-                        
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(10),
                           ),
                           child: Row(
-                            
                             children: [
                               Center(
-                                
-                                
-                                
                                   child: TextButton.icon(
-                                    
-                                    style: TextButton.styleFrom(
-                                    ),
-                                    
                                       onPressed: () {
-                                        subtypes = icon_name[index][0];
-                                        _show(context, subtypes);
-                                        print(icon_name[index][0]);
+                                        print(jsonDecode(icon_name[index]));
+                                        // subtypes =
+                                        //     jsonDecode(icon_name[index])[0];
+                                        // _show(context, subtypes);
+                                        // print(icon_name[index][0]);
                                       },
-                                      
                                       label: Text(
                                         _textEditingController.text.isNotEmpty
-                                            ? icon_nameOnSearch[index][0]
-                                            : icon_name[index][0],
+                                            ? jsonDecode(icon_name[index])[0]
+                                            : jsonDecode(icon_name[index])[0],
                                         style: TextStyle(
                                             color: Colors.black,
                                             fontSize: 15,
                                             letterSpacing: .7),
                                       ),
                                       icon: Icon(
-                                          IconData(icon_name[index][1],
+                                          IconData(
+                                              hexcode_dict[jsonDecode(
+                                                      icon_name[index])[1]] ??
+                                                  0XF155,
                                               fontFamily: 'MaterialIcons'),
                                           color: Color.fromARGB(
                                               255, 93, 99, 216)))),
                             ],
                           ));
-                    }),),
+                    })),
         floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
         floatingActionButton: FloatingActionButton(
             // isExtended: true,
@@ -293,23 +357,32 @@ class _searchbarState extends State<searchbar> {
                               return null;
                             }
                           }),
-                      TextField(
+                      TextFormField(
                         controller: notescontroller,
                         decoration: InputDecoration(labelText: 'Notes'),
                       ),
-                      TextField(
-                        controller: amountcontroller,
-                        decoration: InputDecoration(labelText: 'Amount'),
-                        keyboardType: TextInputType.number,
-                      ),
-                      
-               
-               TextButton(
-              
-                 onPressed: () async {_onAlertWithCustomContentPressed(context);},
-                child: const Text('Upload',
-                     style: TextStyle(color: Color.fromARGB(255, 0, 0, 0))),
-               ),
+                      TextFormField(
+                          controller: amountcontroller,
+                          decoration: InputDecoration(labelText: 'Amount'),
+                          keyboardType: TextInputType.number,
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return "Please enter the amount";
+                            } else {
+                              return null;
+                            }
+                          }),
+                      TextButton(
+                          onPressed: () {
+                            print("test");
+                            _onAlertWithCustomContentPressed(context);
+                            print("test");
+                          },
+                          child: const Text(
+                            "Upload",
+                            style:
+                                TextStyle(color: Color.fromARGB(255, 0, 0, 0)),
+                          )),
                       SizedBox(
                         height: 15,
                       ),
@@ -321,17 +394,16 @@ class _searchbarState extends State<searchbar> {
                             style: TextStyle(color: Colors.white),
                           ),
                           onPressed: () {
+                            print("uyguu");
                             if (formKey.currentState!.validate()) {
                               // print(typecontroller.text);
 
                               dataentry(
-                                typecontroller.text,
-                                subtypes,
-                                namecontroller.text,
-                                notescontroller.text,
-                                amountcontroller.text,
-                                datecontroller.text,
-                              );
+                                  typecontroller.text,
+                                  subtypes,
+                                  namecontroller.text,
+                                  notescontroller.text,
+                                  amountcontroller.text);
 
                               // typecontroller.clear();
                               namecontroller.clear();
@@ -339,75 +411,123 @@ class _searchbarState extends State<searchbar> {
                               amountcontroller.clear();
                               datecontroller.clear();
                             }
+                          
                           })
                     ]),
               ),
             ));
   }
 
-  Future dataentry(
-    type,
-    subtypes,
-    name,
-    notes,
-    amount,
-    date,
-  ) async {
+  Future dataentry(type, subtypes, name, notes, amount) async {
+    print(type);
+    print(subtypes);
+    print(name);
+    print(notes);
+    print(amount);
+
     if (typecontroller.text.isNotEmpty ||
         namecontroller.text.isNotEmpty ||
         notescontroller.text.isNotEmpty ||
-        amountcontroller.text.isNotEmpty ||
-        datecontroller.text.isNotEmpty) {
+        amountcontroller.text.isNotEmpty) {
       print(subtypecontroller.text);
       print(dotenv.env['API_URL']);
-     
+
       // var response = await http.post(Uri.parse(
       //      dotenv.env['API_KEY'] ?? ""));
-      var response = await http.post(Uri.parse(
-      '${dotenv.env['API_URL']}/api/method/money_management_backend.custom.py.api.daily_entry_submit?Type=Asset&Subtype=${subtypes}&Name=${name}&Notes=${notes}&Amount=${amount}&Remainder_date=${date}'
-       ));
+      // var response = await http.post(Uri.parse(
+      //     '${dotenv.env['API_URL']}/api/method/money_management_backend.custom.py.api.daily_entry_submit?Type=Asset&Subtype=${subtypes}&Name=${name}&Notes=${notes}&Amount=${amount}&Remainder_date=${date}'),
+      //     headers: {}
+      //     );
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      print(prefs.getString('token'));
+      var response = await http.post(
+          Uri.parse(
+              '${dotenv.env['API_URL']}/api/method/money_management_backend.custom.py.api.daily_entry_submit?Type=Asset&Subtype=${subtypes}&Name=${name}&Notes=${notes}&Amount=${amount}'),
+          headers: {"Authorization": prefs.getString('token') ?? ""});
       //print(response.statusCode);
       print(name);
-      if (response.statusCode == 200) {
-        print(response.statusCode);
-        Navigator.pop(context);
+      print(response.statusCode);
+      print(json.decode(response.body));
+      // if (response.statusCode == 200) {
+      //   print(response.statusCode);
+      //   Navigator.pop(context);
 
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text("Submited sucessfully"),
-          backgroundColor: Colors.green,
-        ));
-      } else {
-        print(response.statusCode);
-        Navigator.pop(context);
+      //   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      //     content: Text(json.decode(response.body)['message']),
+      //     backgroundColor: Colors.green,
+      //   ));
+      // } else if (response.statusCode == 401) {
+      //   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      //     content: Text(json.decode(response.body)['message']),
+      //     backgroundColor: Colors.red,
+      //   ));
+      // } else if (response.statusCode == 403) {
+      //   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      //     content: Text(json.decode(response.body)['message']),
+      //     backgroundColor: Colors.red,
+      //   ));
+      // } else if (response.statusCode == 417) {
+      //   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      //     content: Text(json.decode(response.body)['message']),
+      //     backgroundColor: Colors.red,
+      //   ));
+      // } else if (response.statusCode == 500) {
+      //   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      //     content: Text(json.decode(response.body)['message']),
+      //     backgroundColor: Colors.red,
+      //   ));
+      // } else if (response.statusCode == 503) {
+      //   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      //     content: Text(json.decode(response.body)['message']),
+      //     backgroundColor: Colors.red,
+      //   ));
+      // } else if (response.statusCode == 409) {
+      //   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      //     content: Text(json.decode(response.body)['message']),
+      //     backgroundColor: Colors.red,
+      //   ));
+      // } else if (response.statusCode == 404) {
+      //   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      //     content: Text(json.decode(response.body)['message']),
+      //     backgroundColor: Colors.red,
+      //   ));
+      // } else {
+      //   Navigator.pop(context);
+      //   Navigator.pop(context);
 
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text("Invalid"),
-          backgroundColor: Colors.red,
-        ));
-      }
+      //   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      //     content: Text("Invalid"),
+      //     backgroundColor: Colors.red,
+      //   ));
+      // }
     }
   }
-    _onAlertWithCustomContentPressed(context){
-      var alertStyle=AlertStyle(
-         isCloseButton: false,
-         isOverlayTapDismiss: true,);
-    Alert(context: context,
-    title: "Image",
+
+  _onAlertWithCustomContentPressed(context) {
+    print("test11");
+    var alertStyle = AlertStyle(
+      isCloseButton: false,
+      isOverlayTapDismiss: true,
+    );
+    Alert(
+      context: context,
+      title: "Image",
       buttons: [
-        
         DialogButton(
           color: Color.fromARGB(255, 93, 99, 216),
           child: Text(
-          "Camera",
-                    style: TextStyle(color: Color.fromARGB(255, 255, 253, 253)),
-        ), onPressed: ()=>pickImage(ImageSource.camera),
+            "Camera",
+            style: TextStyle(color: Color.fromARGB(255, 255, 253, 253)),
+          ),
+          onPressed: () => pickImage(ImageSource.camera),
         ),
         DialogButton(
           color: Color.fromARGB(255, 93, 99, 216),
           child: Text(
-          "Image",
-                    style: TextStyle(color: Color.fromARGB(255, 255, 253, 253)),
-        ), onPressed: ()=>pickImage(ImageSource.gallery),
+            "Image",
+            style: TextStyle(color: Color.fromARGB(255, 255, 253, 253)),
+          ),
+          onPressed: () => pickImage(ImageSource.gallery),
         ),
        DialogButton(
           color: Color.fromARGB(255, 93, 99, 216),
@@ -437,7 +557,6 @@ print(img64);
         
       
       ],
-   
     ).show();
   }
    void openFile(PlatformFile img) {
@@ -459,15 +578,4 @@ print(img64);
     return response.body;
   }
 
-   
-
-  
-   
-
-
-
-
-
 }
-
-

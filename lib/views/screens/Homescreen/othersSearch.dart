@@ -10,6 +10,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:money_manager/views/screens/Categories/Others.dart';
 import 'package:open_file/open_file.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 
 import '../Categories/Asset.dart';
@@ -26,8 +27,8 @@ class othersSearch extends StatefulWidget {
 
 class _othersSearchState extends State<othersSearch> {
   var file;
-        File _myImage = File('');
-      pickImage(ImageSource source) async {
+  File _myImage = File('');
+  pickImage(ImageSource source) async {
     XFile? image = await picker.pickImage(
       source: source,
       imageQuality: 100,
@@ -51,7 +52,8 @@ class _othersSearchState extends State<othersSearch> {
       }
     });
   }
-    Widget showImage(File file) {
+
+  Widget showImage(File file) {
     if (isFileSelected == 0) {
       //TODO: Image not selected widget.
       return Center(child: Text("Image Selected"));
@@ -64,8 +66,8 @@ class _othersSearchState extends State<othersSearch> {
       );
     }
     // ignore: dead_code
-    
   }
+
   int isFileSelected = 0;
   ImagePicker picker = ImagePicker();
   TextEditingController _textEditingController = TextEditingController();
@@ -78,17 +80,27 @@ class _othersSearchState extends State<othersSearch> {
   var datecontroller = TextEditingController();
   final formKey = GlobalKey<FormState>();
   final dateController = TextEditingController();
-
+  bool _loading = true;
+  List icon_nameOnSearch = [];
+  List icon_name = [];
+  var hexcode_dict = <String, int>{
+    ' 0xf12f': 0xf12f,
+    ' 0xef8f': 0xef8f,
+    '0xee35': 0xee35,
+    '0xef2d': 0xef2d,
+    '0xee33': 0xee33,
+    ' 0xf2dd': 0xf2dd,
+  };
   @override
   void dispose() {
     dateController.dispose();
     super.dispose();
   }
 
-  bool _loading = true;
   @override
   void initState() {
     super.initState();
+    listapi();
     Future.delayed(Duration(seconds: 1), () {
       Color.fromARGB(255, 93, 99, 216);
       setState(() {
@@ -97,18 +109,79 @@ class _othersSearchState extends State<othersSearch> {
     });
   }
 
-  List icon_nameOnSearch = [];
-  List icon_name = [
-    ['Invitation', 0xf12f],
-    ['Visiting Card', 0xef8f],
-    ['Profile', 0xee35],
-  ];
+  Future listapi() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    print(prefs.getString('token'));
+    var response = await http.post(
+        Uri.parse(
+            "http://192.168.24.34:8000/api/method/money_management_backend.custom.py.api.withsubtype?Type=Others"),
+        headers: {"Authorization": prefs.getString('token') ?? ""});
+    print(response.statusCode);
+    print('status API');
+
+    if (response.statusCode == 200) {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      List<String> liability_icon_list = [];
+      for (var i = 0; i < json.decode(response.body)["Others"].length; i++) {
+        liability_icon_list
+            .add(jsonEncode(json.decode(response.body)["Others"][i]));
+      }
+      prefs.setStringList('liability_icon_list', liability_icon_list);
+      icon_name = prefs.getStringList("liability_icon_list")!;
+      setState(() => _loading = true);
+      // ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      //   content: Text(json.decode(response.body)['message']),
+      //   backgroundColor: Colors.red,
+      // ));
+    } else if (response.statusCode == 401) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(json.decode(response.body)['message']),
+        backgroundColor: Colors.red,
+      ));
+    } else if (response.statusCode == 403) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(json.decode(response.body)['message']),
+        backgroundColor: Colors.red,
+      ));
+    } else if (response.statusCode == 417) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(json.decode(response.body)['message']),
+        backgroundColor: Colors.red,
+      ));
+    } else if (response.statusCode == 500) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(json.decode(response.body)['message']),
+        backgroundColor: Colors.red,
+      ));
+    } else if (response.statusCode == 503) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(json.decode(response.body)['message']),
+        backgroundColor: Colors.red,
+      ));
+    } else if (response.statusCode == 409) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(json.decode(response.body)['message']),
+        backgroundColor: Colors.red,
+      ));
+    } else if (response.statusCode == 404) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(json.decode(response.body)['message']),
+        backgroundColor: Colors.red,
+      ));
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text("Invalid"),
+        backgroundColor: Colors.red,
+      ));
+    }
+  }
+
   var data;
   var subtypes;
   get index => null;
   @override
   Widget build(BuildContext context) {
-        var file;
+    var file;
 
     return Scaffold(
         appBar: AppBar(
@@ -189,20 +262,24 @@ class _othersSearchState extends State<othersSearch> {
                               Center(
                                   child: TextButton.icon(
                                       onPressed: () {
-                                        subtypes = icon_name[index][0];
+                                        subtypes =
+                                            jsonDecode(icon_name[index])[0];
                                         _show(context, subtypes);
                                       },
                                       label: Text(
                                         _textEditingController.text.isNotEmpty
-                                            ? icon_nameOnSearch[index][0]
-                                            : icon_name[index][0],
+                                            ? jsonDecode(icon_name[index])[0]
+                                            : jsonDecode(icon_name[index])[0],
                                         style: TextStyle(
                                             color: Colors.black,
                                             fontSize: 15,
                                             letterSpacing: .7),
                                       ),
                                       icon: Icon(
-                                          IconData(icon_name[index][1],
+                                          IconData(
+                                              hexcode_dict[jsonDecode(
+                                                      icon_name[index])[1]] ??
+                                                  0XF155,
                                               fontFamily: 'MaterialIcons'),
                                           color: Color.fromARGB(
                                               255, 93, 99, 216)))),
@@ -260,45 +337,68 @@ class _othersSearchState extends State<othersSearch> {
                               return null;
                             }
                           }),
-                      TextField(
-                        controller: notescontroller,
-                        decoration: InputDecoration(labelText: 'Notes'),
-                      ),
-                      TextField(
-                        controller: amountcontroller,
-                        decoration: InputDecoration(labelText: 'Amount'),
-                        keyboardType: TextInputType.number,
-                      ),
-                      TextField(
-                        readOnly: true,
-                        controller: dateController,
-                        decoration: InputDecoration(labelText: 'Reminder Date'),
-                        style: TextStyle(),
-                        onTap: () async {
-                          var date = await showDatePicker(
-                              context: context,
-                              initialDate: DateTime.now(),
-                              firstDate: DateTime(1950),
-                              lastDate: DateTime(2100));
-                          builder:
-                          (BuildContext context, Widget child) {
-                            return Theme(
-                              data: ThemeData().copyWith(
-                                  colorScheme: ColorScheme.dark(
-                                      primary: Colors.red,
-                                      surface: Colors.red)),
-                              child: child,
-                            );
-                          };
-                          dateController.text =
-                              date.toString().substring(0, 10);
-                        },
-                      ),
+                      TextFormField(
+                          controller: notescontroller,
+                          decoration: InputDecoration(labelText: 'Notes'),
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return "Please enter the notes";
+                            } else {
+                              return null;
+                            }
+                          }),
+                      TextFormField(
+                          controller: amountcontroller,
+                          decoration: InputDecoration(labelText: 'Amount'),
+                          keyboardType: TextInputType.number,
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return "Please enter the amount";
+                            } else {
+                              return null;
+                            }
+                          }),
+                      TextFormField(
+                          readOnly: true,
+                          controller: dateController,
+                          decoration:
+                              InputDecoration(labelText: 'Reminder Date'),
+                          style: TextStyle(),
+                          onTap: () async {
+                            var date = await showDatePicker(
+                                context: context,
+                                initialDate: DateTime.now(),
+                                firstDate: DateTime(1950),
+                                lastDate: DateTime(2100));
+                            builder:
+                            (BuildContext context, Widget child) {
+                              return Theme(
+                                data: ThemeData().copyWith(
+                                    colorScheme: ColorScheme.dark(
+                                        primary: Colors.red,
+                                        surface: Colors.red)),
+                                child: child,
+                              );
+                            };
+                            dateController.text =
+                                date.toString().substring(0, 10);
+                          },
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return "Please enter the date";
+                            } else {
+                              return null;
+                            }
+                          }),
                       TextButton(
-                 onPressed: () {_onAlertWithCustomContentPressed(context);},
-                child: const Text('Upload',
-                     style: TextStyle(color: Color.fromARGB(255, 0, 0, 0))),
-               ),
+                          onPressed: () {
+                            _onAlertWithCustomContentPressed;
+                          },
+                          child: Text(
+                            "Upload",
+                            style:
+                                TextStyle(color: Color.fromARGB(255, 0, 0, 0)),
+                          )),
                       SizedBox(
                         height: 15,
                       ),
@@ -336,20 +436,53 @@ class _othersSearchState extends State<othersSearch> {
         amountcontroller.text.isNotEmpty ||
         datecontroller.text.isNotEmpty) {
       print(subtypecontroller.text);
-            print(dotenv.env['API_URL']);
+      print(dotenv.env['API_URL']);
 
       var response = await http.post(Uri.parse(
           "${dotenv.env['API_URL']}/api/method/money_management_backend.custom.py.api.daily_entry_submit?Type=Others&Subtype=${subtypes}&Name=${name}&Notes=${notes}&Amount=${amount}&Remainder_date=${date}"));
       //print(response.statusCode);
       if (response.statusCode == 200) {
-        print(response.statusCode);
         Navigator.pop(context);
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text("Submited Sucessfully"),
+          content: Text(json.decode(response.body)['message']),
           backgroundColor: Colors.green,
         ));
+      } else if (response.statusCode == 401) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(json.decode(response.body)['message']),
+          backgroundColor: Colors.red,
+        ));
+      } else if (response.statusCode == 403) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(json.decode(response.body)['message']),
+          backgroundColor: Colors.red,
+        ));
+      } else if (response.statusCode == 417) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(json.decode(response.body)['message']),
+          backgroundColor: Colors.red,
+        ));
+      } else if (response.statusCode == 500) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(json.decode(response.body)['message']),
+          backgroundColor: Colors.red,
+        ));
+      } else if (response.statusCode == 503) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(json.decode(response.body)['message']),
+          backgroundColor: Colors.red,
+        ));
+      } else if (response.statusCode == 409) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(json.decode(response.body)['message']),
+          backgroundColor: Colors.red,
+        ));
+      } else if (response.statusCode == 404) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(json.decode(response.body)['message']),
+          backgroundColor: Colors.red,
+        ));
       } else {
-        print(response.statusCode);
         Navigator.pop(context);
         Navigator.pop(context);
 
@@ -360,27 +493,31 @@ class _othersSearchState extends State<othersSearch> {
       }
     }
   }
-    _onAlertWithCustomContentPressed(context){
-      var alertStyle=AlertStyle(
-         isCloseButton: false,
-         isOverlayTapDismiss: true,);
-    Alert(context: context,
-    title: "Image",
-    buttons: [
-        
+
+  _onAlertWithCustomContentPressed(context) {
+    var alertStyle = AlertStyle(
+      isCloseButton: false,
+      isOverlayTapDismiss: true,
+    );
+    Alert(
+      context: context,
+      title: "Image",
+      buttons: [
         DialogButton(
           color: Color.fromARGB(255, 93, 99, 216),
           child: Text(
-          "Camera",
-                    style: TextStyle(color: Color.fromARGB(255, 255, 253, 253)),
-        ), onPressed: ()=>pickImage(ImageSource.camera),
+            "Camera",
+            style: TextStyle(color: Color.fromARGB(255, 255, 253, 253)),
+          ),
+          onPressed: () => pickImage(ImageSource.camera),
         ),
         DialogButton(
           color: Color.fromARGB(255, 93, 99, 216),
           child: Text(
-          "Image",
-                    style: TextStyle(color: Color.fromARGB(255, 255, 253, 253)),
-        ), onPressed: ()=>pickImage(ImageSource.gallery),
+            "Image",
+            style: TextStyle(color: Color.fromARGB(255, 255, 253, 253)),
+          ),
+          onPressed: () => pickImage(ImageSource.gallery),
         ),
         DialogButton(
           color: Color.fromARGB(255, 93, 99, 216),

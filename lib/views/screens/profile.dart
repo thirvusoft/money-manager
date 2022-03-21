@@ -167,7 +167,7 @@ Future profile() async {
     prefs.setString(
         "full_name", json.decode(response.body)['message']['full_name']);
     prefs.setString("email", json.decode(response.body)['message']['email']);
-    print(prefs.getString("full_name"));
+     print(prefs.getString("full_name"));
     print(prefs.getString("mobile_number"));
     print(prefs.getString("email"));
   }

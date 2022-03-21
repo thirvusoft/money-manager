@@ -217,33 +217,57 @@ class _login_pageState extends State<login_page> {
   Future login(email, password) async {
     if (passwordcontroller.text.isNotEmpty || emailcontroller.text.isNotEmpty) {
       print('email');
-            print(dotenv.env['API_URL']);
+      print(dotenv.env['API_URL']);
 
       var response = await http.post(Uri.parse(
-        
           "${dotenv.env['API_URL']}/api/method/money_management_backend.custom.py.api.login?email=${email}&password=${password}"));
-          print(response.statusCode);
+      print(response.statusCode);
+      print(json.decode(response.body)['token']);
       if (response.statusCode == 200) {
+        print(json.decode(response.body));
         SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setString("token",
-        json.decode(response.body)['token']['token']);
-        print(prefs.getString("token"));
+        prefs.setString('token', json.decode(response.body)['token']);
         Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => bottomnavigation()),
         );
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text("Logged in successfully"),
+          content: Text(json.decode(response.body)['message']),
           backgroundColor: Colors.green,
+        ));
+      } else if (response.statusCode == 401) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(json.decode(response.body)['message']),
+          backgroundColor: Colors.red,
         ));
       } else if (response.statusCode == 403) {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text(" Access Denied."),
+          content: Text(json.decode(response.body)['message']),
+          backgroundColor: Colors.red,
+        ));
+      } else if (response.statusCode == 417) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(json.decode(response.body)['message']),
+          backgroundColor: Colors.red,
+        ));
+      } else if (response.statusCode == 500) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(json.decode(response.body)['message']),
           backgroundColor: Colors.red,
         ));
       } else if (response.statusCode == 503) {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text("service unavailable"),
+          content: Text(json.decode(response.body)['message']),
+          backgroundColor: Colors.red,
+        ));
+      } else if (response.statusCode == 409) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(json.decode(response.body)['message']),
+          backgroundColor: Colors.red,
+        ));
+      } else if (response.statusCode == 404) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(json.decode(response.body)['message']),
           backgroundColor: Colors.red,
         ));
       } else {

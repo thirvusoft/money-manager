@@ -1,21 +1,37 @@
 import 'dart:convert';
-import 'dart:io'as Io;
-import 'dart:io';
-
 
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:money_manager/views/screens/Categories/Expense.dart';
-import 'package:file_picker/file_picker.dart';
-import 'package:open_file/open_file.dart';
-import 'package:rflutter_alert/rflutter_alert.dart';
+import 'package:money_manager/views/screens/Categories/liability.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
+import 'dart:convert';
+import 'dart:io';
+import 'dart:io'as Io;
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'dart:async';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:open_file/open_file.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:money_manager/views/screens/profile.dart';
+import 'package:file_picker/file_picker.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
 import '../Categories/Asset.dart';
 import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'dart:io'as Io;
+import 'dart:io';
+import 'dart:typed_data';
+import 'package:open_file/open_file.dart';
+import 'package:file_picker/file_picker.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:path_provider/path_provider.dart';
 
-import '../profile.dart';
+import '../Categories/Expense.dart';
 
 class expenseSearch extends StatefulWidget {
   const expenseSearch({Key? key}) : super(key: key);
@@ -25,9 +41,9 @@ class expenseSearch extends StatefulWidget {
 }
 
 class _expenseSearchState extends State<expenseSearch> {
-          var file;
-      File _myImage = File('');
-      pickImage(ImageSource source) async {
+  var file;
+  File _myImage = File('');
+  pickImage(ImageSource source) async {
     XFile? image = await picker.pickImage(
       source: source,
       imageQuality: 100,
@@ -53,7 +69,8 @@ class _expenseSearchState extends State<expenseSearch> {
       }
      });
   }
-    Widget showImage(File file) {
+
+  Widget showImage(File file) {
     if (isFileSelected == 0) {
       return Center(child: Text("Image Selected"));
     } else {
@@ -66,6 +83,7 @@ class _expenseSearchState extends State<expenseSearch> {
 
     
   }
+
   int isFileSelected = 0;
   ImagePicker picker = ImagePicker();
 
@@ -80,18 +98,40 @@ class _expenseSearchState extends State<expenseSearch> {
   var amountcontroller = TextEditingController();
   var datecontroller = TextEditingController();
   final formKey = GlobalKey<FormState>();
-  // final dateController = TextEditingController();
-
-  // @override
-  // void dispose() {
-  //   dateController.dispose();
-  //   super.dispose();
-  // }
 
   bool _loading = true;
+  List icon_nameOnSearch = [];
+  List icon_name = [];
+  var hexcode_dict = <String, int>{
+    ' 0xf2e9': 0xf2e9,
+    ' 0xf172': 0xf172,
+    '0xf37d': 0xf37d,
+    '0xf3cf': 0xf3cf,
+    '0xf37f': 0xf37f,
+    ' 0xef2d': 0xef2d,
+    ' 0xf05f0': 0xf05f0,
+    '0xef4c': 0xef4c,
+    '0xf24e': 0xf24e,
+    '0xf076': 0xf076,
+    '0xf37f': 0xf37f,
+    ' 0xf28c': 0xf28c,
+    ' 0xf28d': 0xf28d,
+    '0xf0f2': 0xf0f2,
+    '0xf041': 0xf041,
+    '0xef0d': 0xef0d,
+    '0xf33c': 0xf33c,
+    ' 0xf108': 0xf108,
+    ' 0xf06a4': 0xf06a4,
+    '0xf109': 0xf109,
+    '0xe2e4': 0xe2e4,
+    '0xf068b': 0xf068b,
+    '0xf05ce': 0xf05ce
+  };
+
   @override
   void initState() {
     super.initState();
+    listapi();
     Future.delayed(Duration(seconds: 1), () {
       Color.fromARGB(255, 93, 99, 216);
       setState(() {
@@ -100,36 +140,78 @@ class _expenseSearchState extends State<expenseSearch> {
     });
   }
 
-  List icon_nameOnSearch = [];
-  List icon_name = [
-    ['Food', 0xf2e9],
-    ['Travel', 0xf172],
-    ['Grocery', 0xf37d],
-    ['Entertainment', 0xf3cf],
-    ['Shopping', 0xf37f],
-    ['Clothing', 0xe15d],
-    ['Tax', 0xf24e],
-    ['Gas', 0xf076],
-    ['Electricity', 0xf016],
-    ['Telephone', 0xf28c],
-    ['Recharge', 0xf28d],
-    ['Health', 0xf0f2],
-    ['Beauty', 0xf041],
-    ['Electronics', 0xef0d],
-    ['Gift', 0xef2d],
-    ['Education', 0xf33c],
-    ['Maintenance', 0xf108],
-    ['Construction', 0xf109],
-    ['Crop', 0xf041],
-  ];
+//Icon API
+  Future listapi() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    print(prefs.getString('token'));
+    var response = await http.post(
+        Uri.parse(
+            "http://192.168.24.34:8000/api/method/money_management_backend.custom.py.api.withsubtype?Type=Expense"),
+        headers: {"Authorization": prefs.getString('token') ?? ""});
+    print(response.statusCode);
+    print('status API');
+    if (response.statusCode == 200) {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      List<String> liability_icon_list = [];
+      for (var i = 0; i < json.decode(response.body)["Expense"].length; i++) {
+        liability_icon_list
+            .add(jsonEncode(json.decode(response.body)["Expense"][i]));
+      }
+      prefs.setStringList('liability_icon_list', liability_icon_list);
+      icon_name = prefs.getStringList("liability_icon_list")!;
+      setState(() => _loading = true);
+      // ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      //   content: Text(json.decode(response.body)['message']),
+      //   backgroundColor: Colors.green,
+      // ));
+    } else if (response.statusCode == 401) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(json.decode(response.body)['message']),
+        backgroundColor: Colors.red,
+      ));
+    } else if (response.statusCode == 403) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(json.decode(response.body)['message']),
+        backgroundColor: Colors.red,
+      ));
+    } else if (response.statusCode == 417) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(json.decode(response.body)['message']),
+        backgroundColor: Colors.red,
+      ));
+    } else if (response.statusCode == 500) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(json.decode(response.body)['message']),
+        backgroundColor: Colors.red,
+      ));
+    } else if (response.statusCode == 503) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(json.decode(response.body)['message']),
+        backgroundColor: Colors.red,
+      ));
+    } else if (response.statusCode == 409) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(json.decode(response.body)['message']),
+        backgroundColor: Colors.red,
+      ));
+    } else if (response.statusCode == 404) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(json.decode(response.body)['message']),
+        backgroundColor: Colors.red,
+      ));
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text("Invalid"),
+        backgroundColor: Colors.red,
+      ));
+    }
+  }
 
   var data;
   var subtype;
   get index => null;
   @override
   Widget build(BuildContext context) {
-    
-
     return Scaffold(
         appBar: AppBar(
           actions: [
@@ -207,20 +289,24 @@ class _expenseSearchState extends State<expenseSearch> {
                               Center(
                                   child: TextButton.icon(
                                       onPressed: () {
-                                        subtype = icon_name[index][0];
+                                        subtype =
+                                            jsonDecode(icon_name[index])[0];
                                         _show(context, subtype);
                                       },
                                       label: Text(
                                         _textEditingController.text.isNotEmpty
-                                            ? icon_nameOnSearch[index][0]
-                                            : icon_name[index][0],
+                                            ? jsonDecode(icon_name[index])[0]
+                                            : jsonDecode(icon_name[index])[0],
                                         style: TextStyle(
                                             color: Colors.black, 
                                             fontSize: 15,
                                             letterSpacing: .7),
                                       ),
                                       icon: Icon(
-                                          IconData(icon_name[index][1],
+                                          IconData(
+                                              hexcode_dict[jsonDecode(
+                                                      icon_name[index])[1]] ??
+                                                  0XF155,
                                               fontFamily: 'MaterialIcons'),
                                           color: Color.fromARGB(
                                               255, 93, 99, 216)))),
@@ -284,17 +370,26 @@ class _expenseSearchState extends State<expenseSearch> {
                         controller: notescontroller,
                         decoration: InputDecoration(labelText: 'Notes'),
                       ),
-                      TextField(
-                        controller: amountcontroller,
-                        decoration: InputDecoration(labelText: 'Amount'),
-                        keyboardType: TextInputType.number,
-                      ),
-                                          TextButton(
-              
-                 onPressed: () {_onAlertWithCustomContentPressed(context);},
-                child: const Text('Upload',
-                     style: TextStyle(color: Color.fromARGB(255, 0, 0, 0))),
-               ),
+                      TextFormField(
+                          controller: amountcontroller,
+                          decoration: InputDecoration(labelText: 'Amount'),
+                          keyboardType: TextInputType.number,
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return "Please enter the amount";
+                            } else {
+                              return null;
+                            }
+                          }),
+                      TextButton(
+                          onPressed: () {
+                            _onAlertWithCustomContentPressed;
+                          },
+                          child: Text(
+                            "Upload",
+                            style:
+                                TextStyle(color: Color.fromARGB(255, 0, 0, 0)),
+                          )),
                       SizedBox(
                         height: 15,
                       ),
@@ -327,6 +422,7 @@ class _expenseSearchState extends State<expenseSearch> {
             ));
   }
 
+// DataEntry API
   Future dataentry(type, subtypes, name, notes, amount, date) async {
     if (typecontroller.text.isNotEmpty ||
         namecontroller.text.isNotEmpty ||
@@ -343,11 +439,46 @@ class _expenseSearchState extends State<expenseSearch> {
         Navigator.pop(context);
 
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text("Submited Sucessfully"),
+          content: Text(json.decode(response.body)['message']),
           backgroundColor: Colors.green,
         ));
+      } else if (response.statusCode == 401) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(json.decode(response.body)['message']),
+          backgroundColor: Colors.red,
+        ));
+      } else if (response.statusCode == 403) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(json.decode(response.body)['message']),
+          backgroundColor: Colors.red,
+        ));
+      } else if (response.statusCode == 417) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(json.decode(response.body)['message']),
+          backgroundColor: Colors.red,
+        ));
+      } else if (response.statusCode == 500) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(json.decode(response.body)['message']),
+          backgroundColor: Colors.red,
+        ));
+      } else if (response.statusCode == 503) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(json.decode(response.body)['message']),
+          backgroundColor: Colors.red,
+        ));
+      } else if (response.statusCode == 409) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(json.decode(response.body)['message']),
+          backgroundColor: Colors.red,
+        ));
+      } else if (response.statusCode == 404) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(json.decode(response.body)['message']),
+          backgroundColor: Colors.red,
+        ));
       } else {
-        print(response.statusCode);
+        Navigator.pop(context);
         Navigator.pop(context);
 
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -357,27 +488,31 @@ class _expenseSearchState extends State<expenseSearch> {
       }
     }
   }
-    _onAlertWithCustomContentPressed(context){
-      var alertStyle=AlertStyle(
-         isCloseButton: false,
-         isOverlayTapDismiss: true,);
-    Alert(context: context,
-    title: "Image",
-    buttons: [
-        
+
+  _onAlertWithCustomContentPressed(context) {
+    var alertStyle = AlertStyle(
+      isCloseButton: false,
+      isOverlayTapDismiss: true,
+    );
+    Alert(
+      context: context,
+      title: "Image",
+      buttons: [
         DialogButton(
           color: Color.fromARGB(255, 93, 99, 216),
           child: Text(
-          "Camera",
-                    style: TextStyle(color: Color.fromARGB(255, 255, 253, 253)),
-        ), onPressed: ()=>pickImage(ImageSource.camera),
+            "Camera",
+            style: TextStyle(color: Color.fromARGB(255, 255, 253, 253)),
+          ),
+          onPressed: () => pickImage(ImageSource.camera),
         ),
         DialogButton(
           color: Color.fromARGB(255, 93, 99, 216),
           child: Text(
-          "Image",
-                    style: TextStyle(color: Color.fromARGB(255, 255, 253, 253)),
-        ), onPressed: ()=>pickImage(ImageSource.gallery),
+            "Image",
+            style: TextStyle(color: Color.fromARGB(255, 255, 253, 253)),
+          ),
+          onPressed: () => pickImage(ImageSource.gallery),
         ),
         DialogButton(
           color: Color.fromARGB(255, 93, 99, 216),
