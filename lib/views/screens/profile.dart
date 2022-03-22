@@ -16,18 +16,26 @@ class Profiles extends StatefulWidget {
 }
 
 class _ProfilesState extends State<Profiles> {
-  String? full_name;
-  bool isLoading = true;
+  int? mobile;
+  bool isLoading = false;
   String? name;
   String? mail;
+  var email;
   // void main() async {
   //   await checkupdateNeeded();
   // }
-  @override
+  bool _loading = false;
   void initState() {
-    checkupdateNeeded();
-
+    profile(email);
+    print('s');
     super.initState();
+    checkupdateNeeded(email);
+    Future.delayed(Duration(seconds: 1), () {
+      Color.fromARGB(255, 93, 99, 216);
+      setState(() {
+        _loading = false;
+      });
+    });
   }
 
   @override
@@ -35,13 +43,19 @@ class _ProfilesState extends State<Profiles> {
     super.dispose();
   }
 
-  checkupdateNeeded() async {
-    await profile();
+  checkupdateNeeded(email) async {
+    await profile(email);
+    _loading = false;
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    full_name = prefs.getString('mobile_number');
+    mobile = prefs.getInt('mobile_number');
     name = prefs.getString("full_name");
     mail = prefs.getString("email");
     setState(() => isLoading = true);
+    print(mobile);
+    print(mail);
+    print(name);
+
+    print('test');
   }
 
   @override
@@ -75,9 +89,9 @@ class _ProfilesState extends State<Profiles> {
             SizedBox(
               height: 16,
             ),
-            Text(
-              full_name ?? '',
-            ),
+            // Text(
+            //   mobile ?? '',
+            // ),
             SizedBox(
               height: 16,
             ),
@@ -151,16 +165,36 @@ class MyClipper extends CustomClipper<Path> {
   }
 }
 
-Future profile() async {
+Future profile(email) async {
+  bool _loading = false;
   SharedPreferences prefs = await SharedPreferences.getInstance();
-  var response = await http.post(Uri.parse(
-      "${dotenv.env['API_URL']}/api/method/money_management_backend.custom.py.api.profile?email=${prefs.getString('email')}"));
+  // mobile = prefs.getInt('mobile_number');
+  //   name = prefs.getString("full_name");
+  //   mail = prefs.getString("email");
+  print('profile');
+  print(dotenv.env['API_URL']);
+  print(
+      "${dotenv.env['API_URL']}/api/method/money_management_backend.custom.py.api.profile?email=${email}");
+  var response = await http.post(
+      Uri.parse(
+          "${dotenv.env['API_URL']}/api/method/money_management_backend.custom.py.api.profile?email=${email}"),
+      headers: {"Authorization": prefs.getString('token') ?? ""});
+  print(response.statusCode);
+  print(email);
   if (response.statusCode == 200) {
+    print(response.statusCode);
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setString("mobile_number",
-        json.decode(response.body)['message']['mobile_number']);
-    prefs.setString(
-        "full_name", json.decode(response.body)['message']['full_name']);
+    // prefs.setString("mobile_number",
+    //     json.decode(response.body)['message']['mobile_number']);
+    // var dfdf = prefs.getString('mobile_number');
+    // print(dfdf);
     prefs.setString("email", json.decode(response.body)['message']['email']);
+    prefs.setString(
+      "name",
+      json.decode(response.body)['message']['full_name'],
+    );
+    var full_name = prefs.getString("email");
+    print(full_name);
+    print(response.statusCode);
   }
 }
