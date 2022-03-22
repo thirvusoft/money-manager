@@ -19,6 +19,7 @@ class _customLiabilityState extends State<customLiability> {
   var namecontroller = TextEditingController();
   final formKey = GlobalKey<FormState>();
   var code;
+  bool _loading = true;
   List icon_nameOnSearch = [];
   List icon_name = [];
   var hexcode_dict = <String, int>{
@@ -36,6 +37,12 @@ class _customLiabilityState extends State<customLiability> {
   void initState() {
     super.initState();
     listapi();
+    Future.delayed(Duration(seconds: 1), () {
+      Color.fromARGB(255, 93, 99, 216);
+      setState(() {
+        _loading = false;
+      });
+    });
   }
 
 //Icon API
@@ -132,7 +139,9 @@ class _customLiabilityState extends State<customLiability> {
                           _show(context);
                         },
                         icon: Icon(
-                            IconData(jsonDecode(icon_name[index])[1],
+                            IconData(
+                                hexcode_dict[jsonDecode(icon_name[index])[0]] ??
+                                    0XF155,
                                 fontFamily: 'MaterialIcons'),
                             color: Color.fromARGB(255, 255, 255, 255))),
                   ),

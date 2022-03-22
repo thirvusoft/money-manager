@@ -19,6 +19,9 @@ class _customAssetState extends State<customAsset> {
   var namecontroller = TextEditingController();
   final formKey = GlobalKey<FormState>();
   var code;
+  var code1;
+  bool _loading = true;
+
   List icon_nameOnSearch = [];
   List icon_name = [];
   var hexcode_dict = <String, int>{
@@ -37,32 +40,37 @@ class _customAssetState extends State<customAsset> {
     '0xf108': 0xf108,
     '0xf05ce': 0xf05ce
   };
+
   @override
   void initState() {
     super.initState();
     listapi();
+    Future.delayed(Duration(seconds: 1), () {
+      Color.fromARGB(255, 93, 99, 216);
+      setState(() {
+        _loading = false;
+      });
+    });
   }
 
 //Icon API
   Future listapi() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    print(prefs.getString('token'));
+    _loading = false;
+
     var response = await http.post(
         Uri.parse(
-            "${dotenv.env['API_URL']}/api/method/money_management_backend.custom.py.api.withsubtype?Type=Asset"),
+            "${dotenv.env['API_URL']}/api/method/money_management_backend.custom.py.api.withoutsubtype?Type=Asset"),
         headers: {"Authorization": prefs.getString('token') ?? ""});
-    print(response.statusCode);
-    print('status API');
 
     if (response.statusCode == 200) {
       SharedPreferences prefs = await SharedPreferences.getInstance();
-      List<String> liability_icon_list = [];
+      List<String> Asset_icon_list = [];
       for (var i = 0; i < json.decode(response.body)["Asset"].length; i++) {
-        liability_icon_list
-            .add(jsonEncode(json.decode(response.body)["Asset"][i]));
+        Asset_icon_list.add(jsonEncode(json.decode(response.body)["Asset"][i]));
       }
-      prefs.setStringList('liability_icon_list', liability_icon_list);
-      icon_name = prefs.getStringList("liability_icon_list")!;
+      prefs.setStringList('Asset_icon_list', Asset_icon_list);
+      icon_name = prefs.getStringList("Asset_icon_list")!;
     } else if (response.statusCode == 401) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text(jsonDecode('message')),
@@ -70,7 +78,7 @@ class _customAssetState extends State<customAsset> {
       ));
     } else if (response.statusCode == 403) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text(jsonDecode('message')),
+        content: Text('Permission Denied'),
         backgroundColor: Colors.red,
       ));
     } else if (response.statusCode == 417) {
@@ -110,12 +118,6 @@ class _customAssetState extends State<customAsset> {
   get index => null;
   @override
   Widget build(BuildContext context) {
-    // Size size = MediaQuery.of(context).size;
-    // double height = MediaQuery.of(context).size.height;
-    // double width = MediaQuery.of(context).size.width;
-    // print(width);
-    // print(height);
-    // print(size);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Color.fromARGB(255, 93, 99, 216),
@@ -131,8 +133,8 @@ class _customAssetState extends State<customAsset> {
                 ? icon_nameOnSearch.length
                 : icon_name.length,
             itemBuilder: (context, index) {
-              code = icon_name[index][1];
-              print(icon_name[index][1]);
+              code = jsonEncode(icon_name[index])[0];
+
               return Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Row(
@@ -147,7 +149,8 @@ class _customAssetState extends State<customAsset> {
                           },
                           icon: Icon(
                               IconData(
-                                jsonDecode(icon_name[index])[1],
+                                hexcode_dict[jsonDecode(icon_name[index])[0]] ??
+                                    0XF155,
                                 fontFamily: 'MaterialIcons',
                               ),
                               color: Color.fromARGB(255, 255, 255, 255))),
@@ -211,13 +214,13 @@ class _customAssetState extends State<customAsset> {
                             style: TextStyle(color: Colors.white),
                           ),
                           onPressed: () {
-                            print("uyguu23");
                             if (formKey.currentState!.validate()) {
                               cussubmit(
                                 typecontroller.text,
                                 namecontroller.text,
                                 code,
                               );
+                              namecontroller.clear();
                             }
                           })
                     ]),
@@ -228,10 +231,14 @@ class _customAssetState extends State<customAsset> {
 //DataEntry API
   Future cussubmit(type, name, code) async {
     if (namecontroller.text.isNotEmpty) {
-      print(dotenv.env['API_URL']);
-      var response = await http.post(Uri.parse(
-          "${dotenv.env['API_URL']}/api/method/money_management_backend.custom.py.api.custom?Type=Expense&Subtype=${name}&IconBineryCode=654654"));
-      print(namecontroller.text);
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+
+      var response = await http.post(
+        Uri.parse(
+            "${dotenv.env['API_URL']}/api/method/money_management_backend.custom.py.api.custom?Type=Asset&Subtype=${name}&IconBineryCode=${code}"),
+        headers: {"Authorization": prefs.getString('token') ?? ""},
+      );
+
       if (response.statusCode == 200) {
         Navigator.pop(context);
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -244,8 +251,10 @@ class _customAssetState extends State<customAsset> {
           backgroundColor: Colors.red,
         ));
       } else if (response.statusCode == 403) {
+        Navigator.pop(context);
+
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text(jsonDecode('message')),
+          content: Text('Permission Denied'),
           backgroundColor: Colors.red,
         ));
       } else if (response.statusCode == 417) {

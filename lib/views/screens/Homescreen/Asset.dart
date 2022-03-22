@@ -141,13 +141,18 @@ class _searchbarState extends State<searchbar> {
     print('status API');
     if (response.statusCode == 200) {
       SharedPreferences prefs = await SharedPreferences.getInstance();
+
       List<String> liability_icon_list = [];
+      print(liability_icon_list);
+
       for (var i = 0; i < json.decode(response.body)["Asset"].length; i++) {
         liability_icon_list
             .add(jsonEncode(json.decode(response.body)["Asset"][i]));
       }
       prefs.setStringList('liability_icon_list', liability_icon_list);
       icon_name = prefs.getStringList("liability_icon_list")!;
+      print("name check");
+      print(liability_icon_list);
       setState(() => _loading = true);
       // ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       //   content: Text(json.decode(response.body)['message']),
@@ -232,6 +237,8 @@ class _searchbarState extends State<searchbar> {
                   icon_nameOnSearch.clear();
                   for (var i = 0; i < icon_name.length; i++) {
                     data = icon_name[i][0];
+                    print("check");
+                    print(data);
                     if (data
                         .toLowerCase()
                         .contains(value.trim().toLowerCase())) {

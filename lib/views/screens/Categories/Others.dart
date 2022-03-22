@@ -21,6 +21,7 @@ class _customOthersState extends State<customOthers> {
 
   var code;
   List icon_nameOnSearch = [];
+  bool _loading = true;
   List icon_name = [];
   var hexcode_dict = <String, int>{
     ' 0xf04e1': 0xf04e1,
@@ -37,6 +38,12 @@ class _customOthersState extends State<customOthers> {
   void initState() {
     super.initState();
     listapi();
+    Future.delayed(Duration(seconds: 1), () {
+      Color.fromARGB(255, 93, 99, 216);
+      setState(() {
+        _loading = false;
+      });
+    });
   }
 
 //Icon API
@@ -132,7 +139,9 @@ class _customOthersState extends State<customOthers> {
                           _show(context);
                         },
                         icon: Icon(
-                            IconData(jsonDecode(icon_name[index])[1],
+                            IconData(
+                                hexcode_dict[jsonDecode(icon_name[index])[0]] ??
+                                    0XF155,
                                 fontFamily: 'MaterialIcons'),
                             color: Color.fromARGB(255, 255, 255, 255))),
                   ),

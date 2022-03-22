@@ -38,6 +38,12 @@ class _customIncomeState extends State<customIncome> {
   void initState() {
     super.initState();
     listapi();
+    Future.delayed(Duration(seconds: 1), () {
+      Color.fromARGB(255, 93, 99, 216);
+      setState(() {
+        _loading = false;
+      });
+    });
   }
 
 //Icon API
@@ -119,7 +125,7 @@ class _customIncomeState extends State<customIncome> {
               ? icon_nameOnSearch.length
               : icon_name.length,
           itemBuilder: (context, index) {
-            code = icon_name[index][1];
+            code = jsonEncode(icon_name[index])[0];
 
             print(icon_name[index][1]);
             return Padding(
@@ -135,7 +141,9 @@ class _customIncomeState extends State<customIncome> {
                           _show(context);
                         },
                         icon: Icon(
-                            IconData(jsonDecode(icon_name[index])[1],
+                            IconData(
+                                hexcode_dict[jsonDecode(icon_name[index])[0]] ??
+                                    0XF155,
                                 fontFamily: 'MaterialIcons'),
                             color: Color.fromARGB(255, 255, 255, 255))),
                   ),

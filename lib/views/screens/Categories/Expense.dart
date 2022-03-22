@@ -20,6 +20,7 @@ class _customExpenseState extends State<customExpense> {
   final formKey = GlobalKey<FormState>();
 
   var code;
+  bool _loading = true;
   List icon_nameOnSearch = [];
   List icon_name = [];
   var hexcode_dict = <String, int>{
@@ -50,15 +51,22 @@ class _customExpenseState extends State<customExpense> {
   void initState() {
     super.initState();
     listapi();
+    Future.delayed(Duration(seconds: 1), () {
+      Color.fromARGB(255, 93, 99, 216);
+      setState(() {
+        _loading = false;
+      });
+    });
   }
 
 //Icon API
   Future listapi() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
+    _loading = false;
     print(prefs.getString('token'));
     var response = await http.post(
         Uri.parse(
-            "${dotenv.env['API_URL']}api/method/money_management_backend.custom.py.api.withsubtype?Type=Expense"),
+            "${dotenv.env['API_URL']}/api/method/money_management_backend.custom.py.api.withoutsubtype?Type=Expense"),
         headers: {"Authorization": prefs.getString('token') ?? ""});
     print(response.statusCode);
     print('status API');
@@ -70,8 +78,9 @@ class _customExpenseState extends State<customExpense> {
         liability_icon_list
             .add(jsonEncode(json.decode(response.body)["Expense"][i]));
       }
-      prefs.setStringList('liability_icon_list', liability_icon_list);
-      icon_name = prefs.getStringList("liability_icon_list")!;
+      prefs.setStringList('Expense_icon_list', liability_icon_list);
+      icon_name = prefs.getStringList("Expense_icon_list")!;
+      print(icon_name[0]);
     } else if (response.statusCode == 401) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text(jsonDecode('message')),
@@ -84,7 +93,7 @@ class _customExpenseState extends State<customExpense> {
       ));
     } else if (response.statusCode == 417) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text(jsonDecode('message')),
+        content: Text(jsonDecode('permission denied')),
         backgroundColor: Colors.red,
       ));
     } else if (response.statusCode == 500) {
@@ -131,7 +140,7 @@ class _customExpenseState extends State<customExpense> {
             ? icon_nameOnSearch.length
             : icon_name.length,
         itemBuilder: (context, index) {
-          code = icon_name[index][1];
+          code = jsonEncode(icon_name[index])[0];
 
           return Padding(
             padding: const EdgeInsets.all(8.0),
@@ -146,7 +155,9 @@ class _customExpenseState extends State<customExpense> {
                         _show(context);
                       },
                       icon: Icon(
-                          IconData(jsonDecode(icon_name[index])[1],
+                          IconData(
+                              hexcode_dict[jsonDecode(icon_name[index])[0]] ??
+                                  0XF155,
                               fontFamily: 'MaterialIcons'),
                           color: Color.fromARGB(255, 255, 255, 255))),
                 ),
@@ -222,9 +233,12 @@ class _customExpenseState extends State<customExpense> {
 //DataEntry API
   Future cussubmit(type, name, code) async {
     if (typecontroller.text.isNotEmpty || namecontroller.text.isNotEmpty) {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
       print(dotenv.env['API_URL']);
-      var response = await http.post(Uri.parse(
-          "${dotenv.env['API_URL']}/api/method/money_management_backend.custom.py.api.custom?Type=Expense&Subtype=${name}&IconBineryCode=654654"));
+      var response = await http.post(
+          Uri.parse(
+              "${dotenv.env['API_URL']}/api/method/money_management_backend.custom.py.api.custom?Type=Asset&Subtype=${name}&IconBineryCode=${code}"),
+          headers: {"Authorization": prefs.getString('token') ?? ""});
       if (response.statusCode == 200) {
         print(response.statusCode);
         Navigator.pop(context);
