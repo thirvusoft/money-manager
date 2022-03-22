@@ -255,7 +255,12 @@ class _liabilitySearchState extends State<liabilitySearch> {
                         ? icon_nameOnSearch.length
                         : icon_name.length,
                     itemBuilder: (context, index) {
-                      print(icon_name[index][1]);
+                      var row = [];
+                      if (icon_nameOnSearch.length != 0) {
+                        row = icon_nameOnSearch;
+                      } else {
+                        row = icon_name;
+                      }
                       return Container(
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(10),
@@ -265,15 +270,13 @@ class _liabilitySearchState extends State<liabilitySearch> {
                               Center(
                                   child: TextButton.icon(
                                       onPressed: () {
-                                        subtypes =
-                                            jsonDecode(icon_name[index])[0];
+                                        subtypes = jsonDecode(row[index])[0];
                                         _show(context, subtypes);
-                                        print(icon_name[index][0]);
                                       },
                                       label: Text(
                                         _textEditingController.text.isNotEmpty
-                                            ? jsonDecode(icon_name[index])[0]
-                                            : jsonDecode(icon_name[index])[0],
+                                            ? jsonDecode(row[index])[0]
+                                            : jsonDecode(row[index])[0],
                                         style: TextStyle(
                                             color: Colors.black,
                                             fontSize: 15,
@@ -282,7 +285,7 @@ class _liabilitySearchState extends State<liabilitySearch> {
                                       icon: Icon(
                                           IconData(
                                               hexcode_dict[jsonDecode(
-                                                      icon_name[index])[1]] ??
+                                                      row[index])[1]] ??
                                                   0XF155,
                                               fontFamily: 'MaterialIcons'),
                                           color: Color.fromARGB(
@@ -520,72 +523,60 @@ class _liabilitySearchState extends State<liabilitySearch> {
     }
   }
 
- _onAlertWithCustomContentPressed(context) {
+  _onAlertWithCustomContentPressed(context) {
     print("test11");
     var alertStyle = AlertStyle(
       isCloseButton: false,
       isOverlayTapDismiss: true,
     );
-    Alert(
-      context: context,
-      title: "Image",
-      buttons: [
-        DialogButton(
-            color: Color.fromARGB(255, 93, 99, 216),
-            child: Text(
-              "Camera",
-              style: TextStyle(color: Color.fromARGB(255, 255, 253, 253)),
-            ),
-            onPressed: () {
-          
-              pickImage(ImageSource.camera);
-               Navigator.pop(
-                                context,
-                                
-                              );
-              
-            }),
-        DialogButton(
-            color: Color.fromARGB(255, 93, 99, 216),
-            child: Text(
-              "Image",
-              style: TextStyle(color: Color.fromARGB(255, 255, 253, 253)),
-            ),onPressed: () {
-          
-              pickImage(ImageSource.gallery);
-               Navigator.pop(
-                                context,
-                                
-                              );}),
-            
-        DialogButton(
+    Alert(context: context, title: "Image", buttons: [
+      DialogButton(
+          color: Color.fromARGB(255, 93, 99, 216),
+          child: Text(
+            "Camera",
+            style: TextStyle(color: Color.fromARGB(255, 255, 253, 253)),
+          ),
+          onPressed: () {
+            pickImage(ImageSource.camera);
+            Navigator.pop(
+              context,
+            );
+          }),
+      DialogButton(
           color: Color.fromARGB(255, 93, 99, 216),
           child: Text(
             "Image",
             style: TextStyle(color: Color.fromARGB(255, 255, 253, 253)),
           ),
-          onPressed: () async {
-            final result = await FilePicker.platform.pickFiles();
-            if (result == null) return;
-            var img;
-            img = result.files.first;
-                
-            final bytes = Io.File(img.path).readAsBytesSync();
+          onPressed: () {
+            pickImage(ImageSource.gallery);
+            Navigator.pop(
+              context,
+            );
+          }),
+      DialogButton(
+        color: Color.fromARGB(255, 93, 99, 216),
+        child: Text(
+          "Image",
+          style: TextStyle(color: Color.fromARGB(255, 255, 253, 253)),
+        ),
+        onPressed: () async {
+          final result = await FilePicker.platform.pickFiles();
+          if (result == null) return;
+          var img;
+          img = result.files.first;
 
-            String img64 = base64Encode(bytes);
-            print(img64);
-               Navigator.pop(
-                                context,
-                                
-                              );
-       
+          final bytes = Io.File(img.path).readAsBytesSync();
 
-          },
-        )
-      ]
-    ).show();
+          String img64 = base64Encode(bytes);
+          print(img64);
+          Navigator.pop(
+            context,
+          );
+        },
+      )
+    ]).show();
   }
-
 
   Future uploadfile(File img64) async {
     var bytes = img64.readAsBytesSync();

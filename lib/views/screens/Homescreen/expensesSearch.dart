@@ -6,7 +6,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'dart:convert';
 import 'dart:io';
-import 'dart:io'as Io;
+import 'dart:io' as Io;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'dart:async';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -21,7 +21,7 @@ import 'package:rflutter_alert/rflutter_alert.dart';
 import '../Categories/Asset.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'dart:io'as Io;
+import 'dart:io' as Io;
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:open_file/open_file.dart';
@@ -52,8 +52,6 @@ class _expenseSearchState extends State<expenseSearch> {
     );
 
     setState(() {
-      
-   
       print(_myImage);
       if (image == null) {
         isFileSelected = 0;
@@ -67,7 +65,7 @@ class _expenseSearchState extends State<expenseSearch> {
         print(_myImage);
         isFileSelected = 1;
       }
-     });
+    });
   }
 
   Widget showImage(File file) {
@@ -80,14 +78,10 @@ class _expenseSearchState extends State<expenseSearch> {
         child: Image.file(file, fit: BoxFit.contain),
       );
     }
-
-    
   }
 
   int isFileSelected = 0;
   ImagePicker picker = ImagePicker();
-
-
 
   TextEditingController _textEditingController = TextEditingController();
 
@@ -279,6 +273,12 @@ class _expenseSearchState extends State<expenseSearch> {
                         ? icon_nameOnSearch.length
                         : icon_name.length,
                     itemBuilder: (context, index) {
+                      var row = [];
+                      if (icon_nameOnSearch.length != 0) {
+                        row = icon_nameOnSearch;
+                      } else {
+                        row = icon_name;
+                      }
                       return Container(
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(10),
@@ -288,23 +288,22 @@ class _expenseSearchState extends State<expenseSearch> {
                               Center(
                                   child: TextButton.icon(
                                       onPressed: () {
-                                        subtype =
-                                            jsonDecode(icon_name[index])[0];
+                                        subtype = jsonDecode(row[index])[0];
                                         _show(context, subtype);
                                       },
                                       label: Text(
                                         _textEditingController.text.isNotEmpty
-                                            ? jsonDecode(icon_name[index])[0]
-                                            : jsonDecode(icon_name[index])[0],
+                                            ? jsonDecode(row[index])[0]
+                                            : jsonDecode(row[index])[0],
                                         style: TextStyle(
-                                            color: Colors.black, 
+                                            color: Colors.black,
                                             fontSize: 15,
                                             letterSpacing: .7),
                                       ),
                                       icon: Icon(
                                           IconData(
                                               hexcode_dict[jsonDecode(
-                                                      icon_name[index])[1]] ??
+                                                      row[index])[1]] ??
                                                   0XF155,
                                               fontFamily: 'MaterialIcons'),
                                           color: Color.fromARGB(
@@ -392,9 +391,6 @@ class _expenseSearchState extends State<expenseSearch> {
                       SizedBox(
                         height: 15,
                       ),
-               
-               
-
                       RaisedButton(
                           color: Color.fromARGB(255, 93, 99, 216),
                           child: Text(
@@ -507,65 +503,52 @@ class _expenseSearchState extends State<expenseSearch> {
       isCloseButton: false,
       isOverlayTapDismiss: true,
     );
-    Alert(
-      context: context,
-      title: "Image",
-      buttons: [
-        DialogButton(
-            color: Color.fromARGB(255, 93, 99, 216),
-            child: Text(
-              "Camera",
-              style: TextStyle(color: Color.fromARGB(255, 255, 253, 253)),
-            ),
-            onPressed: () {
-          
-              pickImage(ImageSource.camera);
-               Navigator.pop(
-                                context,
-                                
-                              );
-              
-            }),
-        DialogButton(
-            color: Color.fromARGB(255, 93, 99, 216),
-            child: Text(
-              "Image",
-              style: TextStyle(color: Color.fromARGB(255, 255, 253, 253)),
-            ),onPressed: () {
-          
-              pickImage(ImageSource.gallery);
-               Navigator.pop(
-                                context,
-                                
-                              );}),
-            
-        DialogButton(
+    Alert(context: context, title: "Image", buttons: [
+      DialogButton(
+          color: Color.fromARGB(255, 93, 99, 216),
+          child: Text(
+            "Camera",
+            style: TextStyle(color: Color.fromARGB(255, 255, 253, 253)),
+          ),
+          onPressed: () {
+            pickImage(ImageSource.camera);
+            Navigator.pop(
+              context,
+            );
+          }),
+      DialogButton(
           color: Color.fromARGB(255, 93, 99, 216),
           child: Text(
             "Image",
             style: TextStyle(color: Color.fromARGB(255, 255, 253, 253)),
           ),
-          onPressed: () async {
-            final result = await FilePicker.platform.pickFiles();
-            if (result == null) return;
-            var img;
-            img = result.files.first;
-                
-            final bytes = Io.File(img.path).readAsBytesSync();
+          onPressed: () {
+            pickImage(ImageSource.gallery);
+            Navigator.pop(
+              context,
+            );
+          }),
+      DialogButton(
+        color: Color.fromARGB(255, 93, 99, 216),
+        child: Text(
+          "Image",
+          style: TextStyle(color: Color.fromARGB(255, 255, 253, 253)),
+        ),
+        onPressed: () async {
+          final result = await FilePicker.platform.pickFiles();
+          if (result == null) return;
+          var img;
+          img = result.files.first;
 
-            String img64 = base64Encode(bytes);
-            print(img64);
-               Navigator.pop(
-                                context,
-                                
-                              );
-       
+          final bytes = Io.File(img.path).readAsBytesSync();
 
-          },
-        )
-      ]
-    ).show();
+          String img64 = base64Encode(bytes);
+          print(img64);
+          Navigator.pop(
+            context,
+          );
+        },
+      )
+    ]).show();
   }
- 
-
 }

@@ -135,13 +135,10 @@ class _searchbarState extends State<searchbar> {
 //Icon API
   Future listapi() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    print(prefs.getString('token'));
     var response = await http.post(
         Uri.parse(
             "${dotenv.env['API_URL']}/api/method/money_management_backend.custom.py.api.withsubtype?Type=Asset"),
         headers: {"Authorization": prefs.getString('token') ?? ""});
-    print(response.statusCode);
-    print('status API');
     if (response.statusCode == 200) {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       List<String> liability_icon_list = [];
@@ -272,7 +269,12 @@ class _searchbarState extends State<searchbar> {
                         ? icon_nameOnSearch.length
                         : icon_name.length,
                     itemBuilder: (context, index) {
-                      print(icon_name[index][1]);
+                      var row = [];
+                      if (icon_nameOnSearch.length != 0) {
+                        row = icon_nameOnSearch;
+                      } else {
+                        row = icon_name;
+                      }
                       return Container(
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(10),
@@ -282,21 +284,17 @@ class _searchbarState extends State<searchbar> {
                               Center(
                                   child: TextButton.icon(
                                       onPressed: () {
-                                        print(jsonDecode(icon_name[index]));
                                         subtypescode =
-                                            jsonDecode(icon_name[index])[2];
+                                            jsonDecode(row[index])[2];
                                         subtypesname =
-                                            jsonDecode(icon_name[index])[0];
+                                            jsonDecode(row[index])[0];
                                         _show(context, subtypescode,
                                             subtypesname);
-                                        print(jsonDecode(icon_name[index])[2]);
-
-                                        // print(icon_name[index][0]);
                                       },
                                       label: Text(
                                         _textEditingController.text.isNotEmpty
-                                            ? jsonDecode(icon_name[index])[0]
-                                            : jsonDecode(icon_name[index])[0],
+                                            ? jsonDecode(row[index])[0]
+                                            : jsonDecode(row[index])[0],
                                         style: TextStyle(
                                             color: Colors.black,
                                             fontSize: 15,
@@ -305,7 +303,7 @@ class _searchbarState extends State<searchbar> {
                                       icon: Icon(
                                           IconData(
                                               hexcode_dict[jsonDecode(
-                                                      icon_name[index])[1]] ??
+                                                      row[index])[1]] ??
                                                   0XF155,
                                               fontFamily: 'MaterialIcons'),
                                           color: Color.fromARGB(
@@ -387,26 +385,6 @@ class _searchbarState extends State<searchbar> {
                             style:
                                 TextStyle(color: Color.fromARGB(255, 0, 0, 0)),
                           )),
-        //                   RichText(
-        //   text: TextSpan(
-        //     children: [
-        //       TextSpan(
-        //         style: defaultText,
-        //         text: "To learn more "
-        //       ),
-        //       TextSpan(
-        //         style: linkText,
-        //          text: "Click here",
-        //           recognizer: TapGestureRecognizer()..onTap =  () {
-        //                 if ( canLaunch(_myImage)) {
-        //                    launch(_myImage));
-        //                 } else {
-        //                   throw 'Could not launch $_myImage';
-        //                 }
-        //           }
-        //       ),
-        //     ]
-        // )),
                       SizedBox(
                         height: 15,
                       ),
@@ -417,7 +395,6 @@ class _searchbarState extends State<searchbar> {
                             style: TextStyle(color: Colors.white),
                           ),
                           onPressed: () {
-                            
                             if (formKey.currentState!.validate()) {
                               dataentry(
                                 typecontroller.text,
@@ -433,7 +410,7 @@ class _searchbarState extends State<searchbar> {
                               amountcontroller.clear();
                               datecontroller.clear();
                             }
-                         })
+                          })
                     ]),
               ),
             ));
@@ -444,8 +421,6 @@ class _searchbarState extends State<searchbar> {
         namecontroller.text.isNotEmpty ||
         notescontroller.text.isNotEmpty ||
         amountcontroller.text.isNotEmpty) {
-      print(dotenv.env['API_URL']);
-
       // var response = await http.post(Uri.parse(
       //      dotenv.env['API_KEY'] ?? ""));
       // var response = await http.post(Uri.parse(
@@ -454,17 +429,11 @@ class _searchbarState extends State<searchbar> {
       //     );
 
       SharedPreferences prefs = await SharedPreferences.getInstance();
-      print(prefs.getString('token'));
       var response = await http.post(
           Uri.parse(
               '${dotenv.env['API_URL']}/api/method/money_management_backend.custom.py.api.daily_entry_submit?Type=Asset&Subtype=${subtypescode}&Name=${name}&Notes=${notes}&Amount=${amount}'),
           headers: {"Authorization": prefs.getString('token') ?? ""});
-      //print(response.statusCode);
-      print(name);
-      print(response.statusCode);
-      print(json.decode(response.body));
       if (response.statusCode == 200) {
-        print(response.statusCode);
         Navigator.pop(context);
 
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -532,77 +501,61 @@ class _searchbarState extends State<searchbar> {
   }
 
   _onAlertWithCustomContentPressed(context) {
-    print("test11");
     var alertStyle = AlertStyle(
       isCloseButton: false,
       isOverlayTapDismiss: true,
     );
-    Alert(
-      context: context,
-      title: "Image",
-      buttons: [
-        DialogButton(
-            color: Color.fromARGB(255, 93, 99, 216),
-            child: Text(
-              "Camera",
-              style: TextStyle(color: Color.fromARGB(255, 255, 253, 253)),
-            ),
-            onPressed: () {
-          
-              pickImage(ImageSource.camera);
-               Navigator.pop(
-                                context,
-                                
-                              );
-              
-            }),
-        DialogButton(
-            color: Color.fromARGB(255, 93, 99, 216),
-            child: Text(
-              "Image",
-              style: TextStyle(color: Color.fromARGB(255, 255, 253, 253)),
-            ),onPressed: () {
-          
-              pickImage(ImageSource.gallery);
-               Navigator.pop(
-                                context,
-                                
-                              );}),
-            
-        DialogButton(
+    Alert(context: context, title: "Image", buttons: [
+      DialogButton(
+          color: Color.fromARGB(255, 93, 99, 216),
+          child: Text(
+            "Camera",
+            style: TextStyle(color: Color.fromARGB(255, 255, 253, 253)),
+          ),
+          onPressed: () {
+            pickImage(ImageSource.camera);
+            Navigator.pop(
+              context,
+            );
+          }),
+      DialogButton(
           color: Color.fromARGB(255, 93, 99, 216),
           child: Text(
             "Image",
             style: TextStyle(color: Color.fromARGB(255, 255, 253, 253)),
           ),
-          onPressed: () async {
-            final result = await FilePicker.platform.pickFiles();
-            if (result == null) return;
-            var img;
-            img = result.files.first;
-                
-            final bytes = Io.File(img.path).readAsBytesSync();
+          onPressed: () {
+            pickImage(ImageSource.gallery);
+            Navigator.pop(
+              context,
+            );
+          }),
+      DialogButton(
+        color: Color.fromARGB(255, 93, 99, 216),
+        child: Text(
+          "Image",
+          style: TextStyle(color: Color.fromARGB(255, 255, 253, 253)),
+        ),
+        onPressed: () async {
+          final result = await FilePicker.platform.pickFiles();
+          if (result == null) return;
+          var img;
+          img = result.files.first;
 
-            String img64 = base64Encode(bytes);
-            print(img64);
-               Navigator.pop(
-                                context,
-                                
-                              );
-       
+          final bytes = Io.File(img.path).readAsBytesSync();
 
-          },
-        )
-      ]
-    ).show();
+          String img64 = base64Encode(bytes);
+          Navigator.pop(
+            context,
+          );
+        },
+      )
+    ]).show();
   }
-
 
   Future uploadfile(File img64) async {
     var bytes = img64.readAsBytesSync();
-    print(bytes);
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    print(prefs.getString('token'));
 
     var response = await http.post(
       Uri.parse(
@@ -617,9 +570,7 @@ class _searchbarState extends State<searchbar> {
   Future uploadimage(_myimage) async {
     var bytes = _myimage.readAsBytesSync();
     String imgcontent = base64Encode(bytes);
-    print(bytes);
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    print(prefs.getString('token'));
 
     var response = await http.post(
       Uri.parse(
@@ -628,11 +579,6 @@ class _searchbarState extends State<searchbar> {
       body: {"file": imgcontent},
       // encoding: Encoding.getByName("utf-8"),
     );
-    print(response.statusCode);
-    print('test api');
     return response.body;
   }
-
- 
 }
-
