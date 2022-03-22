@@ -231,7 +231,7 @@ class _searchbarState extends State<searchbar> {
                   value.trimLeft();
                   icon_nameOnSearch.clear();
                   for (var i = 0; i < icon_name.length; i++) {
-                    data = icon_name[i][0];
+                    data = jsonDecode(icon_name[i])[0];
                     if (data
                         .toLowerCase()
                         .contains(value.trim().toLowerCase())) {
@@ -588,7 +588,7 @@ class _searchbarState extends State<searchbar> {
       Uri.parse(
           "${dotenv.env['API_URL']}/api/method/money_management_backend.custom.py.api.upload_profile_image"),
       headers: {"Authorization": prefs.getString('token') ?? ""},
-      body: {imgcontent},
+      body: {"file": imgcontent},
       // encoding: Encoding.getByName("utf-8"),
     );
     print(response.statusCode);
