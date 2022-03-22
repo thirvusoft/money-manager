@@ -49,13 +49,10 @@ class _customIncomeState extends State<customIncome> {
 //Icon API
   Future listapi() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    print(prefs.getString('token'));
     var response = await http.post(
         Uri.parse(
             "${dotenv.env['API_URL']}/api/method/money_management_backend.custom.py.api.withsubtype?Type=Income"),
         headers: {"Authorization": prefs.getString('token') ?? ""});
-    print(response.statusCode);
-    print('status API');
 
     if (response.statusCode == 200) {
       SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -73,7 +70,7 @@ class _customIncomeState extends State<customIncome> {
       ));
     } else if (response.statusCode == 403) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text(jsonDecode('message')),
+        content: Text('Permission Denied'),
         backgroundColor: Colors.red,
       ));
     } else if (response.statusCode == 417) {
@@ -127,7 +124,6 @@ class _customIncomeState extends State<customIncome> {
           itemBuilder: (context, index) {
             code = jsonEncode(icon_name[index])[0];
 
-            print(icon_name[index][1]);
             return Padding(
               padding: const EdgeInsets.all(8.0),
               child: Row(
@@ -221,53 +217,64 @@ class _customIncomeState extends State<customIncome> {
 //DataEntry API
   Future cussubmit(type, name, code) async {
     if (typecontroller.text.isNotEmpty || namecontroller.text.isNotEmpty) {
-      print(dotenv.env['API_URL']);
       var response = await http.post(Uri.parse(
           "${dotenv.env['API_URL']}/api/method/money_management_backend.custom.py.api.custom?Type=Income&Subtype=${name}&IconBineryCode=654654"));
       if (response.statusCode == 200) {
-        print(response.statusCode);
         Navigator.pop(context);
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text("Submitted Successfully"),
           backgroundColor: Colors.green,
         ));
       } else if (response.statusCode == 401) {
+        Navigator.pop(context);
+
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text(jsonDecode('message')),
           backgroundColor: Colors.red,
         ));
       } else if (response.statusCode == 403) {
+        Navigator.pop(context);
+
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text(jsonDecode('message')),
+          content: Text('Permission Denied'),
           backgroundColor: Colors.red,
         ));
       } else if (response.statusCode == 417) {
+        Navigator.pop(context);
+
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text(jsonDecode('message')),
           backgroundColor: Colors.red,
         ));
       } else if (response.statusCode == 500) {
+        Navigator.pop(context);
+
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text(jsonDecode('message')),
           backgroundColor: Colors.red,
         ));
       } else if (response.statusCode == 503) {
+        Navigator.pop(context);
+
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text(jsonDecode('message')),
           backgroundColor: Colors.red,
         ));
       } else if (response.statusCode == 409) {
+        Navigator.pop(context);
+
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text(jsonDecode('message')),
           backgroundColor: Colors.red,
         ));
       } else if (response.statusCode == 404) {
+        Navigator.pop(context);
+
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text(jsonDecode('message')),
           backgroundColor: Colors.red,
         ));
       } else {
-        Navigator.pop(context);
         Navigator.pop(context);
 
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(

@@ -36,17 +36,16 @@ class _othersSearchState extends State<othersSearch> {
       preferredCameraDevice: CameraDevice.rear,
     );
     setState(() {
-      print(_myImage);
       if (image == null) {
         //TODO: Image not selected action.
         isFileSelected = 0;
       } else {
         //TODO: Image selected action.
         _myImage = File(image.path);
+        bool isLoading = true;
         final bytes = Io.File(image.path).readAsBytesSync();
 
         String img64 = base64Encode(bytes);
-        print(img64);
         uploadimage(_myImage);
         isFileSelected = 1;
       }
@@ -114,7 +113,7 @@ class _othersSearchState extends State<othersSearch> {
     print(prefs.getString('token'));
     var response = await http.post(
         Uri.parse(
-            "http://192.168.24.34:8000/api/method/money_management_backend.custom.py.api.withsubtype?Type=Others"),
+            "${dotenv.env['API_URL']}/api/method/money_management_backend.custom.py.api.withsubtype?Type=Others"),
         headers: {"Authorization": prefs.getString('token') ?? ""});
     print(response.statusCode);
     print('status API');
@@ -140,7 +139,7 @@ class _othersSearchState extends State<othersSearch> {
       ));
     } else if (response.statusCode == 403) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text(json.decode(response.body)['message']),
+        content: Text('Permission Denied'),
         backgroundColor: Colors.red,
       ));
     } else if (response.statusCode == 417) {
@@ -213,12 +212,11 @@ class _othersSearchState extends State<othersSearch> {
                   value.trimLeft();
                   icon_nameOnSearch.clear();
                   for (var i = 0; i < icon_name.length; i++) {
-                    data = icon_name[i][0];
+                    data = jsonDecode(icon_name[i])[0];
                     if (data
                         .toLowerCase()
                         .contains(value.trim().toLowerCase())) {
                       icon_nameOnSearch.add(icon_name[i]);
-                      print(icon_nameOnSearch);
                     }
                   }
                 });
@@ -252,7 +250,12 @@ class _othersSearchState extends State<othersSearch> {
                         ? icon_nameOnSearch.length
                         : icon_name.length,
                     itemBuilder: (context, index) {
-                      print(icon_name[index][1]);
+                      var row = [];
+                      if (icon_nameOnSearch.length != 0) {
+                        row = icon_nameOnSearch;
+                      } else {
+                        row = icon_name;
+                      }
                       return Container(
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(10),
@@ -262,14 +265,13 @@ class _othersSearchState extends State<othersSearch> {
                               Center(
                                   child: TextButton.icon(
                                       onPressed: () {
-                                        subtypes =
-                                            jsonDecode(icon_name[index])[0];
+                                        subtypes = jsonDecode(row[index])[0];
                                         _show(context, subtypes);
                                       },
                                       label: Text(
                                         _textEditingController.text.isNotEmpty
-                                            ? jsonDecode(icon_name[index])[0]
-                                            : jsonDecode(icon_name[index])[0],
+                                            ? jsonDecode(row[index])[0]
+                                            : jsonDecode(row[index])[0],
                                         style: TextStyle(
                                             color: Colors.black,
                                             fontSize: 15,
@@ -278,7 +280,7 @@ class _othersSearchState extends State<othersSearch> {
                                       icon: Icon(
                                           IconData(
                                               hexcode_dict[jsonDecode(
-                                                      icon_name[index])[1]] ??
+                                                      row[index])[1]] ??
                                                   0XF155,
                                               fontFamily: 'MaterialIcons'),
                                           color: Color.fromARGB(
@@ -448,42 +450,55 @@ class _othersSearchState extends State<othersSearch> {
           backgroundColor: Colors.green,
         ));
       } else if (response.statusCode == 401) {
+        Navigator.pop(context);
+
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text(json.decode(response.body)['message']),
           backgroundColor: Colors.red,
         ));
       } else if (response.statusCode == 403) {
+        Navigator.pop(context);
+
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text(json.decode(response.body)['message']),
+          content: Text('Permission Denied'),
           backgroundColor: Colors.red,
         ));
       } else if (response.statusCode == 417) {
+        Navigator.pop(context);
+
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text(json.decode(response.body)['message']),
           backgroundColor: Colors.red,
         ));
       } else if (response.statusCode == 500) {
+        Navigator.pop(context);
+
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text(json.decode(response.body)['message']),
           backgroundColor: Colors.red,
         ));
       } else if (response.statusCode == 503) {
+        Navigator.pop(context);
+
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text(json.decode(response.body)['message']),
           backgroundColor: Colors.red,
         ));
       } else if (response.statusCode == 409) {
+        Navigator.pop(context);
+
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text(json.decode(response.body)['message']),
           backgroundColor: Colors.red,
         ));
       } else if (response.statusCode == 404) {
+        Navigator.pop(context);
+
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text(json.decode(response.body)['message']),
           backgroundColor: Colors.red,
         ));
       } else {
-        Navigator.pop(context);
         Navigator.pop(context);
 
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -495,56 +510,58 @@ class _othersSearchState extends State<othersSearch> {
   }
 
   _onAlertWithCustomContentPressed(context) {
+    print("test11");
     var alertStyle = AlertStyle(
       isCloseButton: false,
       isOverlayTapDismiss: true,
     );
-    Alert(
-      context: context,
-      title: "Image",
-      buttons: [
-        DialogButton(
+    Alert(context: context, title: "Image", buttons: [
+      DialogButton(
           color: Color.fromARGB(255, 93, 99, 216),
           child: Text(
             "Camera",
             style: TextStyle(color: Color.fromARGB(255, 255, 253, 253)),
           ),
-          onPressed: () => pickImage(ImageSource.camera),
-        ),
-        DialogButton(
+          onPressed: () {
+            pickImage(ImageSource.camera);
+            Navigator.pop(
+              context,
+            );
+          }),
+      DialogButton(
           color: Color.fromARGB(255, 93, 99, 216),
           child: Text(
             "Image",
             style: TextStyle(color: Color.fromARGB(255, 255, 253, 253)),
           ),
-          onPressed: () => pickImage(ImageSource.gallery),
+          onPressed: () {
+            pickImage(ImageSource.gallery);
+            Navigator.pop(
+              context,
+            );
+          }),
+      DialogButton(
+        color: Color.fromARGB(255, 93, 99, 216),
+        child: Text(
+          "Image",
+          style: TextStyle(color: Color.fromARGB(255, 255, 253, 253)),
         ),
-        DialogButton(
-          color: Color.fromARGB(255, 93, 99, 216),
-          child: Text(
-            "Image",
-            style: TextStyle(color: Color.fromARGB(255, 255, 253, 253)),
-          ),
-          onPressed: () async {
-            print("object");
-            final result = await FilePicker.platform.pickFiles();
-            if (result == null) return;
-            var img;
-            img = result.files.first;
-            final bytes = Io.File(img.path).readAsBytesSync();
+        onPressed: () async {
+          final result = await FilePicker.platform.pickFiles();
+          if (result == null) return;
+          var img;
+          img = result.files.first;
 
-            String img64 = base64Encode(bytes);
-            print(img64);
+          final bytes = Io.File(img.path).readAsBytesSync();
 
-            openFile(img);
-          },
-        ),
-      ],
-    ).show();
-  }
-
-  void openFile(PlatformFile img) {
-    OpenFile.open(img.path!);
+          String img64 = base64Encode(bytes);
+          print(img64);
+          Navigator.pop(
+            context,
+          );
+        },
+      )
+    ]).show();
   }
 
   Future uploadfile(File img64) async {
@@ -566,9 +583,7 @@ class _othersSearchState extends State<othersSearch> {
   Future uploadimage(_myimage) async {
     var bytes = _myimage.readAsBytesSync();
     String imgcontent = base64Encode(bytes);
-    print(bytes);
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    print(prefs.getString('token'));
 
     var response = await http.post(
       Uri.parse(
@@ -577,8 +592,6 @@ class _othersSearchState extends State<othersSearch> {
       body: {imgcontent},
       // encoding: Encoding.getByName("utf-8"),
     );
-    print(response.statusCode);
-    print('test api');
     return response.body;
   }
 }
