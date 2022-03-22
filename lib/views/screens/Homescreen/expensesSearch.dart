@@ -57,6 +57,7 @@ class _expenseSearchState extends State<expenseSearch> {
       if (image == null) {
         isFileSelected = 0;
       } else {
+        bool isLoading = true;
         _myImage = File(image.path);
         final bytes = Io.File(image.path).readAsBytesSync();
 

@@ -59,6 +59,7 @@ class _searchbarState extends State<searchbar> {
     } else {
       //TODO: Image selected action.
       _myImage = File(image.path);
+      bool isLoading = true;
       final bytes = Io.File(image.path).readAsBytesSync();
 
       String imgcontent = base64Encode(bytes);

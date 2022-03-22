@@ -41,6 +41,7 @@ class _incomeSearchState extends State<incomeSearch> {
         //TODO: Image not selected action.
         isFileSelected = 0;
       } else {
+        bool isLoading = true;
         //TODO: Image selected action.
         _myImage = File(image.path);
         final bytes = Io.File(image.path).readAsBytesSync();
