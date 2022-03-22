@@ -46,7 +46,7 @@ class _customIncomeState extends State<customIncome> {
     print(prefs.getString('token'));
     var response = await http.post(
         Uri.parse(
-            "http://192.168.24.34:8000/api/method/money_management_backend.custom.py.api.withsubtype?Type=Income"),
+            "${dotenv.env['API_URL']}/api/method/money_management_backend.custom.py.api.withsubtype?Type=Income"),
         headers: {"Authorization": prefs.getString('token') ?? ""});
     print(response.statusCode);
     print('status API');

@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'dart:io'as Io;
+import 'dart:io' as Io;
 import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
@@ -47,6 +47,7 @@ class _incomeSearchState extends State<incomeSearch> {
 
         String img64 = base64Encode(bytes);
         print(img64);
+        uploadimage(_myImage);
         isFileSelected = 1;
       }
     });
@@ -484,37 +485,63 @@ class _incomeSearchState extends State<incomeSearch> {
         DialogButton(
           color: Color.fromARGB(255, 93, 99, 216),
           child: Text(
-          "Image",
-                    style: TextStyle(color: Color.fromARGB(255, 255, 253, 253)),
-        ), onPressed: () async{
-     
+            "Image",
+            style: TextStyle(color: Color.fromARGB(255, 255, 253, 253)),
+          ),
+          onPressed: () async {
+            print("object");
+            final result = await FilePicker.platform.pickFiles();
+            if (result == null) return;
+            var img;
+            img = result.files.first;
+            final bytes = Io.File(img.path).readAsBytesSync();
 
+            String img64 = base64Encode(bytes);
+            print(img64);
 
-print("object");
-              final result = await FilePicker.platform.pickFiles();
-             if(result == null)
-         
-              return;
-  var img;
-              img = result.files.first;
-             final bytes = Io.File(img.path).readAsBytesSync();
-
-String img64 = base64Encode(bytes);
-print(img64);
-
-    openFile(img);
-         
-            }, 
+            openFile(img);
+          },
         ),
-        
-      
       ],
-   
     ).show();
   }
-   void openFile(PlatformFile img) {
-      OpenFile.open(img.path!);
-   
+
+  void openFile(PlatformFile img) {
+    OpenFile.open(img.path!);
   }
 
+  Future uploadfile(File img64) async {
+    var bytes = img64.readAsBytesSync();
+    print(bytes);
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    print(prefs.getString('token'));
+
+    var response = await http.post(
+      Uri.parse(
+          "${dotenv.env['API_URL']}/api/method/money_management_backend.custom.py.api.upload_profile_image"),
+      headers: {"Authorization": prefs.getString('token') ?? ""},
+      body: {"file", bytes},
+      encoding: Encoding.getByName("utf-8"),
+    );
+    return response.body;
+  }
+
+  Future uploadimage(_myimage) async {
+    var bytes = _myimage.readAsBytesSync();
+    String imgcontent = base64Encode(bytes);
+    print(bytes);
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    print(prefs.getString('token'));
+
+    var response = await http.post(
+      Uri.parse(
+          "${dotenv.env['API_URL']}/api/method/money_management_backend.custom.py.api.upload_profile_image"),
+      headers: {"Authorization": prefs.getString('token') ?? ""},
+      body: {imgcontent},
+      // encoding: Encoding.getByName("utf-8"),
+    );
+    print(response.statusCode);
+    print('test api');
+    return response.body;
+  }
 }
