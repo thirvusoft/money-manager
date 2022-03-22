@@ -43,6 +43,7 @@ class _liabilitySearchState extends State<liabilitySearch> {
       } else {
         //TODO: Image selected action.
         _myImage = File(image.path);
+        bool isLoading = true;
         final bytes = Io.File(image.path).readAsBytesSync();
 
         String img64 = base64Encode(bytes);
