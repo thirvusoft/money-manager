@@ -4,7 +4,7 @@ import 'Animation/FadeAnimation.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'loginScreen.dart';
-
+/*  */
 class splash_screen extends StatefulWidget {
   const splash_screen({Key? key}) : super(key: key);
 
