@@ -412,42 +412,55 @@ class _incomeSearchState extends State<incomeSearch> {
           backgroundColor: Colors.green,
         ));
       } else if (response.statusCode == 401) {
+        Navigator.pop(context);
+
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text(json.decode(response.body)['message']),
           backgroundColor: Colors.red,
         ));
       } else if (response.statusCode == 403) {
+        Navigator.pop(context);
+
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text('Permission Denied'),
           backgroundColor: Colors.red,
         ));
       } else if (response.statusCode == 417) {
+        Navigator.pop(context);
+
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text(json.decode(response.body)['message']),
           backgroundColor: Colors.red,
         ));
       } else if (response.statusCode == 500) {
+        Navigator.pop(context);
+
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text(json.decode(response.body)['message']),
           backgroundColor: Colors.red,
         ));
       } else if (response.statusCode == 503) {
+        Navigator.pop(context);
+
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text(json.decode(response.body)['message']),
           backgroundColor: Colors.red,
         ));
       } else if (response.statusCode == 409) {
+        Navigator.pop(context);
+
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text(json.decode(response.body)['message']),
           backgroundColor: Colors.red,
         ));
       } else if (response.statusCode == 404) {
+        Navigator.pop(context);
+
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text(json.decode(response.body)['message']),
           backgroundColor: Colors.red,
         ));
       } else {
-        Navigator.pop(context);
         Navigator.pop(context);
 
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
