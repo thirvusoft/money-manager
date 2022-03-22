@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:money_manager/views/screens/Categories/liability.dart';
@@ -7,7 +6,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'dart:convert';
 import 'dart:io';
-import 'dart:io' as Io;
+import 'dart:io'as Io;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'dart:async';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -22,7 +21,7 @@ import 'package:rflutter_alert/rflutter_alert.dart';
 import '../Categories/Asset.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'dart:io' as Io;
+import 'dart:io'as Io;
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:open_file/open_file.dart';
@@ -53,6 +52,8 @@ class _expenseSearchState extends State<expenseSearch> {
     );
 
     setState(() {
+      
+   
       print(_myImage);
       if (image == null) {
         isFileSelected = 0;
@@ -64,10 +65,9 @@ class _expenseSearchState extends State<expenseSearch> {
         String img64 = base64Encode(bytes);
         print(img64);
         print(_myImage);
-        uploadimage(_myImage);
         isFileSelected = 1;
       }
-    });
+     });
   }
 
   Widget showImage(File file) {
@@ -80,10 +80,14 @@ class _expenseSearchState extends State<expenseSearch> {
         child: Image.file(file, fit: BoxFit.contain),
       );
     }
+
+    
   }
 
   int isFileSelected = 0;
   ImagePicker picker = ImagePicker();
+
+
 
   TextEditingController _textEditingController = TextEditingController();
 
@@ -237,12 +241,11 @@ class _expenseSearchState extends State<expenseSearch> {
                   value.trimLeft();
                   icon_nameOnSearch.clear();
                   for (var i = 0; i < icon_name.length; i++) {
-                    data = icon_name[i][0];
+                    data = jsonDecode(icon_name[i])[0];
                     if (data
                         .toLowerCase()
                         .contains(value.trim().toLowerCase())) {
                       icon_nameOnSearch.add(icon_name[i]);
-                      print(icon_nameOnSearch);
                     }
                   }
                 });
@@ -294,7 +297,7 @@ class _expenseSearchState extends State<expenseSearch> {
                                             ? jsonDecode(icon_name[index])[0]
                                             : jsonDecode(icon_name[index])[0],
                                         style: TextStyle(
-                                            color: Colors.black,
+                                            color: Colors.black, 
                                             fontSize: 15,
                                             letterSpacing: .7),
                                       ),
@@ -389,6 +392,9 @@ class _expenseSearchState extends State<expenseSearch> {
                       SizedBox(
                         height: 15,
                       ),
+               
+               
+
                       RaisedButton(
                           color: Color.fromARGB(255, 93, 99, 216),
                           child: Text(
@@ -496,6 +502,7 @@ class _expenseSearchState extends State<expenseSearch> {
   }
 
   _onAlertWithCustomContentPressed(context) {
+    print("test11");
     var alertStyle = AlertStyle(
       isCloseButton: false,
       isOverlayTapDismiss: true,
@@ -505,21 +512,33 @@ class _expenseSearchState extends State<expenseSearch> {
       title: "Image",
       buttons: [
         DialogButton(
-          color: Color.fromARGB(255, 93, 99, 216),
-          child: Text(
-            "Camera",
-            style: TextStyle(color: Color.fromARGB(255, 255, 253, 253)),
-          ),
-          onPressed: () => pickImage(ImageSource.camera),
-        ),
+            color: Color.fromARGB(255, 93, 99, 216),
+            child: Text(
+              "Camera",
+              style: TextStyle(color: Color.fromARGB(255, 255, 253, 253)),
+            ),
+            onPressed: () {
+          
+              pickImage(ImageSource.camera);
+               Navigator.pop(
+                                context,
+                                
+                              );
+              
+            }),
         DialogButton(
-          color: Color.fromARGB(255, 93, 99, 216),
-          child: Text(
-            "Image",
-            style: TextStyle(color: Color.fromARGB(255, 255, 253, 253)),
-          ),
-          onPressed: () => pickImage(ImageSource.gallery),
-        ),
+            color: Color.fromARGB(255, 93, 99, 216),
+            child: Text(
+              "Image",
+              style: TextStyle(color: Color.fromARGB(255, 255, 253, 253)),
+            ),onPressed: () {
+          
+              pickImage(ImageSource.gallery);
+               Navigator.pop(
+                                context,
+                                
+                              );}),
+            
         DialogButton(
           color: Color.fromARGB(255, 93, 99, 216),
           child: Text(
@@ -527,59 +546,26 @@ class _expenseSearchState extends State<expenseSearch> {
             style: TextStyle(color: Color.fromARGB(255, 255, 253, 253)),
           ),
           onPressed: () async {
-            print("object");
             final result = await FilePicker.platform.pickFiles();
             if (result == null) return;
             var img;
             img = result.files.first;
+                
             final bytes = Io.File(img.path).readAsBytesSync();
 
             String img64 = base64Encode(bytes);
             print(img64);
+               Navigator.pop(
+                                context,
+                                
+                              );
+       
 
-            openFile(img);
           },
-        ),
-      ],
+        )
+      ]
     ).show();
   }
+ 
 
-  void openFile(PlatformFile img) {
-    OpenFile.open(img.path!);
-  }
-
-  Future uploadfile(File img64) async {
-    var bytes = img64.readAsBytesSync();
-    print(bytes);
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    print(prefs.getString('token'));
-
-    var response = await http.post(
-      Uri.parse(
-          "${dotenv.env['API_URL']}/api/method/money_management_backend.custom.py.api.upload_profile_image"),
-      headers: {"Authorization": prefs.getString('token') ?? ""},
-      body: {"file", bytes},
-      encoding: Encoding.getByName("utf-8"),
-    );
-    return response.body;
-  }
-
-  Future uploadimage(_myimage) async {
-    var bytes = _myimage.readAsBytesSync();
-    String imgcontent = base64Encode(bytes);
-    print(bytes);
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    print(prefs.getString('token'));
-
-    var response = await http.post(
-      Uri.parse(
-          "${dotenv.env['API_URL']}/api/method/money_management_backend.custom.py.api.upload_profile_image"),
-      headers: {"Authorization": prefs.getString('token') ?? ""},
-      body: {imgcontent},
-      // encoding: Encoding.getByName("utf-8"),
-    );
-    print(response.statusCode);
-    print('test api');
-    return response.body;
-  }
 }
