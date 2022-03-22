@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:money_manager/views/screens/Categories/liability.dart';
@@ -42,6 +43,10 @@ class searchbar extends StatefulWidget {
 class _searchbarState extends State<searchbar> {
   var result;
   File _myImage = File('');
+
+  get defaultText => null;
+
+  get linkText => null;
 
   pickImage(ImageSource source) async {
     print("test213");
@@ -378,15 +383,33 @@ class _searchbarState extends State<searchbar> {
                           }),
                       TextButton(
                           onPressed: () {
-                            print("test");
                             _onAlertWithCustomContentPressed(context);
-                            print("test");
                           },
                           child: const Text(
                             "Upload",
                             style:
                                 TextStyle(color: Color.fromARGB(255, 0, 0, 0)),
                           )),
+        //                   RichText(
+        //   text: TextSpan(
+        //     children: [
+        //       TextSpan(
+        //         style: defaultText,
+        //         text: "To learn more "
+        //       ),
+        //       TextSpan(
+        //         style: linkText,
+        //          text: "Click here",
+        //           recognizer: TapGestureRecognizer()..onTap =  () {
+        //                 if ( canLaunch(_myImage)) {
+        //                    launch(_myImage));
+        //                 } else {
+        //                   throw 'Could not launch $_myImage';
+        //                 }
+        //           }
+        //       ),
+        //     ]
+        // )),
                       SizedBox(
                         height: 15,
                       ),
@@ -397,7 +420,7 @@ class _searchbarState extends State<searchbar> {
                             style: TextStyle(color: Colors.white),
                           ),
                           onPressed: () {
-                            print("uyguu");
+                            
                             if (formKey.currentState!.validate()) {
                               // print(typecontroller.text);
 
@@ -415,7 +438,7 @@ class _searchbarState extends State<searchbar> {
                               amountcontroller.clear();
                               datecontroller.clear();
                             }
-                          })
+                         })
                     ]),
               ),
             ));
@@ -523,16 +546,27 @@ class _searchbarState extends State<searchbar> {
               style: TextStyle(color: Color.fromARGB(255, 255, 253, 253)),
             ),
             onPressed: () {
-              print("eretyye");
+          
               pickImage(ImageSource.camera);
+               Navigator.pop(
+                                context,
+                                
+                              );
+              
             }),
         DialogButton(
             color: Color.fromARGB(255, 93, 99, 216),
             child: Text(
               "Image",
               style: TextStyle(color: Color.fromARGB(255, 255, 253, 253)),
-            ),
-            onPressed: () => pickImage(ImageSource.gallery)),
+            ),onPressed: () {
+          
+              pickImage(ImageSource.gallery);
+               Navigator.pop(
+                                context,
+                                
+                              );}),
+            
         DialogButton(
           color: Color.fromARGB(255, 93, 99, 216),
           child: Text(
@@ -540,26 +574,27 @@ class _searchbarState extends State<searchbar> {
             style: TextStyle(color: Color.fromARGB(255, 255, 253, 253)),
           ),
           onPressed: () async {
-            print("object");
             final result = await FilePicker.platform.pickFiles();
             if (result == null) return;
             var img;
             img = result.files.first;
+                
             final bytes = Io.File(img.path).readAsBytesSync();
 
             String img64 = base64Encode(bytes);
             print(img64);
+               Navigator.pop(
+                                context,
+                                
+                              );
+       
 
-            openFile(img);
           },
-        ),
-      ],
+        )
+      ]
     ).show();
   }
 
-  void openFile(PlatformFile img) {
-    OpenFile.open(img.path!);
-  }
 
   Future uploadfile(File img64) async {
     var bytes = img64.readAsBytesSync();
@@ -595,4 +630,9 @@ class _searchbarState extends State<searchbar> {
     print('test api');
     return response.body;
   }
+
+  launch(String url) {}
+}
+
+canLaunch(String url) {
 }

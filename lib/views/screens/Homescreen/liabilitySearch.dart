@@ -506,7 +506,8 @@ class _liabilitySearchState extends State<liabilitySearch> {
     }
   }
 
-  _onAlertWithCustomContentPressed(context) {
+ _onAlertWithCustomContentPressed(context) {
+    print("test11");
     var alertStyle = AlertStyle(
       isCloseButton: false,
       isOverlayTapDismiss: true,
@@ -516,21 +517,33 @@ class _liabilitySearchState extends State<liabilitySearch> {
       title: "Image",
       buttons: [
         DialogButton(
-          color: Color.fromARGB(255, 93, 99, 216),
-          child: Text(
-            "Camera",
-            style: TextStyle(color: Color.fromARGB(255, 255, 253, 253)),
-          ),
-          onPressed: () => pickImage(ImageSource.camera),
-        ),
+            color: Color.fromARGB(255, 93, 99, 216),
+            child: Text(
+              "Camera",
+              style: TextStyle(color: Color.fromARGB(255, 255, 253, 253)),
+            ),
+            onPressed: () {
+          
+              pickImage(ImageSource.camera);
+               Navigator.pop(
+                                context,
+                                
+                              );
+              
+            }),
         DialogButton(
-          color: Color.fromARGB(255, 93, 99, 216),
-          child: Text(
-            "Image",
-            style: TextStyle(color: Color.fromARGB(255, 255, 253, 253)),
-          ),
-          onPressed: () => pickImage(ImageSource.gallery),
-        ),
+            color: Color.fromARGB(255, 93, 99, 216),
+            child: Text(
+              "Image",
+              style: TextStyle(color: Color.fromARGB(255, 255, 253, 253)),
+            ),onPressed: () {
+          
+              pickImage(ImageSource.gallery);
+               Navigator.pop(
+                                context,
+                                
+                              );}),
+            
         DialogButton(
           color: Color.fromARGB(255, 93, 99, 216),
           child: Text(
@@ -538,26 +551,27 @@ class _liabilitySearchState extends State<liabilitySearch> {
             style: TextStyle(color: Color.fromARGB(255, 255, 253, 253)),
           ),
           onPressed: () async {
-            print("object");
             final result = await FilePicker.platform.pickFiles();
             if (result == null) return;
             var img;
             img = result.files.first;
+                
             final bytes = Io.File(img.path).readAsBytesSync();
 
             String img64 = base64Encode(bytes);
             print(img64);
+               Navigator.pop(
+                                context,
+                                
+                              );
+       
 
-            openFile(img);
           },
-        ),
-      ],
+        )
+      ]
     ).show();
   }
 
-  void openFile(PlatformFile img) {
-    OpenFile.open(img.path!);
-  }
 
   Future uploadfile(File img64) async {
     var bytes = img64.readAsBytesSync();
