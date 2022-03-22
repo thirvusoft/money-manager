@@ -139,7 +139,7 @@ class _othersSearchState extends State<othersSearch> {
       ));
     } else if (response.statusCode == 403) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text(json.decode(response.body)['message']),
+        content: Text('Permission Denied'),
         backgroundColor: Colors.red,
       ));
     } else if (response.statusCode == 417) {
@@ -453,7 +453,7 @@ class _othersSearchState extends State<othersSearch> {
         ));
       } else if (response.statusCode == 403) {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text(json.decode(response.body)['message']),
+          content: Text('Permission Denied'),
           backgroundColor: Colors.red,
         ));
       } else if (response.statusCode == 417) {

@@ -158,7 +158,7 @@ class _searchbarState extends State<searchbar> {
       ));
     } else if (response.statusCode == 403) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text(json.decode(response.body)['message']),
+        content: Text('Permission Denied'),
         backgroundColor: Colors.red,
       ));
     } else if (response.statusCode == 417) {
@@ -439,58 +439,61 @@ class _searchbarState extends State<searchbar> {
               '${dotenv.env['API_URL']}/api/method/money_management_backend.custom.py.api.daily_entry_submit?Type=Asset&Subtype=${subtypescode}&Name=${name}&Notes=${notes}&Amount=${amount}'),
           headers: {"Authorization": prefs.getString('token') ?? ""});
       //print(response.statusCode);
-      // if (response.statusCode == 200) {
-      //   print(response.statusCode);
-      //   Navigator.pop(context);
+      print(name);
+      print(response.statusCode);
+      print(json.decode(response.body));
+      if (response.statusCode == 200) {
+        print(response.statusCode);
+        Navigator.pop(context);
 
-      //   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      //     content: Text(json.decode(response.body)['message']),
-      //     backgroundColor: Colors.green,
-      //   ));
-      // } else if (response.statusCode == 401) {
-      //   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      //     content: Text(json.decode(response.body)['message']),
-      //     backgroundColor: Colors.red,
-      //   ));
-      // } else if (response.statusCode == 403) {
-      //   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      //     content: Text(json.decode(response.body)['message']),
-      //     backgroundColor: Colors.red,
-      //   ));
-      // } else if (response.statusCode == 417) {
-      //   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      //     content: Text(json.decode(response.body)['message']),
-      //     backgroundColor: Colors.red,
-      //   ));
-      // } else if (response.statusCode == 500) {
-      //   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      //     content: Text(json.decode(response.body)['message']),
-      //     backgroundColor: Colors.red,
-      //   ));
-      // } else if (response.statusCode == 503) {
-      //   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      //     content: Text(json.decode(response.body)['message']),
-      //     backgroundColor: Colors.red,
-      //   ));
-      // } else if (response.statusCode == 409) {
-      //   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      //     content: Text(json.decode(response.body)['message']),
-      //     backgroundColor: Colors.red,
-      //   ));
-      // } else if (response.statusCode == 404) {
-      //   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      //     content: Text(json.decode(response.body)['message']),
-      //     backgroundColor: Colors.red,
-      //   ));
-      // } else {
-      //   Navigator.pop(context);
-      //   Navigator.pop(context);
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(json.decode(response.body)['message']),
+          backgroundColor: Colors.green,
+        ));
+      } else if (response.statusCode == 401) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(json.decode(response.body)['message']),
+          backgroundColor: Colors.red,
+        ));
+      } else if (response.statusCode == 403) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(json.decode(response.body)['message']),
+          backgroundColor: Colors.red,
+        ));
+      } else if (response.statusCode == 417) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(json.decode(response.body)['message']),
+          backgroundColor: Colors.red,
+        ));
+      } else if (response.statusCode == 500) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(json.decode(response.body)['message']),
+          backgroundColor: Colors.red,
+        ));
+      } else if (response.statusCode == 503) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(json.decode(response.body)['message']),
+          backgroundColor: Colors.red,
+        ));
+      } else if (response.statusCode == 409) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(json.decode(response.body)['message']),
+          backgroundColor: Colors.red,
+        ));
+      } else if (response.statusCode == 404) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(json.decode(response.body)['message']),
+          backgroundColor: Colors.red,
+        ));
+      } else {
+        Navigator.pop(context);
+        Navigator.pop(context);
 
-      //   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      //     content: Text("Invalid"),
-      //     backgroundColor: Colors.red,
-      //   ));
-      // }
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text("Invalid"),
+          backgroundColor: Colors.red,
+        ));
+      }
     }
   }
 
