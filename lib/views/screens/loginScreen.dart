@@ -9,6 +9,8 @@ import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_login/flutter_login.dart';
 import '../../widgets/BottomNavigation.dart';
+import 'package:connectivity/connectivity.dart';
+import 'package:awesome_dialog/awesome_dialog.dart';
 
 bool _securetext = true;
 
@@ -28,6 +30,13 @@ class _login_pageState extends State<login_page> {
     Timer(Duration(seconds: 1), () {
       _btnController.reset();
     });
+  }
+
+  @override
+  void initState() {
+    checkconnection();
+    // TODO: implement initState
+    super.initState();
   }
 
   @override
@@ -269,5 +278,14 @@ class _login_pageState extends State<login_page> {
         ));
       }
     }
+  }
+
+  checkconnection() async {
+    var connection = await Connectivity().checkConnectivity();
+    if (connection == ConnectivityResult.none) {
+      return ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text('No Internet')));
+    }
+    ;
   }
 }

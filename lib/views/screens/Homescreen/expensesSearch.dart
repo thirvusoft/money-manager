@@ -448,7 +448,7 @@ class _expenseSearchState extends State<expenseSearch> {
         Navigator.pop(context);
 
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text(json.decode(response.body)['message']),
+          content: Text('Permission Denied'),
           backgroundColor: Colors.red,
         ));
       } else if (response.statusCode == 417) {
