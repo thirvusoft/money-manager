@@ -44,7 +44,6 @@ class _searchbarState extends State<searchbar> {
   File _myImage = File('');
 
   pickImage(ImageSource source) async {
-    print("test213");
     XFile? image = await picker.pickImage(
       source: source,
       imageQuality: 100,
@@ -52,7 +51,6 @@ class _searchbarState extends State<searchbar> {
       maxWidth: MediaQuery.of(context).size.width,
       preferredCameraDevice: CameraDevice.rear,
     );
-    print("ettyryr");
     if (image == null) {
       //TODO: Image not selected action.
       isFileSelected = 0;
@@ -63,7 +61,6 @@ class _searchbarState extends State<searchbar> {
       final bytes = Io.File(image.path).readAsBytesSync();
 
       String imgcontent = base64Encode(bytes);
-      print('test');
       uploadimage(_myImage);
 
       isFileSelected = 1;
@@ -237,7 +234,6 @@ class _searchbarState extends State<searchbar> {
                         .toLowerCase()
                         .contains(value.trim().toLowerCase())) {
                       icon_nameOnSearch.add(icon_name[i]);
-                      print(icon_nameOnSearch);
                     }
                   }
                 });
@@ -423,12 +419,6 @@ class _searchbarState extends State<searchbar> {
   }
 
   Future dataentry(type, subtypescode, name, notes, amount) async {
-    print(type);
-    print(subtypescode);
-    print(name);
-    print(notes);
-    print(amount);
-
     if (typecontroller.text.isNotEmpty ||
         namecontroller.text.isNotEmpty ||
         notescontroller.text.isNotEmpty ||
@@ -449,9 +439,6 @@ class _searchbarState extends State<searchbar> {
               '${dotenv.env['API_URL']}/api/method/money_management_backend.custom.py.api.daily_entry_submit?Type=Asset&Subtype=${subtypescode}&Name=${name}&Notes=${notes}&Amount=${amount}'),
           headers: {"Authorization": prefs.getString('token') ?? ""});
       //print(response.statusCode);
-      print(name);
-      print(response.statusCode);
-      print(json.decode(response.body));
       // if (response.statusCode == 200) {
       //   print(response.statusCode);
       //   Navigator.pop(context);

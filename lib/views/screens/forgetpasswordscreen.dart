@@ -108,7 +108,6 @@ class _forget_passwordState extends State<forget_password> {
                                     hintText: "Email",
                                   ),
                                   validator: (value) {
-                                    print(value);
                                     if (value!.trim().isEmpty ||
                                         !RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
                                             .hasMatch(value)) {
@@ -179,13 +178,9 @@ class _forget_passwordState extends State<forget_password> {
   }
 
   Future reset(email) async {
-    print(email);
-          print(dotenv.env['API_URL']);
-
     if (emailcontroller.text.isNotEmpty) {
       var response = await http.post(Uri.parse(
           "${dotenv.env['API_URL']}/api/method/frappe.core.doctype.user.user.reset_password?user=${email}"));
-      print(response.statusCode);
       if (response.statusCode == 200) {
         Navigator.push(
           context,

@@ -43,13 +43,10 @@ class _customIncomeState extends State<customIncome> {
 //Icon API
   Future listapi() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    print(prefs.getString('token'));
     var response = await http.post(
         Uri.parse(
             "${dotenv.env['API_URL']}/api/method/money_management_backend.custom.py.api.withsubtype?Type=Income"),
         headers: {"Authorization": prefs.getString('token') ?? ""});
-    print(response.statusCode);
-    print('status API');
 
     if (response.statusCode == 200) {
       SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -121,7 +118,6 @@ class _customIncomeState extends State<customIncome> {
           itemBuilder: (context, index) {
             code = icon_name[index][1];
 
-            print(icon_name[index][1]);
             return Padding(
               padding: const EdgeInsets.all(8.0),
               child: Row(
@@ -213,11 +209,9 @@ class _customIncomeState extends State<customIncome> {
 //DataEntry API
   Future cussubmit(type, name, code) async {
     if (typecontroller.text.isNotEmpty || namecontroller.text.isNotEmpty) {
-      print(dotenv.env['API_URL']);
       var response = await http.post(Uri.parse(
           "${dotenv.env['API_URL']}/api/method/money_management_backend.custom.py.api.custom?Type=Income&Subtype=${name}&IconBineryCode=654654"));
       if (response.statusCode == 200) {
-        print(response.statusCode);
         Navigator.pop(context);
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text("Submitted Successfully"),

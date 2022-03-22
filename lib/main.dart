@@ -8,11 +8,7 @@ import 'views/screens/Homescreen/expensesSearch.dart';
 import 'widgets/BottomNavigation.dart';
 
 void main() async {
-  print('called');
   await dotenv.load(fileName: ".env");
-  print('Test');
-  print(dotenv.env);
-  print(dotenv.env['API_KEY']);
   runApp(MyApp());
 }
 

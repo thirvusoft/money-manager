@@ -36,7 +36,6 @@ class _othersSearchState extends State<othersSearch> {
       preferredCameraDevice: CameraDevice.rear,
     );
     setState(() {
-      print(_myImage);
       if (image == null) {
         //TODO: Image not selected action.
         isFileSelected = 0;
@@ -47,7 +46,6 @@ class _othersSearchState extends State<othersSearch> {
         final bytes = Io.File(image.path).readAsBytesSync();
 
         String img64 = base64Encode(bytes);
-        print(img64);
         uploadimage(_myImage);
         isFileSelected = 1;
       }
@@ -115,7 +113,7 @@ class _othersSearchState extends State<othersSearch> {
     print(prefs.getString('token'));
     var response = await http.post(
         Uri.parse(
-            "http://192.168.24.34:8000/api/method/money_management_backend.custom.py.api.withsubtype?Type=Others"),
+            "${dotenv.env['API_URL']}/api/method/money_management_backend.custom.py.api.withsubtype?Type=Others"),
         headers: {"Authorization": prefs.getString('token') ?? ""});
     print(response.statusCode);
     print('status API');
@@ -567,9 +565,7 @@ class _othersSearchState extends State<othersSearch> {
   Future uploadimage(_myimage) async {
     var bytes = _myimage.readAsBytesSync();
     String imgcontent = base64Encode(bytes);
-    print(bytes);
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    print(prefs.getString('token'));
 
     var response = await http.post(
       Uri.parse(
@@ -578,8 +574,6 @@ class _othersSearchState extends State<othersSearch> {
       body: {imgcontent},
       // encoding: Encoding.getByName("utf-8"),
     );
-    print(response.statusCode);
-    print('test api');
     return response.body;
   }
 }

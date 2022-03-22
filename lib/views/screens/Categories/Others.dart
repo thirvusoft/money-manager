@@ -42,13 +42,10 @@ class _customOthersState extends State<customOthers> {
 //Icon API
   Future listapi() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    print(prefs.getString('token'));
     var response = await http.post(
         Uri.parse(
             "${dotenv.env['API_URL']}/api/method/money_management_backend.custom.py.api.withsubtype?Type=Others"),
         headers: {"Authorization": prefs.getString('token') ?? ""});
-    print(response.statusCode);
-    print('status API');
 
     if (response.statusCode == 200) {
       SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -207,12 +204,9 @@ class _customOthersState extends State<customOthers> {
 //DataEntry API
   Future cussubmit(type, name, code) async {
     if (typecontroller.text.isNotEmpty || namecontroller.text.isNotEmpty) {
-      print(dotenv.env['API_URL']);
       var response = await http.post(Uri.parse(
           "${dotenv.env['API_URL']}/api/method/money_management_backend.custom.py.api.custom?Type=Others&name=${name}&IconBineryCode=654654"));
-      print(response.statusCode);
       if (response.statusCode == 200) {
-        print(response.statusCode);
         Navigator.pop(context);
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text("Submitted Successfully"),

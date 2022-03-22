@@ -76,11 +76,9 @@ class _bottomnavigationState extends State<bottomnavigation> {
   }
 
   Future profile() async {
-    print('profile');
-    print(dotenv.env['API_URL']);
+    SharedPreferences prefs = await SharedPreferences.getInstance();
     var response = await http.post(Uri.parse(
-        "${dotenv.env['API_URL']}/api/method/money_management_backend.custom.py.api.profile?email=barathpalanisamy2002@gmail.com"));
-    print('response');
+        "${dotenv.env['API_URL']}/api/method/money_management_backend.custom.py.api.profile?email=${prefs.getString('email')}"));
     if (response.statusCode == 200) {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       prefs.setString("mobile_number",
@@ -88,9 +86,6 @@ class _bottomnavigationState extends State<bottomnavigation> {
       prefs.setString(
           "full_name", json.decode(response.body)['message']['full_name']);
       prefs.setString("email", json.decode(response.body)['message']['email']);
-      print(prefs.getString("mobile_number"));
-      print(prefs.getString("full_name"));
-      print(prefs.getString("email"));
     }
   }
 }
