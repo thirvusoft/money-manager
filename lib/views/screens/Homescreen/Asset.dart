@@ -159,7 +159,7 @@ class _searchbarState extends State<searchbar> with SingleTickerProviderStateMix
   
   final formKey = GlobalKey<FormState>();
 
-  bool _loading = false;
+  bool _loading = true;
   List icon_nameOnSearch = [];
   List icon_name = [];
   var hexcode_dict = <String, int>{
