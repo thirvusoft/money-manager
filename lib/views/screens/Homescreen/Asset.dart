@@ -231,8 +231,7 @@ class _searchbarState extends State<searchbar> {
                   value.trimLeft();
                   icon_nameOnSearch.clear();
                   for (var i = 0; i < icon_name.length; i++) {
-                    data = icon_name[i][0];
-
+                    data = jsonDecode(icon_name[i])[0];
                     if (data
                         .toLowerCase()
                         .contains(value.trim().toLowerCase())) {
