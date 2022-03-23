@@ -18,16 +18,18 @@ class Profiles extends StatefulWidget {
 class _ProfilesState extends State<Profiles> {
   int? mobile;
   bool isLoading = false;
-  String? name;
+  String? fname;
   String? mail;
   var email;
   // void main() async {
-  //   await checkupdateNeeded();
+  //   await checkupdateNeeded(email);
   // }
+
   bool _loading = false;
   void initState() {
     profile(email);
-    print('s');
+    checkupdateNeeded(email);
+
     super.initState();
     checkupdateNeeded(email);
     Future.delayed(Duration(seconds: 1), () {
@@ -47,79 +49,80 @@ class _ProfilesState extends State<Profiles> {
     await profile(email);
     _loading = false;
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    mobile = prefs.getInt('mobile_number');
-    name = prefs.getString("full_name");
+    mobile = prefs.getInt('mobile');
+    fname = prefs.getString("name");
     mail = prefs.getString("email");
-    setState(() => isLoading = true);
-    print(mobile);
-    print(mail);
-    print(name);
-
-    print('test');
+    print(fname);
+    setState(() => isLoading = false);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(),
-      body: Container(
-        padding: EdgeInsets.symmetric(horizontal: 16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Divider(),
-            SizedBox(
-              height: 16,
-            ),
-            Text(
-              name ?? '',
-            ),
-            SizedBox(
-              height: 16,
-            ),
-            Divider(),
-            SizedBox(
-              height: 16,
-            ),
-            Text(mail ?? ''),
-            SizedBox(
-              height: 16,
-            ),
-            Divider(),
-            SizedBox(
-              height: 16,
-            ),
-            // Text(
-            //   mobile ?? '',
-            // ),
-            SizedBox(
-              height: 16,
-            ),
-            Divider(),
-            SizedBox(
-              height: 16,
-            ),
-            FlatButton(
-              child: Text(
-                'Logout',
-                style: TextStyle(fontSize: 20.0),
-              ),
-              color: Color.fromARGB(255, 93, 99, 216),
-              textColor: Colors.white,
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => login_page()),
-                );
-              },
-            ),
-            SizedBox(
-              height: 4,
-            ),
-          ],
-        ),
-      ),
-    );
+        appBar: CustomAppBar(),
+        body: Center(
+          child: _loading
+              ? CircularProgressIndicator(
+                  valueColor: AlwaysStoppedAnimation<Color>(
+                      Color.fromARGB(255, 93, 99, 216)),
+                )
+              : Container(
+                  padding: EdgeInsets.symmetric(horizontal: 16),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Divider(),
+                      SizedBox(
+                        height: 16,
+                      ),
+                      Text(
+                        fname ?? '',
+                      ),
+                      SizedBox(
+                        height: 16,
+                      ),
+                      Divider(),
+                      SizedBox(
+                        height: 16,
+                      ),
+                      Text(mail ?? ''),
+                      SizedBox(
+                        height: 16,
+                      ),
+                      Divider(),
+                      SizedBox(
+                        height: 16,
+                      ),
+                      Text('$mobile'),
+                      SizedBox(
+                        height: 16,
+                      ),
+                      Divider(),
+                      SizedBox(
+                        height: 16,
+                      ),
+                      FlatButton(
+                        child: Text(
+                          'Logout',
+                          style: TextStyle(fontSize: 20.0),
+                        ),
+                        color: Color.fromARGB(255, 93, 99, 216),
+                        textColor: Colors.white,
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => login_page()),
+                          );
+                        },
+                      ),
+                      SizedBox(
+                        height: 4,
+                      ),
+                    ],
+                  ),
+                ),
+        ));
   }
 }
 
@@ -168,33 +171,25 @@ class MyClipper extends CustomClipper<Path> {
 Future profile(email) async {
   bool _loading = false;
   SharedPreferences prefs = await SharedPreferences.getInstance();
-  // mobile = prefs.getInt('mobile_number');
-  //   name = prefs.getString("full_name");
-  //   mail = prefs.getString("email");
-  print('profile');
-  print(dotenv.env['API_URL']);
-  print(
-      "${dotenv.env['API_URL']}/api/method/money_management_backend.custom.py.api.profile?email=${email}");
+  print(prefs.getString('email'));
+
   var response = await http.post(
       Uri.parse(
           "${dotenv.env['API_URL']}/api/method/money_management_backend.custom.py.api.profile?email=${email}"),
       headers: {"Authorization": prefs.getString('token') ?? ""});
-  print(response.statusCode);
-  print(email);
+
   if (response.statusCode == 200) {
-    print(response.statusCode);
+    print("hhh");
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    // prefs.setString("mobile_number",
-    //     json.decode(response.body)['message']['mobile_number']);
-    // var dfdf = prefs.getString('mobile_number');
-    // print(dfdf);
+
     prefs.setString("email", json.decode(response.body)['message']['email']);
+    prefs.setString(
+        "mobile", json.decode(response.body)['message']['mobile_number']);
     prefs.setString(
       "name",
       json.decode(response.body)['message']['full_name'],
     );
-    var full_name = prefs.getString("email");
-    print(full_name);
-    print(response.statusCode);
+    print('test');
+    print(prefs.getString('full_name'));
   }
 }

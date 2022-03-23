@@ -56,17 +56,14 @@ class _incomeSearchState extends State<incomeSearch> {
 
   Widget showImage(File file) {
     if (isFileSelected == 0) {
-      //TODO: Image not selected widget.
       return Center(child: Text("Image Selected"));
     } else {
-      //TODO: Image selected widget.
       return Container(
         height: MediaQuery.of(context).size.width * 9 / 16,
         width: MediaQuery.of(context).size.width,
         child: Image.file(file, fit: BoxFit.contain),
       );
     }
-    // ignore: dead_code
   }
 
   int isFileSelected = 0;

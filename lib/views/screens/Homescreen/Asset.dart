@@ -101,7 +101,7 @@ class _searchbarState extends State<searchbar> {
   var subtypesname;
   final formKey = GlobalKey<FormState>();
 
-  bool _loading = true;
+  bool _loading = false;
   List icon_nameOnSearch = [];
   List icon_name = [];
   var hexcode_dict = <String, int>{
@@ -143,7 +143,7 @@ class _searchbarState extends State<searchbar> {
       SharedPreferences prefs = await SharedPreferences.getInstance();
 
       List<String> liability_icon_list = [];
-      print(liability_icon_list);
+//      print(liability_icon_list);
 
       for (var i = 0; i < json.decode(response.body)["Asset"].length; i++) {
         liability_icon_list
@@ -151,13 +151,8 @@ class _searchbarState extends State<searchbar> {
       }
       prefs.setStringList('liability_icon_list', liability_icon_list);
       icon_name = prefs.getStringList("liability_icon_list")!;
-      print("name check");
-      print(liability_icon_list);
+
       setState(() => _loading = true);
-      // ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      //   content: Text(json.decode(response.body)['message']),
-      //   backgroundColor: Colors.green,
-      // ));
     } else if (response.statusCode == 401) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text(json.decode(response.body)['message']),
@@ -323,6 +318,7 @@ class _searchbarState extends State<searchbar> {
             child: Icon(Icons.add, semanticLabel: 'Customise icon'),
             backgroundColor: Color.fromARGB(255, 93, 99, 216),
             onPressed: () {
+              _loading = false;
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => customAsset()),
