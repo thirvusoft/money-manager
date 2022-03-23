@@ -21,6 +21,7 @@ class _customOthersState extends State<customOthers> {
 
   var code;
   List icon_nameOnSearch = [];
+  bool _loading = true;
   List icon_name = [];
   var hexcode_dict = <String, int>{
     ' 0xf04e1': 0xf04e1,
@@ -37,6 +38,12 @@ class _customOthersState extends State<customOthers> {
   void initState() {
     super.initState();
     listapi();
+    Future.delayed(Duration(seconds: 1), () {
+      Color.fromARGB(255, 93, 99, 216);
+      setState(() {
+        _loading = false;
+      });
+    });
   }
 
 //Icon API
@@ -104,43 +111,54 @@ class _customOthersState extends State<customOthers> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Color.fromARGB(255, 93, 99, 216),
-        title: Text('Others Customise Icons'),
-      ),
-      body: GridView.builder(
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2, childAspectRatio: 3, crossAxisSpacing: 12),
-          itemCount: _textEditingController.text.isNotEmpty
-              ? icon_nameOnSearch.length
-              : icon_name.length,
-          itemBuilder: (context, index) {
-            code = icon_name[index][1];
-            return Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                children: [
-                  CircleAvatar(
-                    radius: 58,
-                    backgroundColor: Color.fromARGB(255, 93, 99, 216),
-                    child: IconButton(
-                        iconSize: 30.0,
-                        onPressed: () {
-                          _show(context);
-                        },
-                        icon: Icon(
-                            IconData(jsonDecode(icon_name[index])[1],
-                                fontFamily: 'MaterialIcons'),
-                            color: Color.fromARGB(255, 255, 255, 255))),
-                  ),
-                  SizedBox(
-                    width: 25,
-                  ),
-                ],
-              ),
-            );
-          }),
-    );
+        appBar: AppBar(
+          backgroundColor: Color.fromARGB(255, 93, 99, 216),
+          title: Text('Others Customise Icons'),
+        ),
+        body: Center(
+          child: _loading
+              ? CircularProgressIndicator(
+                  valueColor: AlwaysStoppedAnimation<Color>(
+                      Color.fromARGB(255, 93, 99, 216)),
+                )
+              : GridView.builder(
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      childAspectRatio: 3,
+                      crossAxisSpacing: 12),
+                  itemCount: _textEditingController.text.isNotEmpty
+                      ? icon_nameOnSearch.length
+                      : icon_name.length,
+                  itemBuilder: (context, index) {
+                    code = icon_name[index][1];
+                    return Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                        children: [
+                          CircleAvatar(
+                            radius: 58,
+                            backgroundColor: Color.fromARGB(255, 93, 99, 216),
+                            child: IconButton(
+                                iconSize: 30.0,
+                                onPressed: () {
+                                  _show(context);
+                                },
+                                icon: Icon(
+                                    IconData(
+                                        hexcode_dict[jsonDecode(
+                                                icon_name[index])[0]] ??
+                                            0XF155,
+                                        fontFamily: 'MaterialIcons'),
+                                    color: Color.fromARGB(255, 255, 255, 255))),
+                          ),
+                          SizedBox(
+                            width: 25,
+                          ),
+                        ],
+                      ),
+                    );
+                  }),
+        ));
   }
 
   void _show(BuildContext ctx) {
@@ -204,8 +222,11 @@ class _customOthersState extends State<customOthers> {
 //DataEntry API
   Future cussubmit(type, name, code) async {
     if (typecontroller.text.isNotEmpty || namecontroller.text.isNotEmpty) {
-      var response = await http.post(Uri.parse(
-          "${dotenv.env['API_URL']}/api/method/money_management_backend.custom.py.api.custom?Type=Others&name=${name}&IconBineryCode=654654"));
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      var response = await http.post(
+          Uri.parse(
+              "${dotenv.env['API_URL']}/api/method/money_management_backend.custom.py.api.custom?Type=Others&Subtype=${name}&IconBineryCode=${code}"),
+          headers: {"Authorization": prefs.getString('token') ?? ""});
       if (response.statusCode == 200) {
         Navigator.pop(context);
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(

@@ -19,6 +19,9 @@ class _customAssetState extends State<customAsset> {
   var namecontroller = TextEditingController();
   final formKey = GlobalKey<FormState>();
   var code;
+  var code1;
+  bool _loading = true;
+
   List icon_nameOnSearch = [];
   List icon_name = [];
   var hexcode_dict = <String, int>{
@@ -37,29 +40,37 @@ class _customAssetState extends State<customAsset> {
     '0xf108': 0xf108,
     '0xf05ce': 0xf05ce
   };
+
   @override
   void initState() {
     super.initState();
     listapi();
+    Future.delayed(Duration(seconds: 1), () {
+      Color.fromARGB(255, 93, 99, 216);
+      setState(() {
+        _loading = false;
+      });
+    });
   }
 
 //Icon API
   Future listapi() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
+    _loading = false;
+
     var response = await http.post(
         Uri.parse(
-            "${dotenv.env['API_URL']}/api/method/money_management_backend.custom.py.api.withsubtype?Type=Asset"),
+            "${dotenv.env['API_URL']}/api/method/money_management_backend.custom.py.api.withoutsubtype?Type=Asset"),
         headers: {"Authorization": prefs.getString('token') ?? ""});
 
     if (response.statusCode == 200) {
       SharedPreferences prefs = await SharedPreferences.getInstance();
-      List<String> liability_icon_list = [];
+      List<String> Asset_icon_list = [];
       for (var i = 0; i < json.decode(response.body)["Asset"].length; i++) {
-        liability_icon_list
-            .add(jsonEncode(json.decode(response.body)["Asset"][i]));
+        Asset_icon_list.add(jsonEncode(json.decode(response.body)["Asset"][i]));
       }
-      prefs.setStringList('liability_icon_list', liability_icon_list);
-      icon_name = prefs.getStringList("liability_icon_list")!;
+      prefs.setStringList('Asset_icon_list', Asset_icon_list);
+      icon_name = prefs.getStringList("Asset_icon_list")!;
     } else if (response.statusCode == 401) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text(jsonDecode('message')),
@@ -107,53 +118,63 @@ class _customAssetState extends State<customAsset> {
   get index => null;
   @override
   Widget build(BuildContext context) {
-    // Size size = MediaQuery.of(context).size;
-    // double height = MediaQuery.of(context).size.height;
-    // double width = MediaQuery.of(context).size.width;
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Color.fromARGB(255, 93, 99, 216),
-        title: Text('Asset Customise Icons'),
-      ),
-      body: Container(
-        // height: height/5,
-        // width: width/1.5,
-        child: GridView.builder(
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2, childAspectRatio: 3, crossAxisSpacing: 12),
-            itemCount: _textEditingController.text.isNotEmpty
-                ? icon_nameOnSearch.length
-                : icon_name.length,
-            itemBuilder: (context, index) {
-              code = icon_name[index][1];
-              return Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  children: [
-                    CircleAvatar(
-                      radius: 58,
-                      backgroundColor: Color.fromARGB(255, 93, 99, 216),
-                      child: IconButton(
-                          iconSize: 30.0,
-                          onPressed: () {
-                            _show(context);
-                          },
-                          icon: Icon(
-                              IconData(
-                                jsonDecode(icon_name[index])[1],
-                                fontFamily: 'MaterialIcons',
+        appBar: AppBar(
+          backgroundColor: Color.fromARGB(255, 93, 99, 216),
+          title: Text('Asset Customise Icons'),
+        ),
+        body: Center(
+          child: _loading
+              ? CircularProgressIndicator(
+                  valueColor: AlwaysStoppedAnimation<Color>(
+                      Color.fromARGB(255, 93, 99, 216)),
+                )
+              : Container(
+                  // height: height/5,
+                  // width: width/1.5,
+                  child: GridView.builder(
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                          childAspectRatio: 3,
+                          crossAxisSpacing: 12),
+                      itemCount: _textEditingController.text.isNotEmpty
+                          ? icon_nameOnSearch.length
+                          : icon_name.length,
+                      itemBuilder: (context, index) {
+                        code = jsonEncode(icon_name[index])[0];
+
+                        return Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Row(
+                            children: [
+                              CircleAvatar(
+                                radius: 58,
+                                backgroundColor:
+                                    Color.fromARGB(255, 93, 99, 216),
+                                child: IconButton(
+                                    iconSize: 30.0,
+                                    onPressed: () {
+                                      _show(context);
+                                    },
+                                    icon: Icon(
+                                        IconData(
+                                          hexcode_dict[jsonDecode(
+                                                  icon_name[index])[0]] ??
+                                              0XF155,
+                                          fontFamily: 'MaterialIcons',
+                                        ),
+                                        color: Color.fromARGB(
+                                            255, 255, 255, 255))),
                               ),
-                              color: Color.fromARGB(255, 255, 255, 255))),
-                    ),
-                    SizedBox(
-                      width: 25,
-                    ),
-                  ],
+                              SizedBox(
+                                width: 25,
+                              ),
+                            ],
+                          ),
+                        );
+                      }),
                 ),
-              );
-            }),
-      ),
-    );
+        ));
   }
 
   void _show(BuildContext ctx) {
@@ -210,6 +231,7 @@ class _customAssetState extends State<customAsset> {
                                 namecontroller.text,
                                 code,
                               );
+                              namecontroller.clear();
                             }
                           })
                     ]),
@@ -220,8 +242,11 @@ class _customAssetState extends State<customAsset> {
 //DataEntry API
   Future cussubmit(type, name, code) async {
     if (namecontroller.text.isNotEmpty) {
-      var response = await http.post(Uri.parse(
-          "${dotenv.env['API_URL']}/api/method/money_management_backend.custom.py.api.custom?Type=Expense&Subtype=${name}&IconBineryCode=654654"));
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      var response = await http.post(
+          Uri.parse(
+              "${dotenv.env['API_URL']}/api/method/money_management_backend.custom.py.api.custom?Type=Asset&Subtype=${name}&IconBineryCode=${code}"),
+          headers: {"Authorization": prefs.getString('token') ?? ""});
       if (response.statusCode == 200) {
         Navigator.pop(context);
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(

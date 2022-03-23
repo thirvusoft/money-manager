@@ -56,17 +56,14 @@ class _incomeSearchState extends State<incomeSearch> {
 
   Widget showImage(File file) {
     if (isFileSelected == 0) {
-      //TODO: Image not selected widget.
       return Center(child: Text("Image Selected"));
     } else {
-      //TODO: Image selected widget.
       return Container(
         height: MediaQuery.of(context).size.width * 9 / 16,
         width: MediaQuery.of(context).size.width,
         child: Image.file(file, fit: BoxFit.contain),
       );
     }
-    // ignore: dead_code
   }
 
   int isFileSelected = 0;
@@ -146,6 +143,13 @@ class _incomeSearchState extends State<incomeSearch> {
         content: Text(json.decode(response.body)['message']),
         backgroundColor: Colors.red,
       ));
+    } else if (response.statusCode == 429) {
+      Navigator.pop(context);
+
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(json.decode(response.body)['message']),
+        backgroundColor: Colors.red,
+      ));
     } else if (response.statusCode == 500) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text(json.decode(response.body)['message']),
@@ -212,14 +216,11 @@ class _incomeSearchState extends State<incomeSearch> {
                   value.trimLeft();
                   icon_nameOnSearch.clear();
                   for (var i = 0; i < icon_name.length; i++) {
-                    data = icon_name[i][0];
+                    data = jsonDecode(icon_name[i])[0];
                     if (data
                         .toLowerCase()
                         .contains(value.trim().toLowerCase())) {
                       icon_nameOnSearch.add(icon_name[i]);
-                      print(
-                        icon_nameOnSearch,
-                      );
                     }
                   }
                 });
@@ -253,6 +254,12 @@ class _incomeSearchState extends State<incomeSearch> {
                         ? icon_nameOnSearch.length
                         : icon_name.length,
                     itemBuilder: (context, index) {
+                      var row = [];
+                      if (icon_nameOnSearch.length != 0) {
+                        row = icon_nameOnSearch;
+                      } else {
+                        row = icon_name;
+                      }
                       return Container(
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(10),
@@ -262,14 +269,13 @@ class _incomeSearchState extends State<incomeSearch> {
                               Center(
                                   child: TextButton.icon(
                                       onPressed: () {
-                                        subtypes =
-                                            jsonDecode(icon_name[index])[0];
+                                        subtypes = jsonDecode(row[index])[0];
                                         _show(context, subtypes);
                                       },
                                       label: Text(
                                         _textEditingController.text.isNotEmpty
-                                            ? jsonDecode(icon_name[index])[0]
-                                            : jsonDecode(icon_name[index])[0],
+                                            ? jsonDecode(row[index])[0]
+                                            : jsonDecode(row[index])[0],
                                         style: TextStyle(
                                             color: Colors.black,
                                             fontSize: 15,
@@ -278,7 +284,7 @@ class _incomeSearchState extends State<incomeSearch> {
                                       icon: Icon(
                                           IconData(
                                               hexcode_dict[jsonDecode(
-                                                      icon_name[index])[1]] ??
+                                                      row[index])[1]] ??
                                                   0XF155,
                                               fontFamily: 'MaterialIcons'),
                                           color: Color.fromARGB(
@@ -471,72 +477,60 @@ class _incomeSearchState extends State<incomeSearch> {
     }
   }
 
- _onAlertWithCustomContentPressed(context) {
+  _onAlertWithCustomContentPressed(context) {
     print("test11");
     var alertStyle = AlertStyle(
       isCloseButton: false,
       isOverlayTapDismiss: true,
     );
-    Alert(
-      context: context,
-      title: "Image",
-      buttons: [
-        DialogButton(
-            color: Color.fromARGB(255, 93, 99, 216),
-            child: Text(
-              "Camera",
-              style: TextStyle(color: Color.fromARGB(255, 255, 253, 253)),
-            ),
-            onPressed: () {
-          
-              pickImage(ImageSource.camera);
-               Navigator.pop(
-                                context,
-                                
-                              );
-              
-            }),
-        DialogButton(
-            color: Color.fromARGB(255, 93, 99, 216),
-            child: Text(
-              "Image",
-              style: TextStyle(color: Color.fromARGB(255, 255, 253, 253)),
-            ),onPressed: () {
-          
-              pickImage(ImageSource.gallery);
-               Navigator.pop(
-                                context,
-                                
-                              );}),
-            
-        DialogButton(
+    Alert(context: context, title: "Image", buttons: [
+      DialogButton(
+          color: Color.fromARGB(255, 93, 99, 216),
+          child: Text(
+            "Camera",
+            style: TextStyle(color: Color.fromARGB(255, 255, 253, 253)),
+          ),
+          onPressed: () {
+            pickImage(ImageSource.camera);
+            Navigator.pop(
+              context,
+            );
+          }),
+      DialogButton(
           color: Color.fromARGB(255, 93, 99, 216),
           child: Text(
             "Image",
             style: TextStyle(color: Color.fromARGB(255, 255, 253, 253)),
           ),
-          onPressed: () async {
-            final result = await FilePicker.platform.pickFiles();
-            if (result == null) return;
-            var img;
-            img = result.files.first;
-                
-            final bytes = Io.File(img.path).readAsBytesSync();
+          onPressed: () {
+            pickImage(ImageSource.gallery);
+            Navigator.pop(
+              context,
+            );
+          }),
+      DialogButton(
+        color: Color.fromARGB(255, 93, 99, 216),
+        child: Text(
+          "Image",
+          style: TextStyle(color: Color.fromARGB(255, 255, 253, 253)),
+        ),
+        onPressed: () async {
+          final result = await FilePicker.platform.pickFiles();
+          if (result == null) return;
+          var img;
+          img = result.files.first;
 
-            String img64 = base64Encode(bytes);
-            print(img64);
-               Navigator.pop(
-                                context,
-                                
-                              );
-       
+          final bytes = Io.File(img.path).readAsBytesSync();
 
-          },
-        )
-      ]
-    ).show();
+          String img64 = base64Encode(bytes);
+          print(img64);
+          Navigator.pop(
+            context,
+          );
+        },
+      )
+    ]).show();
   }
-
 
   Future uploadfile(File img64) async {
     var bytes = img64.readAsBytesSync();

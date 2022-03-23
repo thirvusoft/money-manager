@@ -159,7 +159,7 @@ class _searchbarState extends State<searchbar> with SingleTickerProviderStateMix
   
   final formKey = GlobalKey<FormState>();
 
-  bool _loading = true;
+  bool _loading = false;
   List icon_nameOnSearch = [];
   List icon_name = [];
   var hexcode_dict = <String, int>{
@@ -191,18 +191,18 @@ class _searchbarState extends State<searchbar> with SingleTickerProviderStateMix
    
     if (response.statusCode == 200) {
       SharedPreferences prefs = await SharedPreferences.getInstance();
+
       List<String> liability_icon_list = [];
+//      print(liability_icon_list);
+
       for (var i = 0; i < json.decode(response.body)["Asset"].length; i++) {
         liability_icon_list
             .add(jsonEncode(json.decode(response.body)["Asset"][i]));
       }
       prefs.setStringList('liability_icon_list', liability_icon_list);
       icon_name = prefs.getStringList("liability_icon_list")!;
+
       setState(() => _loading = true);
-      // ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      //   content: Text(json.decode(response.body)['message']),
-      //   backgroundColor: Colors.green,
-      // ));
     } else if (response.statusCode == 401) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text(json.decode(response.body)['message']),
@@ -257,8 +257,12 @@ class _searchbarState extends State<searchbar> with SingleTickerProviderStateMix
           actions: [
             InkWell(
               onTap: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => Profiles()));
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => Profiles(),
+                  ),
+                );
               },
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -282,6 +286,7 @@ class _searchbarState extends State<searchbar> with SingleTickerProviderStateMix
                   icon_nameOnSearch.clear();
                   for (var i = 0; i < icon_name.length; i++) {
                     data = jsonDecode(icon_name[i])[0];
+
                     if (data
                         .toLowerCase()
                         .contains(value.trim().toLowerCase())) {
@@ -320,7 +325,14 @@ class _searchbarState extends State<searchbar> with SingleTickerProviderStateMix
                         ? icon_nameOnSearch.length
                         : icon_name.length,
                     itemBuilder: (context, index) {
-                      
+                      var row = [];
+                      if (icon_nameOnSearch.length != 0) {
+                        row = icon_nameOnSearch;
+                        print(row);
+                      } else {
+                        row = icon_name;
+                        print(row);
+                      }
                       return Container(
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(10),
@@ -332,9 +344,9 @@ class _searchbarState extends State<searchbar> with SingleTickerProviderStateMix
                                       onPressed: () {
                                        
                                         subtypescode =
-                                            jsonDecode(icon_name[index])[2];
+                                            jsonDecode(row[index])[2];
                                         subtypesname =
-                                            jsonDecode(icon_name[index])[0];
+                                            jsonDecode(row[index])[0];
                                         _show(context, subtypescode,
                                             subtypesname);
                                     namecontroller.clear();
@@ -347,8 +359,8 @@ class _searchbarState extends State<searchbar> with SingleTickerProviderStateMix
                                       },
                                       label: Text(
                                         _textEditingController.text.isNotEmpty
-                                            ? jsonDecode(icon_name[index])[0]
-                                            : jsonDecode(icon_name[index])[0],
+                                            ? jsonDecode(row[index])[0]
+                                            : jsonDecode(row[index])[0],
                                         style: TextStyle(
                                             color: Colors.black,
                                             fontSize: 15,
@@ -357,7 +369,7 @@ class _searchbarState extends State<searchbar> with SingleTickerProviderStateMix
                                       icon: Icon(
                                           IconData(
                                               hexcode_dict[jsonDecode(
-                                                      icon_name[index])[1]] ??
+                                                      row[index])[1]] ??
                                                   0XF155,
                                               fontFamily: 'MaterialIcons'),
                                           color: Color.fromARGB(
@@ -371,9 +383,12 @@ class _searchbarState extends State<searchbar> with SingleTickerProviderStateMix
             child: Icon(Icons.add, semanticLabel: 'Customise icon'),
             backgroundColor: Color.fromARGB(255, 93, 99, 216),
             onPressed: () {
+              _loading = false;
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => customAsset()),
+                MaterialPageRoute(
+                  builder: (context) => customAsset(),
+                ),
               );
             }));
   }
@@ -555,7 +570,6 @@ class _searchbarState extends State<searchbar> with SingleTickerProviderStateMix
                             style: TextStyle(color: Colors.white),
                           ),
                           onPressed: () {
-                            
                             if (formKey.currentState!.validate()) {
                               dataentry(
                                 typecontroller.text,
@@ -590,7 +604,6 @@ class _searchbarState extends State<searchbar> with SingleTickerProviderStateMix
         namecontroller.text.isNotEmpty ||
         notescontroller.text.isNotEmpty ||
         amountcontroller.text.isNotEmpty) {
-
 
       SharedPreferences prefs = await SharedPreferences.getInstance();
       var response = await http.post(
@@ -667,78 +680,10 @@ class _searchbarState extends State<searchbar> with SingleTickerProviderStateMix
     }
   }
 
-  // _onAlertWithCustomContentPressed(context) {
-  //   print("test11");
-  //   var alertStyle = AlertStyle(
-  //     isCloseButton: false,
-  //     isOverlayTapDismiss: true,
-  //   );
-  //   Alert(
-  //     context: context,
-  //     title: "Image",
-  //     buttons: [
-  //       DialogButton(
-  //           color: Color.fromARGB(255, 93, 99, 216),
-  //           child: Text(
-  //             "Camera",
-  //             style: TextStyle(color: Color.fromARGB(255, 255, 253, 253)),
-  //           ),
-  //           onPressed: () {
-          
-  //             pickImage(ImageSource.camera);
-  //              Navigator.pop(
-  //                               context,
-                                
-  //                             );
-              
-  //           }),
-  //       DialogButton(
-  //           color: Color.fromARGB(255, 93, 99, 216),
-  //           child: Text(
-  //             "Image",
-  //             style: TextStyle(color: Color.fromARGB(255, 255, 253, 253)),
-  //           ),onPressed: () {
-          
-  //             pickImage(ImageSource.gallery);
-  //              Navigator.pop(
-  //                               context,
-                                
-  //                             );}),
-            
-  //       DialogButton(
-  //         color: Color.fromARGB(255, 93, 99, 216),
-  //         child: Text(
-  //           "Image",
-  //           style: TextStyle(color: Color.fromARGB(255, 255, 253, 253)),
-  //         ),
-  //         onPressed: () async {
-  //           final result = await FilePicker.platform.pickFiles();
-  //           if (result == null) return;
-            
-  //           _platformFile = result.files.first;
-                
-  //           // final bytes = Io.File(_.path).readAsBytesSync();
-
-  //           // String img64 = base64Encode(bytes);
-  //           // print(img64);
-  //              Navigator.pop(
-  //                               context,
-                                
-  //                             );
-       
-
-  //         },
-  //       )
-  //     ]
-  //   ).show();
-  // }
-
 
   Future uploadfile(File img64) async {
     var bytes = img64.readAsBytesSync();
-    print(bytes);
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    print(prefs.getString('token'));
 
     var response = await http.post(
       Uri.parse(
@@ -750,12 +695,10 @@ class _searchbarState extends State<searchbar> with SingleTickerProviderStateMix
     return response.body;
   }
 
-  Future uploadimage(_myimage) async {
-    var bytes = _myimage.readAsBytesSync();
-    String imgcontent = base64Encode(bytes);
-    print(bytes);
+  Future uploadimage(imgcontent) async {
+    //var bytes = _myimage.readAsBytesSync();
+    //String imgcontent = base64Encode(bytes);
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    print(prefs.getString('token'));
 
     var response = await http.post(
       Uri.parse(
@@ -764,11 +707,9 @@ class _searchbarState extends State<searchbar> with SingleTickerProviderStateMix
       body: {"file": imgcontent},
       // encoding: Encoding.getByName("utf-8"),
     );
-    print(response.statusCode);
-    print('test api');
+    if (response.statusCode == 200) {
+      print("fhj");
+    }
     return response.body;
   }
-
- 
 }
-

@@ -9,6 +9,7 @@ import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_login/flutter_login.dart';
 import '../../widgets/BottomNavigation.dart';
+import 'package:connectivity/connectivity.dart';
 
 bool _securetext = true;
 
@@ -28,6 +29,13 @@ class _login_pageState extends State<login_page> {
     Timer(Duration(seconds: 1), () {
       _btnController.reset();
     });
+  }
+
+  @override
+  void initState() {
+    checkconnection();
+    // TODO: implement initState
+    super.initState();
   }
 
   @override
@@ -219,9 +227,12 @@ class _login_pageState extends State<login_page> {
         SharedPreferences prefs = await SharedPreferences.getInstance();
         prefs.setString('token', json.decode(response.body)['token']);
         prefs.setString('email', email);
-        Navigator.push(
+        Navigator.pushAndRemoveUntil(
           context,
-          MaterialPageRoute(builder: (context) => bottomnavigation()),
+          MaterialPageRoute(
+            builder: (context) => bottomnavigation(),
+          ),
+          (route) => false,
         );
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text(json.decode(response.body)['message']),
@@ -269,5 +280,14 @@ class _login_pageState extends State<login_page> {
         ));
       }
     }
+  }
+
+  checkconnection() async {
+    var connection = await Connectivity().checkConnectivity();
+    if (connection == ConnectivityResult.none) {
+      return ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text('No Internet')));
+    }
+    ;
   }
 }
