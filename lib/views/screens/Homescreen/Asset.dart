@@ -5,6 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:money_manager/views/screens/Categories/liability.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:dotted_border/dotted_border.dart';
+import 'package:iconsax/iconsax.dart';
+import 'package:dio/dio.dart';
+import 'dart:io';
 
 // ignore: file_names
 import 'dart:convert';
@@ -40,55 +44,107 @@ class searchbar extends StatefulWidget {
   _searchbarState createState() => _searchbarState();
 }
 
-class _searchbarState extends State<searchbar> {
-  var result;
-  File _myImage = File('');
+class _searchbarState extends State<searchbar> with SingleTickerProviderStateMixin {
+  String _image = ' ';
+  late AnimationController loadingController;
 
-  get defaultText => null;
+  File? _file;
+  PlatformFile? _platformFile;
 
-  get linkText => null;
-
-  pickImage(ImageSource source) async {
-    XFile? image = await picker.pickImage(
-      source: source,
-      imageQuality: 100,
-      maxHeight: MediaQuery.of(context).size.height,
-      maxWidth: MediaQuery.of(context).size.width,
-      preferredCameraDevice: CameraDevice.rear,
+  selectFile() async {
+    final file = await FilePicker.platform.pickFiles(
+      type: FileType.custom,
+      allowedExtensions: ['png', 'jpg', 'jpeg','pdf']
     );
-    if (image == null) {
-      //TODO: Image not selected action.
-      isFileSelected = 0;
-    } else {
-      //TODO: Image selected action.
-      _myImage = File(image.path);
-      bool isLoading = true;
-      final bytes = Io.File(image.path).readAsBytesSync();
 
-      String imgcontent = base64Encode(bytes);
-      uploadimage(_myImage);
+    if (file != null) {
+      setState(() {
+        
+        _file = File(file.files.single.path!);
+        _platformFile = file.files.first;
+                print(_platformFile);
 
-      isFileSelected = 1;
+      });
     }
-  }
+        loadingController.forward();
 
-  Widget showImage(File file) {
-    if (isFileSelected == 0) {
-      //TODO: Image not selected widget.
-      return Center(child: Text("Image Selected"));
-    } else {
-      //TODO: Image selected widget.
-      return Container(
-        height: MediaQuery.of(context).size.width * 9 / 16,
-        width: MediaQuery.of(context).size.width,
-        child: Image.file(file, fit: BoxFit.contain),
-      );
-    }
-    // ignore: dead_code
   }
+    @override
+  void initState() {
+  super.initState();
+    
+  
+    listapi();
+    Future.delayed(Duration(seconds: 1), () {
+      Color.fromARGB(255, 93, 99, 216);
+      
+    //   loadingController = AnimationController(
+     
+    //   duration: const Duration(seconds: 10), vsync: this, 
+    // )..addListener(() { setState(() {}); });
+      setState(() {
+        _loading = false;
+       
+      
+      });
+    });
+  }
+  // @override
+  // void initState() {
+  //   loadingController = AnimationController(
+     
+  //     duration: const Duration(seconds: 10), vsync: this,
+  //   )..addListener(() { setState(() {}); });
+    
+  //   super.initState();
+  // }
+ 
+  // var result;
+  // File _myImage = File('');
 
-  int isFileSelected = 0;
-  ImagePicker picker = ImagePicker();
+  
+
+  // pickImage(ImageSource source) async {
+  //   XFile? image = await picker.pickImage(
+  //     source: source,
+  //     imageQuality: 100,
+  //     maxHeight: MediaQuery.of(context).size.height,
+  //     maxWidth: MediaQuery.of(context).size.width,
+  //     preferredCameraDevice: CameraDevice.rear,
+  //   );
+  //   if (image == null) {
+  //     //TODO: Image not selected action.
+  //     isFileSelected = 0;
+  //   } else {
+  //     //TODO: Image selected action.
+  //     _myImage = File(image.path);
+  //     bool isLoading = true;
+  //     final bytes = Io.File(image.path).readAsBytesSync();
+
+  //     String imgcontent = base64Encode(bytes);
+  //     uploadimage(_myImage);
+
+  //     isFileSelected = 1;
+  //   }
+  // }
+
+  // Widget showImage(File file) {
+  //   if (isFileSelected == 0) {
+  //     //TODO: Image not selected widget.
+  //     return Center(child: Text("Image Selected"));
+  //   } else {
+  //     //TODO: Image selected widget.
+  //     return Container(
+  //       height: MediaQuery.of(context).size.width * 9 / 16,
+  //       width: MediaQuery.of(context).size.width,
+  //       child: Image.file(file, fit: BoxFit.contain),
+  //     );
+  //   }
+  //   // ignore: dead_code
+  // }
+
+  // int isFileSelected = 0;
+  // ImagePicker picker = ImagePicker();
   TextEditingController _textEditingController = TextEditingController();
 
   var typecontroller = TextEditingController();
@@ -99,6 +155,8 @@ class _searchbarState extends State<searchbar> {
   var datecontroller = TextEditingController();
   var subtypescode;
   var subtypesname;
+   
+  
   final formKey = GlobalKey<FormState>();
 
   bool _loading = true;
@@ -120,28 +178,17 @@ class _searchbarState extends State<searchbar> {
     '0xf108': 0xf108,
     '0xf05ce': 0xf05ce
   };
-  @override
-  void initState() {
-    super.initState();
-    listapi();
-    Future.delayed(Duration(seconds: 1), () {
-      Color.fromARGB(255, 93, 99, 216);
-      setState(() {
-        _loading = false;
-      });
-    });
-  }
 
-//Icon API
+
+
+// Icon API
   Future listapi() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    print(prefs.getString('token'));
     var response = await http.post(
         Uri.parse(
             "${dotenv.env['API_URL']}/api/method/money_management_backend.custom.py.api.withsubtype?Type=Asset"),
         headers: {"Authorization": prefs.getString('token') ?? ""});
-    print(response.statusCode);
-    print('status API');
+   
     if (response.statusCode == 200) {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       List<String> liability_icon_list = [];
@@ -258,6 +305,7 @@ class _searchbarState extends State<searchbar> {
           ),
         ),
         body: Center(
+          
             child: _loading
                 ? CircularProgressIndicator(
                     valueColor: AlwaysStoppedAnimation<Color>(
@@ -272,7 +320,7 @@ class _searchbarState extends State<searchbar> {
                         ? icon_nameOnSearch.length
                         : icon_name.length,
                     itemBuilder: (context, index) {
-                      print(icon_name[index][1]);
+                      
                       return Container(
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(10),
@@ -282,14 +330,18 @@ class _searchbarState extends State<searchbar> {
                               Center(
                                   child: TextButton.icon(
                                       onPressed: () {
-                                        print(jsonDecode(icon_name[index]));
+                                       
                                         subtypescode =
                                             jsonDecode(icon_name[index])[2];
                                         subtypesname =
                                             jsonDecode(icon_name[index])[0];
                                         _show(context, subtypescode,
                                             subtypesname);
-                                        print(jsonDecode(icon_name[index])[2]);
+                                    namecontroller.clear();
+                                    amountcontroller.clear();
+                                    notescontroller.clear();
+                                    _platformFile = null;
+                                    // loadingController.clearListeners();
 
                                         // print(icon_name[index][0]);
                                       },
@@ -329,6 +381,7 @@ class _searchbarState extends State<searchbar> {
   void _show(BuildContext ctx, subtypescode, subtypesname) {
     showModalBottomSheet(
         shape: RoundedRectangleBorder(
+          
           borderRadius: BorderRadius.all(Radius.circular(10.0)),
         ),
         isScrollControlled: true,
@@ -340,7 +393,7 @@ class _searchbarState extends State<searchbar> {
                   left: 15,
                   right: 15,
                   bottom: MediaQuery.of(ctx).viewInsets.bottom + 15),
-              child: Form(
+            child: Form(
                 key: formKey,
                 child: Column(
                     mainAxisSize: MainAxisSize.min,
@@ -378,38 +431,123 @@ class _searchbarState extends State<searchbar> {
                               return null;
                             }
                           }),
-                      TextButton(
-                          onPressed: () {
-                            _onAlertWithCustomContentPressed(context);
-                          },
-                          child: const Text(
-                            "Upload",
-                            style:
-                                TextStyle(color: Color.fromARGB(255, 0, 0, 0)),
-                          )),
-        //                   RichText(
-        //   text: TextSpan(
-        //     children: [
-        //       TextSpan(
-        //         style: defaultText,
-        //         text: "To learn more "
-        //       ),
-        //       TextSpan(
-        //         style: linkText,
-        //          text: "Click here",
-        //           recognizer: TapGestureRecognizer()..onTap =  () {
-        //                 if ( canLaunch(_myImage)) {
-        //                    launch(_myImage));
-        //                 } else {
-        //                   throw 'Could not launch $_myImage';
-        //                 }
-        //           }
-        //       ),
-        //     ]
-        // )),
-                      SizedBox(
-                        height: 15,
-                      ),
+                      // TextButton(
+                      //     onPressed: () {
+                      //       _onAlertWithCustomContentPressed(context);
+                      //     },
+                      //     child: const Text(
+                      //       "Upload",
+                      //       style:
+                      //           TextStyle(color: Color.fromARGB(255, 0, 0, 0)),
+                      //     )),
+                                      GestureDetector(
+              onTap: selectFile,
+          child:
+               Padding(
+                padding: EdgeInsets.symmetric(horizontal: 40.0, vertical: 20.0),
+                child: DottedBorder(
+                  borderType: BorderType.RRect,
+                  radius: Radius.circular(10),
+                  dashPattern: [10, 4],
+                  strokeCap: StrokeCap.round,
+                  color: Colors.blue.shade400,
+                  child: Container(
+                    width: double.infinity,
+                      child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(Iconsax.folder_open, color: Colors.blue, size: 40,),
+                     
+                      ],
+                    ),
+                  ),
+                )
+              ),
+            
+                                      ),
+               _platformFile != null
+              ? Container(
+                child: _loading
+                ? CircularProgressIndicator(
+                    valueColor: AlwaysStoppedAnimation<Color>(
+                        Color.fromARGB(255, 93, 99, 216)),
+                  )
+                :
+                 Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+              
+                    children: [
+                    Text('Selected File', 
+                      style: TextStyle(color: Colors.grey.shade400, fontSize: 15, ),),
+             
+                    Container(
+                      
+                      padding: EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(100),
+                        color: Colors.white,
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.shade200,
+                            offset: Offset(0, 1),
+                            blurRadius: 3,
+                            spreadRadius: 2,
+                          )
+                        ]
+                        
+                ),
+              child:  Row(
+                        children: [
+                         
+                          SizedBox(width: 10,),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(_platformFile!.name, 
+                                  style: TextStyle(fontSize: 13, color: Colors.black),),
+                                SizedBox(height: 5,),
+                                Text('${(_platformFile!.size / 1024).ceil()} KB', 
+                                  style: TextStyle(fontSize: 13, color: Colors.grey.shade500),
+                                ),
+                                   Container(
+                                  height: 5,
+                                  clipBehavior: Clip.hardEdge,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(5),
+                                    color: Colors.blue.shade50,
+                                   ), 
+                                    child:
+                    
+                                  LinearProgressIndicator(
+                                    value: loadingController.value,
+                                    
+                                  ),
+                                  
+                                
+                            
+                                   ),
+
+                              ],
+                                   
+                            ),
+                          ),
+                        ],
+                      )
+                    ),
+                                        SizedBox(height: 20,),
+
+            
+                  ],
+                )
+              ):Container(),
+              SizedBox(height: 150,),
+                    
+            
+              
+            
+  
+                 
                       RaisedButton(
                           color: Color.fromARGB(255, 93, 99, 216),
                           child: Text(
@@ -432,11 +570,19 @@ class _searchbarState extends State<searchbar> {
                               notescontroller.clear();
                               amountcontroller.clear();
                               datecontroller.clear();
+                              
                             }
                          })
-                    ]),
-              ),
+                        
+                    ],
+                    ),
+
+
+                ),
+                
+        
             ));
+    
   }
 
   Future dataentry(type, subtypescode, name, notes, amount) async {
@@ -444,27 +590,17 @@ class _searchbarState extends State<searchbar> {
         namecontroller.text.isNotEmpty ||
         notescontroller.text.isNotEmpty ||
         amountcontroller.text.isNotEmpty) {
-      print(dotenv.env['API_URL']);
 
-      // var response = await http.post(Uri.parse(
-      //      dotenv.env['API_KEY'] ?? ""));
-      // var response = await http.post(Uri.parse(
-      //     '${dotenv.env['API_URL']}/api/method/money_management_backend.custom.py.api.daily_entry_submit?Type=Asset&Subtype=${subtypes}&Name=${name}&Notes=${notes}&Amount=${amount}&Remainder_date=${date}'),
-      //     headers: {}
-      //     );
 
       SharedPreferences prefs = await SharedPreferences.getInstance();
-      print(prefs.getString('token'));
       var response = await http.post(
           Uri.parse(
               '${dotenv.env['API_URL']}/api/method/money_management_backend.custom.py.api.daily_entry_submit?Type=Asset&Subtype=${subtypescode}&Name=${name}&Notes=${notes}&Amount=${amount}'),
           headers: {"Authorization": prefs.getString('token') ?? ""});
       //print(response.statusCode);
-      print(name);
-      print(response.statusCode);
-      print(json.decode(response.body));
+     
       if (response.statusCode == 200) {
-        print(response.statusCode);
+       
         Navigator.pop(context);
 
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -531,71 +667,71 @@ class _searchbarState extends State<searchbar> {
     }
   }
 
-  _onAlertWithCustomContentPressed(context) {
-    print("test11");
-    var alertStyle = AlertStyle(
-      isCloseButton: false,
-      isOverlayTapDismiss: true,
-    );
-    Alert(
-      context: context,
-      title: "Image",
-      buttons: [
-        DialogButton(
-            color: Color.fromARGB(255, 93, 99, 216),
-            child: Text(
-              "Camera",
-              style: TextStyle(color: Color.fromARGB(255, 255, 253, 253)),
-            ),
-            onPressed: () {
+  // _onAlertWithCustomContentPressed(context) {
+  //   print("test11");
+  //   var alertStyle = AlertStyle(
+  //     isCloseButton: false,
+  //     isOverlayTapDismiss: true,
+  //   );
+  //   Alert(
+  //     context: context,
+  //     title: "Image",
+  //     buttons: [
+  //       DialogButton(
+  //           color: Color.fromARGB(255, 93, 99, 216),
+  //           child: Text(
+  //             "Camera",
+  //             style: TextStyle(color: Color.fromARGB(255, 255, 253, 253)),
+  //           ),
+  //           onPressed: () {
           
-              pickImage(ImageSource.camera);
-               Navigator.pop(
-                                context,
+  //             pickImage(ImageSource.camera);
+  //              Navigator.pop(
+  //                               context,
                                 
-                              );
+  //                             );
               
-            }),
-        DialogButton(
-            color: Color.fromARGB(255, 93, 99, 216),
-            child: Text(
-              "Image",
-              style: TextStyle(color: Color.fromARGB(255, 255, 253, 253)),
-            ),onPressed: () {
+  //           }),
+  //       DialogButton(
+  //           color: Color.fromARGB(255, 93, 99, 216),
+  //           child: Text(
+  //             "Image",
+  //             style: TextStyle(color: Color.fromARGB(255, 255, 253, 253)),
+  //           ),onPressed: () {
           
-              pickImage(ImageSource.gallery);
-               Navigator.pop(
-                                context,
+  //             pickImage(ImageSource.gallery);
+  //              Navigator.pop(
+  //                               context,
                                 
-                              );}),
+  //                             );}),
             
-        DialogButton(
-          color: Color.fromARGB(255, 93, 99, 216),
-          child: Text(
-            "Image",
-            style: TextStyle(color: Color.fromARGB(255, 255, 253, 253)),
-          ),
-          onPressed: () async {
-            final result = await FilePicker.platform.pickFiles();
-            if (result == null) return;
-            var img;
-            img = result.files.first;
+  //       DialogButton(
+  //         color: Color.fromARGB(255, 93, 99, 216),
+  //         child: Text(
+  //           "Image",
+  //           style: TextStyle(color: Color.fromARGB(255, 255, 253, 253)),
+  //         ),
+  //         onPressed: () async {
+  //           final result = await FilePicker.platform.pickFiles();
+  //           if (result == null) return;
+            
+  //           _platformFile = result.files.first;
                 
-            final bytes = Io.File(img.path).readAsBytesSync();
+  //           // final bytes = Io.File(_.path).readAsBytesSync();
 
-            String img64 = base64Encode(bytes);
-            print(img64);
-               Navigator.pop(
-                                context,
+  //           // String img64 = base64Encode(bytes);
+  //           // print(img64);
+  //              Navigator.pop(
+  //                               context,
                                 
-                              );
+  //                             );
        
 
-          },
-        )
-      ]
-    ).show();
-  }
+  //         },
+  //       )
+  //     ]
+  //   ).show();
+  // }
 
 
   Future uploadfile(File img64) async {
