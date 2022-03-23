@@ -146,7 +146,7 @@ class _customExpenseState extends State<customExpense> {
                       ? icon_nameOnSearch.length
                       : icon_name.length,
                   itemBuilder: (context, index) {
-                    code = jsonEncode(icon_name[index])[0];
+                    code = jsonDecode(icon_name[index])[0];
 
                     return Padding(
                       padding: const EdgeInsets.all(8.0),

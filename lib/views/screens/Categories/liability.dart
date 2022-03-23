@@ -130,7 +130,7 @@ class _customLiabilityState extends State<customLiability> {
                       ? icon_nameOnSearch.length
                       : icon_name.length,
                   itemBuilder: (context, index) {
-                    code = icon_name[index][1];
+                    code = jsonDecode(icon_name[index])[0];
 
                     return Padding(
                       padding: const EdgeInsets.all(8.0),

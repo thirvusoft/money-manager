@@ -51,7 +51,7 @@ class _customOthersState extends State<customOthers> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var response = await http.post(
         Uri.parse(
-            "${dotenv.env['API_URL']}/api/method/money_management_backend.custom.py.api.withsubtype?Type=Others"),
+            "${dotenv.env['API_URL']}/api/method/money_management_backend.custom.py.api.withoutsubtype?Type=Others"),
         headers: {"Authorization": prefs.getString('token') ?? ""});
 
     if (response.statusCode == 200) {
@@ -129,7 +129,7 @@ class _customOthersState extends State<customOthers> {
                       crossAxisSpacing: 12),
                   itemCount: icon_name.length,
                   itemBuilder: (context, index) {
-                    code = jsonDecode(icon_name[index])[1];
+                    code = jsonDecode(icon_name[index])[0];
                     //print(icon_name);
                     //print(icon_name[index]);
                     print(hexcode_dict[jsonDecode(icon_name[index])[0]]);
