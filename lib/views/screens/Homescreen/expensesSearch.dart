@@ -461,6 +461,13 @@ class _expenseSearchState extends State<expenseSearch> {
           content: Text(json.decode(response.body)['message']),
           backgroundColor: Colors.red,
         ));
+      } else if (response.statusCode == 429) {
+        Navigator.pop(context);
+
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(json.decode(response.body)['message']),
+          backgroundColor: Colors.red,
+        ));
       } else if (response.statusCode == 500) {
         Navigator.pop(context);
 
