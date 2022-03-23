@@ -101,7 +101,7 @@ class _searchbarState extends State<searchbar> {
   var subtypesname;
   final formKey = GlobalKey<FormState>();
 
-  bool _loading = true;
+  bool _loading = false;
   List icon_nameOnSearch = [];
   List icon_name = [];
   var hexcode_dict = <String, int>{
@@ -323,6 +323,12 @@ class _searchbarState extends State<searchbar> {
             child: Icon(Icons.add, semanticLabel: 'Customise icon'),
             backgroundColor: Color.fromARGB(255, 93, 99, 216),
             onPressed: () {
+              Future.delayed(Duration(seconds: 1), () {
+                Color.fromARGB(255, 93, 99, 216);
+                setState(() {
+                  _loading = false;
+                });
+              });
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => customAsset()),
