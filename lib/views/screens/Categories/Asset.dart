@@ -243,13 +243,10 @@ class _customAssetState extends State<customAsset> {
   Future cussubmit(type, name, code) async {
     if (namecontroller.text.isNotEmpty) {
       SharedPreferences prefs = await SharedPreferences.getInstance();
-
       var response = await http.post(
-        Uri.parse(
-            "${dotenv.env['API_URL']}/api/method/money_management_backend.custom.py.api.custom?Type=Asset&Subtype=${name}&IconBineryCode=${code}"),
-        headers: {"Authorization": prefs.getString('token') ?? ""},
-      );
-
+          Uri.parse(
+              "${dotenv.env['API_URL']}/api/method/money_management_backend.custom.py.api.custom?Type=Asset&Subtype=${name}&IconBineryCode=${code}"),
+          headers: {"Authorization": prefs.getString('token') ?? ""});
       if (response.statusCode == 200) {
         Navigator.pop(context);
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
