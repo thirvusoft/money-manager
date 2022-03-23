@@ -209,8 +209,13 @@ class _searchbarState extends State<searchbar> {
           actions: [
             InkWell(
               onTap: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => Profiles()));
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => Profiles(),
+                  ),
+                );
+                (Route route) => false;
               },
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -275,8 +280,10 @@ class _searchbarState extends State<searchbar> {
                       var row = [];
                       if (icon_nameOnSearch.length != 0) {
                         row = icon_nameOnSearch;
+                        print(row);
                       } else {
                         row = icon_name;
+                        print(row);
                       }
                       return Container(
                           decoration: BoxDecoration(
@@ -323,8 +330,11 @@ class _searchbarState extends State<searchbar> {
               _loading = false;
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => customAsset()),
+                MaterialPageRoute(
+                  builder: (context) => customAsset(),
+                ),
               );
+              (Route route) => false;
             }));
   }
 
@@ -439,6 +449,7 @@ class _searchbarState extends State<searchbar> {
           headers: {"Authorization": prefs.getString('token') ?? ""});
       if (response.statusCode == 200) {
         Navigator.pop(context);
+        (Route route) => false;
 
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text(json.decode(response.body)['message']),
@@ -446,6 +457,7 @@ class _searchbarState extends State<searchbar> {
         ));
       } else if (response.statusCode == 401) {
         Navigator.pop(context);
+        (Route route) => false;
 
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text(json.decode(response.body)['message']),
@@ -453,6 +465,7 @@ class _searchbarState extends State<searchbar> {
         ));
       } else if (response.statusCode == 403) {
         Navigator.pop(context);
+        (Route route) => false;
 
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text('Permission Denied'),
@@ -465,15 +478,9 @@ class _searchbarState extends State<searchbar> {
           content: Text(json.decode(response.body)['message']),
           backgroundColor: Colors.red,
         ));
-      } else if (response.statusCode == 4) {
-        Navigator.pop(context);
-
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text(json.decode(response.body)['message']),
-          backgroundColor: Colors.red,
-        ));
       } else if (response.statusCode == 500) {
         Navigator.pop(context);
+        (Route route) => false;
 
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text(json.decode(response.body)['message']),
@@ -481,6 +488,7 @@ class _searchbarState extends State<searchbar> {
         ));
       } else if (response.statusCode == 503) {
         Navigator.pop(context);
+        (Route route) => false;
 
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text(json.decode(response.body)['message']),
@@ -488,6 +496,7 @@ class _searchbarState extends State<searchbar> {
         ));
       } else if (response.statusCode == 409) {
         Navigator.pop(context);
+        (Route route) => false;
 
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text(json.decode(response.body)['message']),
@@ -495,6 +504,7 @@ class _searchbarState extends State<searchbar> {
         ));
       } else if (response.statusCode == 404) {
         Navigator.pop(context);
+        (Route route) => false;
 
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text(json.decode(response.body)['message']),
@@ -502,6 +512,7 @@ class _searchbarState extends State<searchbar> {
         ));
       } else {
         Navigator.pop(context);
+        (Route route) => false;
 
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text("Invalid"),
@@ -527,6 +538,7 @@ class _searchbarState extends State<searchbar> {
             Navigator.pop(
               context,
             );
+            (Route route) => false;
           }),
       DialogButton(
           color: Color.fromARGB(255, 93, 99, 216),
@@ -540,6 +552,7 @@ class _searchbarState extends State<searchbar> {
             Navigator.pop(
               context,
             );
+            (Route route) => false;
           }),
       DialogButton(
         color: Color.fromARGB(255, 93, 99, 216),
@@ -559,6 +572,7 @@ class _searchbarState extends State<searchbar> {
           Navigator.pop(
             context,
           );
+          (Route route) => false;
         },
       )
     ]).show();

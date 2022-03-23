@@ -227,9 +227,12 @@ class _login_pageState extends State<login_page> {
         SharedPreferences prefs = await SharedPreferences.getInstance();
         prefs.setString('token', json.decode(response.body)['token']);
         prefs.setString('email', email);
-        Navigator.push(
+        Navigator.pushAndRemoveUntil(
           context,
-          MaterialPageRoute(builder: (context) => bottomnavigation()),
+          MaterialPageRoute(
+            builder: (context) => bottomnavigation(),
+          ),
+          (route) => false,
         );
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text(json.decode(response.body)['message']),

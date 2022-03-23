@@ -38,6 +38,7 @@ class _bottomnavigationState extends State<bottomnavigation> {
           setState(
             () {
               currentIndex = index;
+              (Route route) => true;
             },
           );
         },
