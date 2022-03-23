@@ -318,7 +318,16 @@ class _searchbarState extends State<searchbar> {
             child: Icon(Icons.add, semanticLabel: 'Customise icon'),
             backgroundColor: Color.fromARGB(255, 93, 99, 216),
             onPressed: () {
+<<<<<<< HEAD
               _loading = false;
+=======
+              Future.delayed(Duration(seconds: 1), () {
+                Color.fromARGB(255, 93, 99, 216);
+                setState(() {
+                  _loading = false;
+                });
+              });
+>>>>>>> e9daf126b4b619a7d2ae784a6cdb4fa193dbb589
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => customAsset()),

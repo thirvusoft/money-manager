@@ -10,7 +10,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_login/flutter_login.dart';
 import '../../widgets/BottomNavigation.dart';
 import 'package:connectivity/connectivity.dart';
-import 'package:awesome_dialog/awesome_dialog.dart';
 
 bool _securetext = true;
 
