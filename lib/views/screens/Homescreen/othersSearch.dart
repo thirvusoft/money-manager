@@ -110,13 +110,11 @@ class _othersSearchState extends State<othersSearch> {
 
   Future listapi() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    print(prefs.getString('token'));
+
     var response = await http.post(
         Uri.parse(
             "${dotenv.env['API_URL']}/api/method/money_management_backend.custom.py.api.withsubtype?Type=Others"),
         headers: {"Authorization": prefs.getString('token') ?? ""});
-    print(response.statusCode);
-    print('status API');
 
     if (response.statusCode == 200) {
       SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -128,10 +126,6 @@ class _othersSearchState extends State<othersSearch> {
       prefs.setStringList('liability_icon_list', liability_icon_list);
       icon_name = prefs.getStringList("liability_icon_list")!;
       setState(() => _loading = true);
-      // ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      //   content: Text(json.decode(response.body)['message']),
-      //   backgroundColor: Colors.red,
-      // ));
     } else if (response.statusCode == 401) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text(json.decode(response.body)['message']),
@@ -143,6 +137,13 @@ class _othersSearchState extends State<othersSearch> {
         backgroundColor: Colors.red,
       ));
     } else if (response.statusCode == 417) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(json.decode(response.body)['message']),
+        backgroundColor: Colors.red,
+      ));
+    } else if (response.statusCode == 429) {
+      Navigator.pop(context);
+
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text(json.decode(response.body)['message']),
         backgroundColor: Colors.red,
@@ -412,7 +413,6 @@ class _othersSearchState extends State<othersSearch> {
                           ),
                           onPressed: () {
                             if (formKey.currentState!.validate()) {
-                              // print(typecontroller.text);
                               dataentry(
                                   typecontroller.text,
                                   subtypes,
@@ -437,12 +437,9 @@ class _othersSearchState extends State<othersSearch> {
         notescontroller.text.isNotEmpty ||
         amountcontroller.text.isNotEmpty ||
         datecontroller.text.isNotEmpty) {
-      print(subtypecontroller.text);
-      print(dotenv.env['API_URL']);
-
       var response = await http.post(Uri.parse(
           "${dotenv.env['API_URL']}/api/method/money_management_backend.custom.py.api.daily_entry_submit?Type=Others&Subtype=${subtypes}&Name=${name}&Notes=${notes}&Amount=${amount}&Remainder_date=${date}"));
-      //print(response.statusCode);
+
       if (response.statusCode == 200) {
         Navigator.pop(context);
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -510,7 +507,6 @@ class _othersSearchState extends State<othersSearch> {
   }
 
   _onAlertWithCustomContentPressed(context) {
-    print("test11");
     var alertStyle = AlertStyle(
       isCloseButton: false,
       isOverlayTapDismiss: true,
@@ -555,7 +551,7 @@ class _othersSearchState extends State<othersSearch> {
           final bytes = Io.File(img.path).readAsBytesSync();
 
           String img64 = base64Encode(bytes);
-          print(img64);
+
           Navigator.pop(
             context,
           );
@@ -566,9 +562,8 @@ class _othersSearchState extends State<othersSearch> {
 
   Future uploadfile(File img64) async {
     var bytes = img64.readAsBytesSync();
-    print(bytes);
+
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    print(prefs.getString('token'));
 
     var response = await http.post(
       Uri.parse(

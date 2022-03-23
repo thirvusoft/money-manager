@@ -48,6 +48,8 @@ class _searchbarState extends State<searchbar> {
 
   get linkText => null;
 
+  get imgcontent => null;
+
   pickImage(ImageSource source) async {
     XFile? image = await picker.pickImage(
       source: source,
@@ -462,6 +464,13 @@ class _searchbarState extends State<searchbar> {
           content: Text(json.decode(response.body)['message']),
           backgroundColor: Colors.red,
         ));
+      } else if (response.statusCode == 4) {
+        Navigator.pop(context);
+
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(json.decode(response.body)['message']),
+          backgroundColor: Colors.red,
+        ));
       } else if (response.statusCode == 500) {
         Navigator.pop(context);
 
@@ -514,7 +523,6 @@ class _searchbarState extends State<searchbar> {
             style: TextStyle(color: Color.fromARGB(255, 255, 253, 253)),
           ),
           onPressed: () {
-            pickImage(ImageSource.camera);
             Navigator.pop(
               context,
             );
@@ -527,6 +535,7 @@ class _searchbarState extends State<searchbar> {
           ),
           onPressed: () {
             pickImage(ImageSource.gallery);
+            uploadimage(imgcontent);
             Navigator.pop(
               context,
             );
@@ -568,9 +577,9 @@ class _searchbarState extends State<searchbar> {
     return response.body;
   }
 
-  Future uploadimage(_myimage) async {
-    var bytes = _myimage.readAsBytesSync();
-    String imgcontent = base64Encode(bytes);
+  Future uploadimage(imgcontent) async {
+    //var bytes = _myimage.readAsBytesSync();
+    //String imgcontent = base64Encode(bytes);
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
     var response = await http.post(
@@ -580,6 +589,9 @@ class _searchbarState extends State<searchbar> {
       body: {"file": imgcontent},
       // encoding: Encoding.getByName("utf-8"),
     );
+    if (response.statusCode == 200) {
+      print("fhj");
+    }
     return response.body;
   }
 }

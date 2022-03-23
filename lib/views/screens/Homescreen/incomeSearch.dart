@@ -143,6 +143,13 @@ class _incomeSearchState extends State<incomeSearch> {
         content: Text(json.decode(response.body)['message']),
         backgroundColor: Colors.red,
       ));
+    } else if (response.statusCode == 429) {
+      Navigator.pop(context);
+
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(json.decode(response.body)['message']),
+        backgroundColor: Colors.red,
+      ));
     } else if (response.statusCode == 500) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text(json.decode(response.body)['message']),
