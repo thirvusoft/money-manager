@@ -111,46 +111,55 @@ class _customLiabilityState extends State<customLiability> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Color.fromARGB(255, 93, 99, 216),
-        title: Text('Liability Customise Icons'),
-      ),
-      body: GridView.builder(
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2, childAspectRatio: 3, crossAxisSpacing: 12),
-          itemCount: _textEditingController.text.isNotEmpty
-              ? icon_nameOnSearch.length
-              : icon_name.length,
-          itemBuilder: (context, index) {
-            code = icon_name[index][1];
+        appBar: AppBar(
+          backgroundColor: Color.fromARGB(255, 93, 99, 216),
+          title: Text('Liability Customise Icons'),
+        ),
+        body: Center(
+          child: _loading
+              ? CircularProgressIndicator(
+                  valueColor: AlwaysStoppedAnimation<Color>(
+                      Color.fromARGB(255, 93, 99, 216)),
+                )
+              : GridView.builder(
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      childAspectRatio: 3,
+                      crossAxisSpacing: 12),
+                  itemCount: _textEditingController.text.isNotEmpty
+                      ? icon_nameOnSearch.length
+                      : icon_name.length,
+                  itemBuilder: (context, index) {
+                    code = icon_name[index][1];
 
-            return Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                children: [
-                  CircleAvatar(
-                    radius: 58,
-                    backgroundColor: Color.fromARGB(255, 93, 99, 216),
-                    child: IconButton(
-                        iconSize: 30.0,
-                        onPressed: () {
-                          _show(context);
-                        },
-                        icon: Icon(
-                            IconData(
-                                hexcode_dict[jsonDecode(icon_name[index])[0]] ??
-                                    0XF155,
-                                fontFamily: 'MaterialIcons'),
-                            color: Color.fromARGB(255, 255, 255, 255))),
-                  ),
-                  SizedBox(
-                    width: 25,
-                  ),
-                ],
-              ),
-            );
-          }),
-    );
+                    return Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                        children: [
+                          CircleAvatar(
+                            radius: 58,
+                            backgroundColor: Color.fromARGB(255, 93, 99, 216),
+                            child: IconButton(
+                                iconSize: 30.0,
+                                onPressed: () {
+                                  _show(context);
+                                },
+                                icon: Icon(
+                                    IconData(
+                                        hexcode_dict[jsonDecode(
+                                                icon_name[index])[0]] ??
+                                            0XF155,
+                                        fontFamily: 'MaterialIcons'),
+                                    color: Color.fromARGB(255, 255, 255, 255))),
+                          ),
+                          SizedBox(
+                            width: 25,
+                          ),
+                        ],
+                      ),
+                    );
+                  }),
+        ));
   }
 
   void _show(BuildContext ctx) {
