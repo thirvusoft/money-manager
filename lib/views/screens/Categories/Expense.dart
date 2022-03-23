@@ -244,7 +244,7 @@ class _customExpenseState extends State<customExpense> {
       print(dotenv.env['API_URL']);
       var response = await http.post(
           Uri.parse(
-              "${dotenv.env['API_URL']}/api/method/money_management_backend.custom.py.api.custom?Type=Asset&Subtype=${name}&IconBineryCode=${code}"),
+              "${dotenv.env['API_URL']}/api/method/money_management_backend.custom.py.api.custom?Type=Expense&Subtype=${name}&IconBineryCode=${code}"),
           headers: {"Authorization": prefs.getString('token') ?? ""});
       if (response.statusCode == 200) {
         Navigator.pop(context);
