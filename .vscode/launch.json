@@ -9,12 +9,14 @@
             "name": "money_manager",
             "request": "launch",
             "type": "dart"
+            
         },
         {
             "name": "money_manager (profile mode)",
             "request": "launch",
             "type": "dart",
             "flutterMode": "profile"
+            
         }
     ]
 }

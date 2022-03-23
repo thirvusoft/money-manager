@@ -27,9 +27,8 @@ class _ProfilesState extends State<Profiles> {
   // }
   @override
   void initState() {
-    checkupdateNeeded(email);
-
     super.initState();
+    checkupdateNeeded(email);
   }
 
   @override
@@ -38,11 +37,13 @@ class _ProfilesState extends State<Profiles> {
   }
 
   checkupdateNeeded(email) async {
-    await profile(email);
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    full_name = prefs.getString('mobile_number');
-    name = prefs.getString("full_name");
     mail = prefs.getString("email");
+    await profile(mail);
+    SharedPreferences _prefs = await SharedPreferences.getInstance();
+    mail = _prefs.getString("email");
+    full_name = _prefs.getString('mobile_number');
+    name = prefs.getString("full_name");
     setState(() => isLoading = true);
   }
 
@@ -154,9 +155,11 @@ class MyClipper extends CustomClipper<Path> {
 }
 
 Future profile(email) async {
-  var response = await http.post(Uri.parse(
-      "${dotenv.env['API_URL']}/api/method/money_management_backend.custom.py.api.profile?email=${email}"));
-
+  SharedPreferences _prefs = await SharedPreferences.getInstance();
+  var response = await http.post(
+      Uri.parse(
+          "${dotenv.env['API_URL']}/api/method/money_management_backend.custom.py.api.profile?email=${email}"),
+      headers: {"Authorization": _prefs.getString('token') ?? ""});
   if (response.statusCode == 200) {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setString("mobile_number",

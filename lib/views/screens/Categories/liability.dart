@@ -223,8 +223,12 @@ class _customLiabilityState extends State<customLiability> {
 //DataEntry API
   Future cussubmit(type, name, code) async {
     if (typecontroller.text.isNotEmpty || namecontroller.text.isNotEmpty) {
-      var response = await http.post(Uri.parse(
-          "${dotenv.env['API_URL']}/api/method/money_management_backend.custom.py.api.custom?Type=Liability&Subtype=${name}&IconBineryCode=654654"));
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+
+      var response = await http.post(
+          Uri.parse(
+              "${dotenv.env['API_URL']}/api/method/money_management_backend.custom.py.api.custom?Type=Liability&Subtype=${name}&IconBineryCode=654654"),
+          headers: {"Authorization": prefs.getString('token') ?? ""});
       if (response.statusCode == 200) {
         Navigator.pop(context);
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
