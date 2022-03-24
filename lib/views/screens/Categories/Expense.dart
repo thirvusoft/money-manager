@@ -146,7 +146,7 @@ class _customExpenseState extends State<customExpense> {
                       ? icon_nameOnSearch.length
                       : icon_name.length,
                   itemBuilder: (context, index) {
-                    code = jsonEncode(icon_name[index])[0];
+                    code = jsonDecode(icon_name[index])[0];
 
                     return Padding(
                       padding: const EdgeInsets.all(8.0),
@@ -244,7 +244,7 @@ class _customExpenseState extends State<customExpense> {
       print(dotenv.env['API_URL']);
       var response = await http.post(
           Uri.parse(
-              "${dotenv.env['API_URL']}/api/method/money_management_backend.custom.py.api.custom?Type=Asset&Subtype=${name}&IconBineryCode=${code}"),
+              "${dotenv.env['API_URL']}/api/method/money_management_backend.custom.py.api.custom?Type=Expense&Subtype=${name}&IconBineryCode=${code}"),
           headers: {"Authorization": prefs.getString('token') ?? ""});
       if (response.statusCode == 200) {
         Navigator.pop(context);

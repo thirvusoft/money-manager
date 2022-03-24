@@ -230,7 +230,7 @@ class _searchbarState extends State<searchbar> {
                   value.trimLeft();
                   icon_nameOnSearch.clear();
                   for (var i = 0; i < icon_name.length; i++) {
-                    data = icon_name[i][0];
+                    data = jsonDecode(icon_name[i])[0];
 
                     if (data
                         .toLowerCase()
@@ -272,8 +272,10 @@ class _searchbarState extends State<searchbar> {
                       var row = [];
                       if (icon_nameOnSearch.length != 0) {
                         row = icon_nameOnSearch;
+                        print(row);
                       } else {
                         row = icon_name;
+                        print(row);
                       }
                       return Container(
                           decoration: BoxDecoration(
@@ -320,7 +322,9 @@ class _searchbarState extends State<searchbar> {
               _loading = false;
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => customAsset()),
+                MaterialPageRoute(
+                  builder: (context) => customAsset(),
+                ),
               );
             }));
   }
@@ -456,13 +460,6 @@ class _searchbarState extends State<searchbar> {
           backgroundColor: Colors.red,
         ));
       } else if (response.statusCode == 417) {
-        Navigator.pop(context);
-
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text(json.decode(response.body)['message']),
-          backgroundColor: Colors.red,
-        ));
-      } else if (response.statusCode == 4) {
         Navigator.pop(context);
 
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(

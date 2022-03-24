@@ -51,7 +51,7 @@ class _customOthersState extends State<customOthers> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var response = await http.post(
         Uri.parse(
-            "${dotenv.env['API_URL']}/api/method/money_management_backend.custom.py.api.withsubtype?Type=Others"),
+            "${dotenv.env['API_URL']}/api/method/money_management_backend.custom.py.api.withoutsubtype?Type=Others"),
         headers: {"Authorization": prefs.getString('token') ?? ""});
 
     if (response.statusCode == 200) {
@@ -61,6 +61,7 @@ class _customOthersState extends State<customOthers> {
         liability_icon_list
             .add(jsonEncode(json.decode(response.body)["Others"][i]));
       }
+      print(liability_icon_list);
       prefs.setStringList('liability_icon_list', liability_icon_list);
       icon_name = prefs.getStringList("liability_icon_list")!;
     } else if (response.statusCode == 401) {
@@ -126,11 +127,13 @@ class _customOthersState extends State<customOthers> {
                       crossAxisCount: 2,
                       childAspectRatio: 3,
                       crossAxisSpacing: 12),
-                  itemCount: _textEditingController.text.isNotEmpty
-                      ? icon_nameOnSearch.length
-                      : icon_name.length,
+                  itemCount: icon_name.length,
                   itemBuilder: (context, index) {
-                    code = icon_name[index][1];
+                    code = jsonDecode(icon_name[index])[0];
+                    //print(icon_name);
+                    //print(icon_name[index]);
+                    print(hexcode_dict[jsonDecode(icon_name[index])[0]]);
+                    print(code);
                     return Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Row(
@@ -222,8 +225,12 @@ class _customOthersState extends State<customOthers> {
 //DataEntry API
   Future cussubmit(type, name, code) async {
     if (typecontroller.text.isNotEmpty || namecontroller.text.isNotEmpty) {
+      print("fyfyh");
+      print(
+          "${dotenv.env['API_URL']}/api/method/money_management_backend.custom.py.api.custom?Type=Others&name=${name}&IconBineryCode=${code}");
       var response = await http.post(Uri.parse(
-          "${dotenv.env['API_URL']}/api/method/money_management_backend.custom.py.api.custom?Type=Others&name=${name}&IconBineryCode=654654"));
+          "${dotenv.env['API_URL']}/api/method/money_management_backend.custom.py.api.custom?Type=Others&name=${name}&IconBineryCode=${code}"));
+      print(response.statusCode);
       if (response.statusCode == 200) {
         Navigator.pop(context);
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(

@@ -141,7 +141,7 @@ class _customAssetState extends State<customAsset> {
                           ? icon_nameOnSearch.length
                           : icon_name.length,
                       itemBuilder: (context, index) {
-                        code = jsonEncode(icon_name[index])[0];
+                        code = jsonDecode(icon_name[index])[0];
 
                         return Padding(
                           padding: const EdgeInsets.all(8.0),
@@ -243,13 +243,10 @@ class _customAssetState extends State<customAsset> {
   Future cussubmit(type, name, code) async {
     if (namecontroller.text.isNotEmpty) {
       SharedPreferences prefs = await SharedPreferences.getInstance();
-
       var response = await http.post(
-        Uri.parse(
-            "${dotenv.env['API_URL']}/api/method/money_management_backend.custom.py.api.custom?Type=Asset&Subtype=${name}&IconBineryCode=${code}"),
-        headers: {"Authorization": prefs.getString('token') ?? ""},
-      );
-
+          Uri.parse(
+              "${dotenv.env['API_URL']}/api/method/money_management_backend.custom.py.api.custom?Type=Asset&Subtype=${name}&IconBineryCode=${code}"),
+          headers: {"Authorization": prefs.getString('token') ?? ""});
       if (response.statusCode == 200) {
         Navigator.pop(context);
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
