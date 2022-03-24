@@ -44,7 +44,8 @@ class searchbar extends StatefulWidget {
   _searchbarState createState() => _searchbarState();
 }
 
-class _searchbarState extends State<searchbar> with SingleTickerProviderStateMixin {
+class _searchbarState extends State<searchbar>
+    with SingleTickerProviderStateMixin {
   String _image = ' ';
   late AnimationController loadingController;
 
@@ -53,56 +54,47 @@ class _searchbarState extends State<searchbar> with SingleTickerProviderStateMix
 
   selectFile() async {
     final file = await FilePicker.platform.pickFiles(
-      type: FileType.custom,
-      allowedExtensions: ['png', 'jpg', 'jpeg','pdf']
-    );
+        type: FileType.custom,
+        allowedExtensions: ['png', 'jpg', 'jpeg', 'pdf']);
 
     if (file != null) {
       setState(() {
-        
         _file = File(file.files.single.path!);
         _platformFile = file.files.first;
-                print(_platformFile);
-
       });
     }
-        loadingController.forward();
-
+    loadingController.forward();
   }
-    @override
+
+  @override
   void initState() {
-  super.initState();
-    
-  
+    super.initState();
+
     listapi();
     Future.delayed(Duration(seconds: 1), () {
       Color.fromARGB(255, 93, 99, 216);
-      
-    //   loadingController = AnimationController(
-     
-    //   duration: const Duration(seconds: 10), vsync: this, 
-    // )..addListener(() { setState(() {}); });
+
+      //   loadingController = AnimationController(
+
+      //   duration: const Duration(seconds: 10), vsync: this,
+      // )..addListener(() { setState(() {}); });
       setState(() {
         _loading = false;
-       
-      
       });
     });
   }
   // @override
   // void initState() {
   //   loadingController = AnimationController(
-     
+
   //     duration: const Duration(seconds: 10), vsync: this,
   //   )..addListener(() { setState(() {}); });
-    
+
   //   super.initState();
   // }
- 
+
   // var result;
   // File _myImage = File('');
-
-  
 
   // pickImage(ImageSource source) async {
   //   XFile? image = await picker.pickImage(
@@ -155,8 +147,7 @@ class _searchbarState extends State<searchbar> with SingleTickerProviderStateMix
   var datecontroller = TextEditingController();
   var subtypescode;
   var subtypesname;
-   
-  
+
   final formKey = GlobalKey<FormState>();
 
   bool _loading = true;
@@ -179,8 +170,6 @@ class _searchbarState extends State<searchbar> with SingleTickerProviderStateMix
     '0xf05ce': 0xf05ce
   };
 
-
-
 // Icon API
   Future listapi() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -188,7 +177,7 @@ class _searchbarState extends State<searchbar> with SingleTickerProviderStateMix
         Uri.parse(
             "${dotenv.env['API_URL']}/api/method/money_management_backend.custom.py.api.withsubtype?Type=Asset"),
         headers: {"Authorization": prefs.getString('token') ?? ""});
-   
+
     if (response.statusCode == 200) {
       SharedPreferences prefs = await SharedPreferences.getInstance();
 
@@ -310,7 +299,6 @@ class _searchbarState extends State<searchbar> with SingleTickerProviderStateMix
           ),
         ),
         body: Center(
-          
             child: _loading
                 ? CircularProgressIndicator(
                     valueColor: AlwaysStoppedAnimation<Color>(
@@ -342,18 +330,17 @@ class _searchbarState extends State<searchbar> with SingleTickerProviderStateMix
                               Center(
                                   child: TextButton.icon(
                                       onPressed: () {
-                                       
                                         subtypescode =
                                             jsonDecode(row[index])[2];
                                         subtypesname =
                                             jsonDecode(row[index])[0];
                                         _show(context, subtypescode,
                                             subtypesname);
-                                    namecontroller.clear();
-                                    amountcontroller.clear();
-                                    notescontroller.clear();
-                                    _platformFile = null;
-                                    // loadingController.clearListeners();
+                                        namecontroller.clear();
+                                        amountcontroller.clear();
+                                        notescontroller.clear();
+
+                                        // loadingController.clearListeners();
 
                                         // print(icon_name[index][0]);
                                       },
@@ -396,7 +383,6 @@ class _searchbarState extends State<searchbar> with SingleTickerProviderStateMix
   void _show(BuildContext ctx, subtypescode, subtypesname) {
     showModalBottomSheet(
         shape: RoundedRectangleBorder(
-          
           borderRadius: BorderRadius.all(Radius.circular(10.0)),
         ),
         isScrollControlled: true,
@@ -408,195 +394,180 @@ class _searchbarState extends State<searchbar> with SingleTickerProviderStateMix
                   left: 15,
                   right: 15,
                   bottom: MediaQuery.of(ctx).viewInsets.bottom + 15),
-            child: Form(
+              child: Form(
                 key: formKey,
                 child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Align(
-                        alignment: Alignment.center,
-                        child: Text("Asset",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(fontSize: 25)),
-                      ),
-                      Text(subtypesname, style: TextStyle(fontSize: 20)),
-                      TextFormField(
-                          controller: namecontroller,
-                          decoration: InputDecoration(labelText: 'Name'),
-                          validator: (value) {
-                            if (value!.isEmpty) {
-                              return "Please enter the name";
-                            } else {
-                              return null;
-                            }
-                          }),
-                      TextFormField(
-                        controller: notescontroller,
-                        decoration: InputDecoration(labelText: 'Notes'),
-                      ),
-                      TextFormField(
-                          controller: amountcontroller,
-                          decoration: InputDecoration(labelText: 'Amount'),
-                          keyboardType: TextInputType.number,
-                          validator: (value) {
-                            if (value!.isEmpty) {
-                              return "Please enter the amount";
-                            } else {
-                              return null;
-                            }
-                          }),
-                      // TextButton(
-                      //     onPressed: () {
-                      //       _onAlertWithCustomContentPressed(context);
-                      //     },
-                      //     child: const Text(
-                      //       "Upload",
-                      //       style:
-                      //           TextStyle(color: Color.fromARGB(255, 0, 0, 0)),
-                      //     )),
-                                      GestureDetector(
-              onTap: selectFile,
-          child:
-               Padding(
-                padding: EdgeInsets.symmetric(horizontal: 40.0, vertical: 20.0),
-                child: DottedBorder(
-                  borderType: BorderType.RRect,
-                  radius: Radius.circular(10),
-                  dashPattern: [10, 4],
-                  strokeCap: StrokeCap.round,
-                  color: Colors.blue.shade400,
-                  child: Container(
-                    width: double.infinity,
-                      child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(Iconsax.folder_open, color: Colors.blue, size: 40,),
-                     
-                      ],
-                    ),
-                  ),
-                )
-              ),
-            
-                                      ),
-               _platformFile != null
-              ? Container(
-                child: _loading
-                ? CircularProgressIndicator(
-                    valueColor: AlwaysStoppedAnimation<Color>(
-                        Color.fromARGB(255, 93, 99, 216)),
-                  )
-                :
-                 Column(
+                  mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,
-              
-                    children: [
-                    Text('Selected File', 
-                      style: TextStyle(color: Colors.grey.shade400, fontSize: 15, ),),
-             
-                    Container(
-                      
-                      padding: EdgeInsets.all(8),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(100),
-                        color: Colors.white,
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.grey.shade200,
-                            offset: Offset(0, 1),
-                            blurRadius: 3,
-                            spreadRadius: 2,
-                          )
-                        ]
-                        
-                ),
-              child:  Row(
-                        children: [
-                         
-                          SizedBox(width: 10,),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(_platformFile!.name, 
-                                  style: TextStyle(fontSize: 13, color: Colors.black),),
-                                SizedBox(height: 5,),
-                                Text('${(_platformFile!.size / 1024).ceil()} KB', 
-                                  style: TextStyle(fontSize: 13, color: Colors.grey.shade500),
-                                ),
-                                   Container(
-                                  height: 5,
-                                  clipBehavior: Clip.hardEdge,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(5),
-                                    color: Colors.blue.shade50,
-                                   ), 
-                                    child:
-                    
-                                  LinearProgressIndicator(
-                                    value: loadingController.value,
-                                    
+                  children: [
+                    Align(
+                      alignment: Alignment.center,
+                      child: Text("Asset",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(fontSize: 25)),
+                    ),
+                    Text(subtypesname, style: TextStyle(fontSize: 20)),
+                    TextFormField(
+                        controller: namecontroller,
+                        decoration: InputDecoration(labelText: 'Name'),
+                        validator: (value) {
+                          if (value!.isEmpty) {
+                            return "Please enter the name";
+                          } else {
+                            return null;
+                          }
+                        }),
+                    TextFormField(
+                      controller: notescontroller,
+                      decoration: InputDecoration(labelText: 'Notes'),
+                    ),
+                    TextFormField(
+                        controller: amountcontroller,
+                        decoration: InputDecoration(labelText: 'Amount'),
+                        keyboardType: TextInputType.number,
+                        validator: (value) {
+                          if (value!.isEmpty) {
+                            return "Please enter the amount";
+                          } else {
+                            return null;
+                          }
+                        }),
+                    // TextButton(
+                    //     onPressed: () {
+                    //       _onAlertWithCustomContentPressed(context);
+                    //     },
+                    //     child: const Text(
+                    //       "Upload",
+                    //       style:
+                    //           TextStyle(color: Color.fromARGB(255, 0, 0, 0)),
+                    //     )),
+                    GestureDetector(
+                      onTap: selectFile,
+                      child: Padding(
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 40.0, vertical: 20.0),
+                          child: DottedBorder(
+                            borderType: BorderType.RRect,
+                            radius: Radius.circular(10),
+                            dashPattern: [10, 4],
+                            strokeCap: StrokeCap.round,
+                            color: Colors.blue.shade400,
+                            child: Container(
+                              width: double.infinity,
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(
+                                    Iconsax.folder_open,
+                                    color: Colors.blue,
+                                    size: 40,
                                   ),
-                                  
-                                
-                            
-                                   ),
-
-                              ],
-                                   
+                                ],
+                              ),
                             ),
-                          ),
-                        ],
-                      )
+                          )),
                     ),
-                                        SizedBox(height: 20,),
+                    _platformFile != null
+                        ? Container(
+                            child: _loading
+                                ? CircularProgressIndicator(
+                                    valueColor: AlwaysStoppedAnimation<Color>(
+                                        Color.fromARGB(255, 93, 99, 216)),
+                                  )
+                                : Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        'Selected File',
+                                        style: TextStyle(
+                                          color: Colors.grey.shade400,
+                                          fontSize: 15,
+                                        ),
+                                      ),
+                                      Container(
+                                          padding: EdgeInsets.all(8),
+                                          decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(100),
+                                              color: Colors.white,
+                                              boxShadow: [
+                                                BoxShadow(
+                                                  color: Colors.grey.shade200,
+                                                  offset: Offset(0, 1),
+                                                  blurRadius: 3,
+                                                  spreadRadius: 2,
+                                                )
+                                              ]),
+                                          child: Row(
+                                            children: [
+                                              SizedBox(
+                                                width: 10,
+                                              ),
+                                              Expanded(
+                                                child: Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    Text(
+                                                      _platformFile!.name,
+                                                      style: TextStyle(
+                                                          fontSize: 13,
+                                                          color: Colors.black),
+                                                    ),
+                                                    SizedBox(
+                                                      height: 5,
+                                                    ),
+                                                    Text(
+                                                      '${(_platformFile!.size / 1024).ceil()} KB',
+                                                      style: TextStyle(
+                                                          fontSize: 13,
+                                                          color: Colors
+                                                              .grey.shade500),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ],
+                                          )),
+                                      SizedBox(
+                                        height: 20,
+                                      ),
+                                    ],
+                                  ))
+                        : Container(),
+                    SizedBox(
+                      height: 150,
+                    ),
 
-            
+                    RaisedButton(
+                        color: Color.fromARGB(255, 93, 99, 216),
+                        child: Text(
+                          "Submit",
+                          style: TextStyle(color: Colors.white),
+                        ),
+                        onPressed: () {
+                          uploadimage();
+                          // if (formKey.currentState!.validate()) {
+                          //   dataentry(
+                          //     typecontroller.text,
+                          //     subtypescode,
+                          //     namecontroller.text,
+                          //     notescontroller.text,
+                          //     amountcontroller.text,
+                          //   );
+
+                          //   // typecontroller.clear();
+                          //   namecontroller.clear();
+                          //   notescontroller.clear();
+                          //   amountcontroller.clear();
+                          //   datecontroller.clear();
+                          // }
+                        })
                   ],
-                )
-              ):Container(),
-              SizedBox(height: 150,),
-                    
-            
-              
-            
-  
-                 
-                      RaisedButton(
-                          color: Color.fromARGB(255, 93, 99, 216),
-                          child: Text(
-                            "Submit",
-                            style: TextStyle(color: Colors.white),
-                          ),
-                          onPressed: () {
-                            if (formKey.currentState!.validate()) {
-                              dataentry(
-                                typecontroller.text,
-                                subtypescode,
-                                namecontroller.text,
-                                notescontroller.text,
-                                amountcontroller.text,
-                              );
-
-                              // typecontroller.clear();
-                              namecontroller.clear();
-                              notescontroller.clear();
-                              amountcontroller.clear();
-                              datecontroller.clear();
-                              
-                            }
-                         })
-                        
-                    ],
-                    ),
-
-
                 ),
-                
-        
+              ),
             ));
-    
   }
 
   Future dataentry(type, subtypescode, name, notes, amount) async {
@@ -604,16 +575,14 @@ class _searchbarState extends State<searchbar> with SingleTickerProviderStateMix
         namecontroller.text.isNotEmpty ||
         notescontroller.text.isNotEmpty ||
         amountcontroller.text.isNotEmpty) {
-
       SharedPreferences prefs = await SharedPreferences.getInstance();
       var response = await http.post(
           Uri.parse(
               '${dotenv.env['API_URL']}/api/method/money_management_backend.custom.py.api.daily_entry_submit?Type=Asset&Subtype=${subtypescode}&Name=${name}&Notes=${notes}&Amount=${amount}'),
           headers: {"Authorization": prefs.getString('token') ?? ""});
       //print(response.statusCode);
-     
+
       if (response.statusCode == 200) {
-       
         Navigator.pop(context);
 
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -680,7 +649,6 @@ class _searchbarState extends State<searchbar> with SingleTickerProviderStateMix
     }
   }
 
-
   Future uploadfile(File img64) async {
     var bytes = img64.readAsBytesSync();
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -695,21 +663,51 @@ class _searchbarState extends State<searchbar> with SingleTickerProviderStateMix
     return response.body;
   }
 
-  Future uploadimage(imgcontent) async {
-    //var bytes = _myimage.readAsBytesSync();
-    //String imgcontent = base64Encode(bytes);
+  Future uploadimage() async {
+    FormData formData = FormData.fromMap({
+      "file": await MultipartFile.fromFile(
+        '/data/user/0/com.example.money_manager/cache/file_picker/Employer Survey.pdf',
+        filename: 'Employer Survey.pdf',
+      ),
+      "docname": 'barathpalanisamy2002@gmail.com',
+      "doctype": 'User',
+      "is_private": 0,
+      "folder": "Home/Attachments"
+    });
+    print(formData);
+    var dio = Dio();
     SharedPreferences prefs = await SharedPreferences.getInstance();
-
-    var response = await http.post(
-      Uri.parse(
-          "${dotenv.env['API_URL']}/api/method/money_management_backend.custom.py.api.upload_profile_image"),
-      headers: {"Authorization": prefs.getString('token') ?? ""},
-      body: {"file": imgcontent},
-      // encoding: Encoding.getByName("utf-8"),
+    dio.options.headers["Authorization"] = prefs.getString('token') ?? "";
+    var response = await dio.post(
+      "http://192.168.116.158:8002/api/method/upload_file",
+      data: formData,
     );
+    print(dio);
+    print(response.statusCode);
     if (response.statusCode == 200) {
-      print("fhj");
+    } else {
+      throw Exception('Something went wrong');
     }
-    return response.body;
+    // print("ryyrg");
+    // var bytes = "";
+
+    // var decodedBytes = base64Decode(bytes);
+    // var change = base64.encode(decodedBytes);
+    // print(decodedBytes);
+    // print(change);
+    // //  print(Uint8List base64Decode(String source) => base64.decode(change));
+
+    // SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    // var response = await http.post(
+    //     Uri.parse(
+    //         "${dotenv.env['API_URL']}/api/method/money_management_backend.custom.py.api.upload_profile_image"),
+    //     headers: {"Authorization": prefs.getString('token') ?? ""},
+    //     body: {"file": bytes});
+    // print(response.statusCode);
+    // if (response.statusCode == 200) {
+    //   print("rgt");
+    // }
+    // return response.body;
   }
 }
