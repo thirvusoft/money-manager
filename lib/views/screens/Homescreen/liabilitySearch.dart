@@ -16,6 +16,8 @@ import '../Categories/Asset.dart';
 import 'package:http/http.dart' as http;
 
 import '../profile.dart';
+import '../dailysheet.dart';
+import '../Dataentrysheet.dart';
 
 class liabilitySearch extends StatefulWidget {
   const liabilitySearch({Key? key}) : super(key: key);
@@ -80,6 +82,9 @@ class _liabilitySearchState extends State<liabilitySearch> {
   var notescontroller = TextEditingController();
   var amountcontroller = TextEditingController();
   var datecontroller = TextEditingController();
+  var subtypescode;
+  var subtypesname;
+
   final formKey = GlobalKey<FormState>();
   final dateController = TextEditingController();
 
@@ -277,8 +282,18 @@ class _liabilitySearchState extends State<liabilitySearch> {
                               Center(
                                   child: TextButton.icon(
                                       onPressed: () {
-                                        subtypes = jsonDecode(row[index])[0];
-                                        _show(context, subtypes);
+                                        subtypescode =
+                                            jsonDecode(row[index])[2];
+                                        subtypesname =
+                                            jsonDecode(row[index])[0];
+
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) =>
+                                                daily(subtypesname),
+                                          ),
+                                        );
                                       },
                                       label: Text(
                                         _textEditingController.text.isNotEmpty

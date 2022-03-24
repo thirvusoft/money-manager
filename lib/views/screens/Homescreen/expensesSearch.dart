@@ -31,6 +31,7 @@ import 'package:flutter/services.dart';
 import 'package:path_provider/path_provider.dart';
 
 import '../Categories/Expense.dart';
+import '../dailysheet.dart';
 
 class expenseSearch extends StatefulWidget {
   const expenseSearch({Key? key}) : super(key: key);
@@ -289,7 +290,14 @@ class _expenseSearchState extends State<expenseSearch> {
                                   child: TextButton.icon(
                                       onPressed: () {
                                         subtype = jsonDecode(row[index])[0];
-                                        _show(context, subtype);
+
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) =>
+                                                dailysheet(subtype),
+                                          ),
+                                        );
                                       },
                                       label: Text(
                                         _textEditingController.text.isNotEmpty

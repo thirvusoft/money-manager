@@ -190,6 +190,7 @@ class _customLiabilityState extends State<customLiability> {
                         height: 15,
                       ),
                       TextFormField(
+                          maxLength: 11,
                           controller: namecontroller,
                           keyboardType: TextInputType.text,
                           decoration: InputDecoration(labelText: 'Name:'),

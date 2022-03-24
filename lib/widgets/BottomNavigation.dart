@@ -22,7 +22,7 @@ class bottomnavigation extends StatefulWidget {
 class _bottomnavigationState extends State<bottomnavigation> {
   int currentIndex = 0;
   List widgetOptions = [
-    searchbar(),
+    asset(),
     liabilitySearch(),
     expenseSearch(),
     incomeSearch(),
