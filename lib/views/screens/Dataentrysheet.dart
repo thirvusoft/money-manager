@@ -85,119 +85,240 @@ class MyCustomFormState extends State<MyCustomForm>
       child: Form(
         key: _formKey,
         child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              TextFormField(
-                  controller: namecontroller,
-                  decoration: InputDecoration(labelText: 'Name'),
-                  validator: (value) {
-                    if (value!.isEmpty) {
-                      return "Please enter the name";
-                    } else {
-                      return null;
-                    }
-                  }),
-              TextFormField(
-                  controller: notescontroller,
-                  decoration: InputDecoration(labelText: 'Notes'),
-                  validator: (value) {
-                    if (value!.isEmpty) {
-                      return "Please enter the notes";
-                    } else {
-                      return null;
-                    }
-                  }),
-              TextFormField(
-                  controller: amountcontroller,
-                  decoration: InputDecoration(labelText: 'Amount'),
-                  keyboardType: TextInputType.number,
-                  validator: (value) {
-                    if (value!.isEmpty) {
-                      return "Please enter the amount";
-                    } else {
-                      return null;
-                    }
-                  }),
-              TextFormField(
-                  readOnly: true,
-                  controller: dateController,
-                  decoration: InputDecoration(labelText: 'Reminder Date'),
-                  style: TextStyle(),
-                  onTap: () async {
-                    var date = await showDatePicker(
-                      context: context,
-                      initialDate: DateTime.now(),
-                      firstDate: DateTime(1950),
-                      lastDate: DateTime(2100),
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            TextFormField(
+                controller: namecontroller,
+                decoration: InputDecoration(labelText: 'Name'),
+                validator: (value) {
+                  if (value!.isEmpty) {
+                    return "Please enter the name";
+                  } else {
+                    return null;
+                  }
+                }),
+            TextFormField(
+                controller: notescontroller,
+                decoration: InputDecoration(labelText: 'Notes'),
+                validator: (value) {
+                  if (value!.isEmpty) {
+                    return "Please enter the notes";
+                  } else {
+                    return null;
+                  }
+                }),
+            TextFormField(
+                controller: amountcontroller,
+                decoration: InputDecoration(labelText: 'Amount'),
+                keyboardType: TextInputType.number,
+                validator: (value) {
+                  if (value!.isEmpty) {
+                    return "Please enter the amount";
+                  } else {
+                    return null;
+                  }
+                }),
+            TextFormField(
+                readOnly: true,
+                controller: dateController,
+                decoration: InputDecoration(labelText: 'Reminder Date'),
+                style: TextStyle(),
+                onTap: () async {
+                  var date = await showDatePicker(
+                    context: context,
+                    initialDate: DateTime.now(),
+                    firstDate: DateTime(1950),
+                    lastDate: DateTime(2100),
+                  );
+                  builder:
+                  (BuildContext context, Widget child) {
+                    return Theme(
+                      data: ThemeData().copyWith(
+                          colorScheme: ColorScheme.dark(
+                              primary: Colors.red, surface: Colors.red)),
+                      child: child,
                     );
-                    builder:
-                    (BuildContext context, Widget child) {
-                      return Theme(
-                        data: ThemeData().copyWith(
-                            colorScheme: ColorScheme.dark(
-                                primary: Colors.red, surface: Colors.red)),
-                        child: child,
-                      );
-                    };
-                    dateController.text = date.toString().substring(0, 10);
-                  },
-                  validator: (value) {
-                    if (value!.isEmpty) {
-                      return "Please enter the date";
-                    } else {
-                      return null;
-                    }
-                  }),
-              SizedBox(
-                height: 15,
-              ),
-              RaisedButton(
-                  color: Color.fromARGB(255, 93, 99, 216),
-                  child: Text(
-                    "Submit",
-                    style: TextStyle(color: Colors.white),
-                  ),
-                  onPressed: () {
-                    print('yyyyyyyyyyyyyyyy');
-                    if (_formKey.currentState!.validate()) {
-                      dataentry(
-                        typecontroller.text,
-                        subtypescode,
-                        namecontroller.text,
-                        notescontroller.text,
-                        amountcontroller.text,
-                        datecontroller.text,
-                      );
-                      namecontroller.clear();
-                      notescontroller.clear();
-                      amountcontroller.clear();
-                      datecontroller.clear();
-                    }
-                  })
-            ]),
+                  };
+                  dateController.text = date.toString().substring(0, 10);
+                },
+                validator: (value) {
+                  if (value!.isEmpty) {
+                    return "Please enter the date";
+                  } else {
+                    return null;
+                  }
+                }),
+            GestureDetector(
+              onTap: selectFile,
+              child: Padding(
+                  padding:
+                      EdgeInsets.symmetric(horizontal: 40.0, vertical: 20.0),
+                  child: DottedBorder(
+                    borderType: BorderType.RRect,
+                    radius: Radius.circular(10),
+                    dashPattern: [10, 4],
+                    strokeCap: StrokeCap.round,
+                    color: Color.fromARGB(255, 93, 99, 216),
+                    child: Container(
+                      width: double.infinity,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Iconsax.folder_open,
+                            color: Color.fromARGB(255, 93, 99, 216),
+                            size: 40,
+                          ),
+                        ],
+                      ),
+                    ),
+                  )),
+            ),
+            _platformFile != null
+                ? Container(
+                    child: _loading
+                        ? CircularProgressIndicator(
+                            valueColor: AlwaysStoppedAnimation<Color>(
+                                Color.fromARGB(255, 93, 99, 216)),
+                          )
+                        : Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Selected File',
+                                style: TextStyle(
+                                  color: Colors.grey.shade400,
+                                  fontSize: 15,
+                                ),
+                              ),
+                              Container(
+                                  padding: EdgeInsets.all(8),
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(100),
+                                      color: Colors.white,
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: Colors.grey.shade200,
+                                          offset: Offset(0, 1),
+                                          blurRadius: 3,
+                                          spreadRadius: 2,
+                                        )
+                                      ]),
+                                  child: Row(
+                                    children: [
+                                      SizedBox(
+                                        width: 10,
+                                      ),
+                                      Expanded(
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              _platformFile!.name,
+                                              style: TextStyle(
+                                                  fontSize: 13,
+                                                  color: Colors.black),
+                                            ),
+                                            SizedBox(
+                                              height: 5,
+                                            ),
+                                            Text(
+                                              '${(_platformFile!.size / 1024).ceil()} KB',
+                                              style: TextStyle(
+                                                  fontSize: 13,
+                                                  color: Colors.grey.shade500),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  )),
+                              SizedBox(
+                                height: 20,
+                              ),
+                            ],
+                          ))
+                : Container(),
+            SizedBox(
+              height: 20,
+            ),
+            RaisedButton(
+                color: Color.fromARGB(255, 93, 99, 216),
+                child: Text(
+                  "Submit",
+                  style: TextStyle(color: Colors.white),
+                ),
+                onPressed: () {
+                  print("test");
+                  uploadimage(_file, _platformFile!.name);
+                  // _file, _platformFile
+                  if (_formKey.currentState!.validate()) {
+                    dataentry(
+                      typecontroller.text,
+                      subtypescode,
+                      namecontroller.text,
+                      notescontroller.text,
+                      amountcontroller.text,
+                    );
+
+                    // typecontroller.clear();
+                    namecontroller.clear();
+                    notescontroller.clear();
+                    amountcontroller.clear();
+                    datecontroller.clear();
+                  }
+                })
+          ],
+        ),
       ),
     );
   }
 
-  Future dataentry(
-    type,
-    subtypes,
-    name,
-    notes,
-    amount,
-    date,
-  ) async {
+  //           RaisedButton(
+  //               color: Color.fromARGB(255, 93, 99, 216),
+  //               child: Text(
+  //                 "Submit",
+  //                 style: TextStyle(color: Colors.white),
+  //               ),
+  //               onPressed: () {
+  //                 print("test");
+  //                 uploadimage(_file, _platformFile!.name);
+  //                 // _file, _platformFile
+  //                 if (_formKey.currentState!.validate()) {
+  //                   dataentry(
+  //                     typecontroller.text,
+  //                     subtypescode,
+  //                     namecontroller.text,
+  //                     notescontroller.text,
+  //                     amountcontroller.text,
+  //                   );
+
+  //                   // typecontroller.clear();
+  //                   namecontroller.clear();
+  //                   notescontroller.clear();
+  //                   amountcontroller.clear();
+  //                   datecontroller.clear();
+  //                 }
+  //               })
+  //         ],
+  //       ),
+  //     ),
+  //   );
+  // }
+
+  Future dataentry(type, subtypescode, name, notes, amount) async {
     if (typecontroller.text.isNotEmpty ||
         namecontroller.text.isNotEmpty ||
         notescontroller.text.isNotEmpty ||
-        amountcontroller.text.isNotEmpty ||
-        datecontroller.text.isNotEmpty) {
-      print(subtypecontroller.text);
-      print(dotenv.env['API_URL']);
-
-      var response = await http.post(Uri.parse(
-          "${dotenv.env['API_URL']}/api/method/money_management_backend.custom.py.api.daily_entry_submit?Type=Liability&Subtype=${subtypes}&Name=${name}&Notes=${notes}&Amount=${amount}&Remainder_date=${date}"));
+        amountcontroller.text.isNotEmpty) {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      var response = await http.post(
+          Uri.parse(
+              '${dotenv.env['API_URL']}/api/method/money_management_backend.custom.py.api.daily_entry_submit?Type=Asset&Subtype=${subtypescode}&Name=${name}&Notes=${notes}&Amount=${amount}'),
+          headers: {"Authorization": prefs.getString('token') ?? ""});
       //print(response.statusCode);
+
       if (response.statusCode == 200) {
         Navigator.pop(context);
 
@@ -264,51 +385,52 @@ class MyCustomFormState extends State<MyCustomForm>
       }
     }
   }
+}
 
-  Future uploadfile(File img64) async {
-    var bytes = img64.readAsBytesSync();
-    SharedPreferences prefs = await SharedPreferences.getInstance();
+Future uploadfile(File img64) async {
+  var bytes = img64.readAsBytesSync();
+  SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    var response = await http.post(
-      Uri.parse(
-          "${dotenv.env['API_URL']}/api/method/money_management_backend.custom.py.api.upload_profile_image"),
-      headers: {"Authorization": prefs.getString('token') ?? ""},
-      body: {"file", bytes},
-      encoding: Encoding.getByName("utf-8"),
-    );
-    return response.body;
-  }
+  var response = await http.post(
+    Uri.parse(
+        "${dotenv.env['API_URL']}/api/method/money_management_backend.custom.py.api.upload_profile_image"),
+    headers: {"Authorization": prefs.getString('token') ?? ""},
+    body: {
+      "file",
+    },
+    encoding: Encoding.getByName("utf-8"),
+  );
+  return response.body;
+}
 
-  Future uploadimage(_file, _platformForm) async {
-    print("object");
-    FormData formData = FormData.fromMap({
-      "file": await MultipartFile.fromFile(
-        '/data/user/0/com.example.money_manager/cache/file_picker/Employer Survey.pdf',
-        filename: 'Employer Survey.pdf',
-        // _file',
-        // filename: _platformFile!.name),
-      ),
-      "docname": 'mail',
-      "doctype": 'User',
-      "is_private": 0,
-      "folder": "Home/Attachments"
-    });
-    print(formData);
+//var _file, var _platformFile
+Future uploadimage(Path, String name) async {
+  print("object");
+  FormData formData = FormData.fromMap({
+    "file": await MultipartFile.fromFile(
+        // '/data/user/0/com.example.money_manager/cache/file_picker/Employer Survey.pdf',
+        // filename: 'Employer Survey.pdf',
+        Path,
+        filename: name),
+    "docname": 'barathpalanisamy2002@gmail.com',
+    "doctype": 'User',
+    "is_private": 0,
+    "folder": "Home/Attachments"
+  });
+  print(formData);
 
-    var dio = Dio();
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    dio.options.headers["Authorization"] = prefs.getString('token') ?? "";
-    var mail = prefs.getString("email");
-    print(mail);
-    var response = await dio.post(
-      "${dotenv.env['API_URL']}/api/method/upload_file",
-      data: formData,
-    );
-    print(dio);
-    print(response.statusCode);
-    if (response.statusCode == 200) {
-    } else {
-      throw Exception('Something went wrong');
-    }
+  var dio = Dio();
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  dio.options.headers["Authorization"] = prefs.getString('token') ?? "";
+
+  var response = await dio.post(
+    "http://192.168.116.158:8002/api/method/upload_file",
+    data: formData,
+  );
+  print(dio);
+  print(response.statusCode);
+  if (response.statusCode == 200) {
+  } else {
+    throw Exception('Something went wrong');
   }
 }

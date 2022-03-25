@@ -208,31 +208,34 @@ class MyCustomFormState extends State<MyCustomForm>
             SizedBox(
               height: 20,
             ),
-            RaisedButton(
-                color: Color.fromARGB(255, 93, 99, 216),
-                child: Text(
-                  "Submit",
-                  style: TextStyle(color: Colors.white),
-                ),
-                onPressed: () {
-                  print("test");
-                  uploadimage(_file, _platformFile);
-                  if (_formKey.currentState!.validate()) {
-                    dataentry(
-                      typecontroller.text,
-                      subtypescode,
-                      namecontroller.text,
-                      notescontroller.text,
-                      amountcontroller.text,
-                    );
+            Container(
+                child: Center(
+                    child: RaisedButton(
+                        color: Color.fromARGB(255, 93, 99, 216),
+                        child: Text(
+                          "Submit",
+                          style: TextStyle(color: Colors.white),
+                        ),
+                        onPressed: () {
+                          print("test");
+                          uploadimage(_file, _platformFile!.name);
+                          // _file, _platformFile
+                          if (_formKey.currentState!.validate()) {
+                            dataentry(
+                              typecontroller.text,
+                              subtypescode,
+                              namecontroller.text,
+                              notescontroller.text,
+                              amountcontroller.text,
+                            );
 
-                    // typecontroller.clear();
-                    namecontroller.clear();
-                    notescontroller.clear();
-                    amountcontroller.clear();
-                    datecontroller.clear();
-                  }
-                })
+                            // typecontroller.clear();
+                            namecontroller.clear();
+                            notescontroller.clear();
+                            amountcontroller.clear();
+                            datecontroller.clear();
+                          }
+                        })))
           ],
         ),
       ),
@@ -317,51 +320,52 @@ class MyCustomFormState extends State<MyCustomForm>
       }
     }
   }
+}
 
-  Future uploadfile(File img64) async {
-    var bytes = img64.readAsBytesSync();
-    SharedPreferences prefs = await SharedPreferences.getInstance();
+Future uploadfile(File img64) async {
+  var bytes = img64.readAsBytesSync();
+  SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    var response = await http.post(
-      Uri.parse(
-          "${dotenv.env['API_URL']}/api/method/money_management_backend.custom.py.api.upload_profile_image"),
-      headers: {"Authorization": prefs.getString('token') ?? ""},
-      body: {"file", bytes},
-      encoding: Encoding.getByName("utf-8"),
-    );
-    return response.body;
-  }
+  var response = await http.post(
+    Uri.parse(
+        "${dotenv.env['API_URL']}/api/method/money_management_backend.custom.py.api.upload_profile_image"),
+    headers: {"Authorization": prefs.getString('token') ?? ""},
+    body: {
+      "file",
+    },
+    encoding: Encoding.getByName("utf-8"),
+  );
+  return response.body;
+}
 
-  Future uploadimage(_file, _platformForm) async {
-    print("object");
-    FormData formData = FormData.fromMap({
-      "file": await MultipartFile.fromFile(
-        '/data/user/0/com.example.money_manager/cache/file_picker/Employer Survey.pdf',
-        filename: 'Employer Survey.pdf',
-        // 'File_file',
-        // filename: _platformFile!.name),
-      ),
-      "docname": 'mail',
-      "doctype": 'User',
-      "is_private": 0,
-      "folder": "Home/Attachments"
-    });
-    print(formData);
+//var _file, var _platformFile
+Future uploadimage(Path, String name) async {
+  print("object");
+  FormData formData = FormData.fromMap({
+    "file": await MultipartFile.fromFile(
+        // '/data/user/0/com.example.money_manager/cache/file_picker/Employer Survey.pdf',
+        // filename: 'Employer Survey.pdf',
+        Path,
+        filename: name),
+    "docname": 'barathpalanisamy2002@gmail.com',
+    "doctype": 'User',
+    "is_private": 0,
+    "folder": "Home/Attachments"
+  });
+  print(formData);
 
-    var dio = Dio();
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    dio.options.headers["Authorization"] = prefs.getString('token') ?? "";
-    var mail = prefs.getString("email");
-    print(mail);
-    var response = await dio.post(
-      "${dotenv.env['API_URL']}/api/method/upload_file",
-      data: formData,
-    );
-    print(dio);
-    print(response.statusCode);
-    if (response.statusCode == 200) {
-    } else {
-      throw Exception('Something went wrong');
-    }
+  var dio = Dio();
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  dio.options.headers["Authorization"] = prefs.getString('token') ?? "";
+
+  var response = await dio.post(
+    "${dotenv.env['API_URL']}/api/method/upload_file",
+    data: formData,
+  );
+  print(dio);
+  print(response.statusCode);
+  if (response.statusCode == 200) {
+  } else {
+    throw Exception('Something went wrong');
   }
 }
