@@ -11,8 +11,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
 class dailysheet extends StatelessWidget {
-  String subtypesname;
-  dailysheet(this.subtypesname);
+  String subtypescode;
+  dailysheet(this.subtypescode);
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +25,7 @@ class dailysheet extends StatelessWidget {
           centerTitle: true,
           backgroundColor: Color.fromARGB(255, 93, 99, 216),
           title: Text(
-            subtypesname,
+            subtypescode,
           ),
         ),
         body: MyCustomForm(),
@@ -215,9 +215,8 @@ class MyCustomFormState extends State<MyCustomForm>
                         style: TextStyle(color: Colors.white),
                       ),
                       onPressed: () {
-                        print("test");
-                        uploadimage(
-                            _platformFile!.path ?? '', _platformFile!.name);
+                        print("button_sample");
+
                         // _file, _platformFile
                         if (_formKey.currentState!.validate()) {
                           dataentry(
@@ -227,7 +226,8 @@ class MyCustomFormState extends State<MyCustomForm>
                             notescontroller.text,
                             amountcontroller.text,
                           );
-
+                          uploadimage(
+                              _platformFile!.path ?? '', _platformFile!.name);
                           // typecontroller.clear();
                           namecontroller.clear();
                           notescontroller.clear();
@@ -247,12 +247,15 @@ class MyCustomFormState extends State<MyCustomForm>
         namecontroller.text.isNotEmpty ||
         notescontroller.text.isNotEmpty ||
         amountcontroller.text.isNotEmpty) {
+      print("check_dvbsdh");
+      print(subtypescode);
       SharedPreferences prefs = await SharedPreferences.getInstance();
       var response = await http.post(
           Uri.parse(
-              '${dotenv.env['API_URL']}/api/method/money_management_backend.custom.py.api.daily_entry_submit?Type=Asset&Subtype=${subtypescode}&Name=${name}&Notes=${notes}&Amount=${amount}'),
+              '${dotenv.env['API_URL']}/api/method/money_management_backend.custom.py.api.daily_entry_submit?Type=Asset&Subtype=Subtype0001&Name=${name}&Notes=${notes}&Amount=${amount}'),
           headers: {"Authorization": prefs.getString('token') ?? ""});
-      //print(response.statusCode);
+      print("dataentery code");
+      print(response.statusCode);
 
       if (response.statusCode == 200) {
         Navigator.pop(context);
@@ -327,58 +330,59 @@ class MyCustomFormState extends State<MyCustomForm>
       }
     }
   }
-}
 
-Future uploadfile(File img64) async {
-  var bytes = img64.readAsBytesSync();
-  SharedPreferences prefs = await SharedPreferences.getInstance();
+  Future uploadfile(File img64) async {
+    var bytes = img64.readAsBytesSync();
+    SharedPreferences prefs = await SharedPreferences.getInstance();
 
-  var response = await http.post(
-    Uri.parse(
-        "${dotenv.env['API_URL']}/api/method/money_management_backend.custom.py.api.upload_profile_image"),
-    headers: {"Authorization": prefs.getString('token') ?? ""},
-    body: {
-      "file",
-    },
-    encoding: Encoding.getByName("utf-8"),
-  );
-  return response.body;
-}
+    var response = await http.post(
+      Uri.parse(
+          "${dotenv.env['API_URL']}/api/method/money_management_backend.custom.py.api.upload_profile_image"),
+      headers: {"Authorization": prefs.getString('token') ?? ""},
+      body: {
+        "file",
+      },
+      encoding: Encoding.getByName("utf-8"),
+    );
+    return response.body;
+  }
 
 //var _file, var _platformFile
-Future uploadimage(String path, String name) async {
-  print("object");
-  print(path);
-  print(name);
-  FormData formData = FormData.fromMap({
-    "file": await MultipartFile.fromFile(
-        // '/data/user/0/com.example.money_manager/cache/file_picker/Employer Survey.pdf',
-        // filename: 'Employer Survey.pdf',
-        path,
-        filename: name),
-    "docname": 'mail',
-    "doctype": 'User',
-    "is_private": 0,
-    "folder": "Home/Attachments"
-  });
-  print(formData);
+  Future uploadimage(String path, String name) async {
+    // print("object");
+    print(path);
+    print(name);
+    FormData formData = FormData.fromMap({
+      "file": await MultipartFile.fromFile(
+          // '/data/user/0/com.example.money_manager/cache/file_picker/Employer Survey.pdf',
+          // filename: 'Employer Survey.pdf',
+          path,
+          filename: name),
+      "docname": 'mail',
+      "doctype": 'User',
+      "is_private": 0,
+      "folder": "Home/Attachments"
+    });
+    print(formData);
 
-  var dio = Dio();
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  dio.options.headers["Authorization"] = prefs.getString('token') ?? "";
+    var dio = Dio();
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    dio.options.headers["Authorization"] = prefs.getString('token') ?? "";
 
-  var response = await dio.post(
-    "${dotenv.env['API_URL']}/api/method/upload_file",
-    data: formData,
-  );
-  SharedPreferences preferences = await SharedPreferences.getInstance();
-  var mail = prefs.getString("email");
+    var response = await dio.post(
+      "${dotenv.env['API_URL']}/api/method/upload_file",
+      data: formData,
+    );
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    var mail = prefs.getString("email");
 
-  print(mail);
-  print(dio);
-  print(response.statusCode);
-  if (response.statusCode == 200) {
-  } else {
-    throw Exception('Something went wrong');
+    print(mail);
+    print(dio);
+    print(response.statusCode);
+    if (response.statusCode == 200) {
+      Navigator.pop(context);
+    } else {
+      throw Exception('Something went wrong');
+    }
   }
 }

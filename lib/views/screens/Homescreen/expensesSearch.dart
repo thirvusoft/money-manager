@@ -92,6 +92,9 @@ class _expenseSearchState extends State<expenseSearch> {
   var notescontroller = TextEditingController();
   var amountcontroller = TextEditingController();
   var datecontroller = TextEditingController();
+  var subtypescode;
+
+  var subtypesname;
   final formKey = GlobalKey<FormState>();
 
   bool _loading = true;
@@ -289,13 +292,15 @@ class _expenseSearchState extends State<expenseSearch> {
                               Center(
                                   child: TextButton.icon(
                                       onPressed: () {
-                                        subtype = jsonDecode(row[index])[0];
-
+                                        subtypescode =
+                                            jsonDecode(row[index])[2];
+                                        subtypesname =
+                                            jsonDecode(row[index])[0];
                                         Navigator.push(
                                           context,
                                           MaterialPageRoute(
                                             builder: (context) =>
-                                                dailysheet(subtype),
+                                                dailysheet(subtypescode),
                                           ),
                                         );
                                       },

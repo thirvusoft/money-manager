@@ -74,69 +74,12 @@ class _assetState extends State<asset> with SingleTickerProviderStateMixin {
     Future.delayed(Duration(seconds: 1), () {
       Color.fromARGB(255, 93, 99, 216);
 
-      //   loadingController = AnimationController(
-
-      //   duration: const Duration(seconds: 10), vsync: this,
-      // )..addListener(() { setState(() {}); });
       setState(() {
         _loading = false;
       });
     });
   }
-  // @override
-  // void initState() {
-  //   loadingController = AnimationController(
 
-  //     duration: const Duration(seconds: 10), vsync: this,
-  //   )..addListener(() { setState(() {}); });
-
-  //   super.initState();
-  // }
-
-  // var result;
-  // File _myImage = File('');
-
-  // pickImage(ImageSource source) async {
-  //   XFile? image = await picker.pickImage(
-  //     source: source,
-  //     imageQuality: 100,
-  //     maxHeight: MediaQuery.of(context).size.height,
-  //     maxWidth: MediaQuery.of(context).size.width,
-  //     preferredCameraDevice: CameraDevice.rear,
-  //   );
-  //   if (image == null) {
-  //     //TODO: Image not selected action.
-  //     isFileSelected = 0;
-  //   } else {
-  //     //TODO: Image selected action.
-  //     _myImage = File(image.path);
-  //     bool isLoading = true;
-  //     final bytes = Io.File(image.path).readAsBytesSync();
-
-  //     String imgcontent = base64Encode(bytes);
-  //     uploadimage(_myImage);
-
-  //     isFileSelected = 1;
-  //   }
-  // }
-
-  // Widget showImage(File file) {
-  //   if (isFileSelected == 0) {
-  //     //TODO: Image not selected widget.
-  //     return Center(child: Text("Image Selected"));
-  //   } else {
-  //     //TODO: Image selected widget.
-  //     return Container(
-  //       height: MediaQuery.of(context).size.width * 9 / 16,
-  //       width: MediaQuery.of(context).size.width,
-  //       child: Image.file(file, fit: BoxFit.contain),
-  //     );
-  //   }
-  //   // ignore: dead_code
-  // }
-
-  // int isFileSelected = 0;
-  // ImagePicker picker = ImagePicker();
   TextEditingController _textEditingController = TextEditingController();
 
   var typecontroller = TextEditingController();
@@ -339,19 +282,9 @@ class _assetState extends State<asset> with SingleTickerProviderStateMixin {
                                           context,
                                           MaterialPageRoute(
                                             builder: (context) =>
-                                                dailysheet(subtypesname),
+                                                dailysheet(subtypescode),
                                           ),
                                         );
-
-                                        // _show(context, subtypescode,
-                                        //     subtypesname);
-                                        // namecontroller.clear();
-                                        // amountcontroller.clear();
-                                        // notescontroller.clear();
-
-                                        // loadingController.clearListeners();
-
-                                        // print(icon_name[index][0]);
                                       },
                                       label: Text(
                                         _textEditingController.text.isNotEmpty
