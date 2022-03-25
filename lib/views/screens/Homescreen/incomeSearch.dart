@@ -8,6 +8,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:money_manager/views/screens/Categories/Income.dart';
+import 'package:money_manager/views/screens/Dataentrysheet.dart';
 import 'package:open_file/open_file.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
@@ -16,6 +17,7 @@ import '../Categories/Asset.dart';
 import 'package:http/http.dart' as http;
 
 import '../profile.dart';
+import '../dailysheet.dart';
 
 class incomeSearch extends StatefulWidget {
   const incomeSearch({Key? key}) : super(key: key);
@@ -270,7 +272,13 @@ class _incomeSearchState extends State<incomeSearch> {
                                   child: TextButton.icon(
                                       onPressed: () {
                                         subtypes = jsonDecode(row[index])[0];
-                                        _show(context, subtypes);
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) =>
+                                                daily(subtypes),
+                                          ),
+                                        );
                                       },
                                       label: Text(
                                         _textEditingController.text.isNotEmpty

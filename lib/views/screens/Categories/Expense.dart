@@ -207,6 +207,7 @@ class _customExpenseState extends State<customExpense> {
                         height: 15,
                       ),
                       TextFormField(
+                          maxLength: 11,
                           controller: namecontroller,
                           keyboardType: TextInputType.text,
                           decoration: InputDecoration(labelText: 'Name:'),

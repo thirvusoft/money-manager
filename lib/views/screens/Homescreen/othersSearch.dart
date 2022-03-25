@@ -14,8 +14,10 @@ import 'package:rflutter_alert/rflutter_alert.dart';
 
 import '../Categories/Asset.dart';
 import 'package:http/http.dart' as http;
+import '../Dataentrysheet.dart';
 
 import '../profile.dart';
+import '../dailysheet.dart';
 
 class othersSearch extends StatefulWidget {
   const othersSearch({Key? key}) : super(key: key);
@@ -77,6 +79,9 @@ class _othersSearchState extends State<othersSearch> {
   var notescontroller = TextEditingController();
   var amountcontroller = TextEditingController();
   var datecontroller = TextEditingController();
+  var subtypescode;
+  var subtypesname;
+
   final formKey = GlobalKey<FormState>();
   final dateController = TextEditingController();
   bool _loading = true;
@@ -266,8 +271,17 @@ class _othersSearchState extends State<othersSearch> {
                               Center(
                                   child: TextButton.icon(
                                       onPressed: () {
-                                        subtypes = jsonDecode(row[index])[0];
-                                        _show(context, subtypes);
+                                        subtypescode =
+                                            jsonDecode(row[index])[2];
+                                        subtypesname =
+                                            jsonDecode(row[index])[0];
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) =>
+                                                daily(subtypesname),
+                                          ),
+                                        );
                                       },
                                       label: Text(
                                         _textEditingController.text.isNotEmpty
