@@ -371,6 +371,13 @@ class MyCustomFormState extends State<MyCustomForm>
           content: Text(json.decode(response.body)['message']),
           backgroundColor: Colors.red,
         ));
+      } else if (response.statusCode == 429) {
+        Navigator.pop(context);
+
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(json.decode(response.body)['message']),
+          backgroundColor: Colors.red,
+        ));
       } else if (response.statusCode == 404) {
         Navigator.pop(context);
 
