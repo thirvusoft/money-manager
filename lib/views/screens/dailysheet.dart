@@ -46,7 +46,6 @@ class MyCustomFormState extends State<MyCustomForm>
     with SingleTickerProviderStateMixin {
   var name;
   String _image = ' ';
-  late AnimationController loadingController;
 
   File? _file;
   PlatformFile? _platformFile;
@@ -62,7 +61,6 @@ class MyCustomFormState extends State<MyCustomForm>
         _platformFile = file.files.first;
       });
     }
-    loadingController.forward();
   }
 
   TextEditingController _textEditingController = TextEditingController();
@@ -209,33 +207,35 @@ class MyCustomFormState extends State<MyCustomForm>
               height: 20,
             ),
             Container(
-                child: Center(
-                    child: RaisedButton(
-                        color: Color.fromARGB(255, 93, 99, 216),
-                        child: Text(
-                          "Submit",
-                          style: TextStyle(color: Colors.white),
-                        ),
-                        onPressed: () {
-                          print("test");
-                          uploadimage(_file, _platformFile!.name);
-                          // _file, _platformFile
-                          if (_formKey.currentState!.validate()) {
-                            dataentry(
-                              typecontroller.text,
-                              subtypescode,
-                              namecontroller.text,
-                              notescontroller.text,
-                              amountcontroller.text,
-                            );
+              child: Center(
+                  child: RaisedButton(
+                      color: Color.fromARGB(255, 93, 99, 216),
+                      child: Text(
+                        "Submit",
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      onPressed: () {
+                        print("test");
+                        uploadimage(
+                            _platformFile!.path ?? '', _platformFile!.name);
+                        // _file, _platformFile
+                        if (_formKey.currentState!.validate()) {
+                          dataentry(
+                            typecontroller.text,
+                            subtypescode,
+                            namecontroller.text,
+                            notescontroller.text,
+                            amountcontroller.text,
+                          );
 
-                            // typecontroller.clear();
-                            namecontroller.clear();
-                            notescontroller.clear();
-                            amountcontroller.clear();
-                            datecontroller.clear();
-                          }
-                        })))
+                          // typecontroller.clear();
+                          namecontroller.clear();
+                          notescontroller.clear();
+                          amountcontroller.clear();
+                          datecontroller.clear();
+                        }
+                      })),
+            ),
           ],
         ),
       ),
@@ -339,15 +339,17 @@ Future uploadfile(File img64) async {
 }
 
 //var _file, var _platformFile
-Future uploadimage(Path, String name) async {
+Future uploadimage(String path, String name) async {
   print("object");
+  print(path);
+  print(name);
   FormData formData = FormData.fromMap({
     "file": await MultipartFile.fromFile(
         // '/data/user/0/com.example.money_manager/cache/file_picker/Employer Survey.pdf',
         // filename: 'Employer Survey.pdf',
-        Path,
+        path,
         filename: name),
-    "docname": 'barathpalanisamy2002@gmail.com',
+    "docname": 'mail',
     "doctype": 'User',
     "is_private": 0,
     "folder": "Home/Attachments"
@@ -362,6 +364,10 @@ Future uploadimage(Path, String name) async {
     "${dotenv.env['API_URL']}/api/method/upload_file",
     data: formData,
   );
+  SharedPreferences preferences = await SharedPreferences.getInstance();
+  var mail = prefs.getString("email");
+
+  print(mail);
   print(dio);
   print(response.statusCode);
   if (response.statusCode == 200) {
