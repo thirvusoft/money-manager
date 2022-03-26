@@ -11,7 +11,6 @@ import 'package:iconsax/iconsax.dart';
 import 'package:dio/dio.dart';
 import 'dart:io';
 
-// ignore: file_names
 import 'dart:convert';
 import 'dart:io';
 import 'dart:io' as Io;
@@ -81,7 +80,6 @@ class _assetState extends State<asset> with SingleTickerProviderStateMixin {
   }
 
   TextEditingController _textEditingController = TextEditingController();
-
   var typecontroller = TextEditingController();
   var subtypecontroller = TextEditingController();
   var namecontroller = TextEditingController();
@@ -113,7 +111,6 @@ class _assetState extends State<asset> with SingleTickerProviderStateMixin {
     '0xf05ce': 0xf05ce
   };
 
-// Icon API
   Future listapi() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var response = await http.post(
@@ -259,10 +256,8 @@ class _assetState extends State<asset> with SingleTickerProviderStateMixin {
                       var row = [];
                       if (icon_nameOnSearch.length != 0) {
                         row = icon_nameOnSearch;
-                        print(row);
                       } else {
                         row = icon_name;
-                        print(row);
                       }
                       return Container(
                           decoration: BoxDecoration(
@@ -277,12 +272,16 @@ class _assetState extends State<asset> with SingleTickerProviderStateMixin {
                                             jsonDecode(row[index])[2];
                                         subtypesname =
                                             jsonDecode(row[index])[0];
-
+                                        // _show(context, subtypescode,
+                                        //subtypesname);
+                                        print(subtypescode);
                                         Navigator.push(
                                           context,
                                           MaterialPageRoute(
-                                            builder: (context) =>
-                                                dailysheet(subtypescode),
+                                            builder: (context) => MyCustomForm(
+                                                "Assets",
+                                                subtypescode,
+                                                subtypesname),
                                           ),
                                         );
                                       },
@@ -322,196 +321,178 @@ class _assetState extends State<asset> with SingleTickerProviderStateMixin {
               );
             }));
   }
-}
-  // void _show(BuildContext ctx, subtypescode, subtypesname) {
-  //   showModalBottomSheet(
-  //       shape: RoundedRectangleBorder(
-  //         borderRadius: BorderRadius.all(Radius.circular(10.0)),
-  //       ),
-  //       isScrollControlled: true,
-  //       elevation: 5,
-  //       context: ctx,
-  //       builder: (ctx) => Padding(
-  //             padding: EdgeInsets.only(
-  //                 top: 15,
-  //                 left: 15,
-  //                 right: 15,
-  //                 bottom: MediaQuery.of(ctx).viewInsets.bottom + 15),
-  //             child: Form(
-  //               key: formKey,
-  //               child: Column(
-  //                 mainAxisSize: MainAxisSize.min,
-  //                 crossAxisAlignment: CrossAxisAlignment.start,
-  //                 children: [
-  //                   Align(
-  //                     alignment: Alignment.center,
-  //                     child: Text("Asset",
-  //                         textAlign: TextAlign.center,
-  //                         style: TextStyle(fontSize: 25)),
-  //                   ),
-  //                   Text(subtypesname, style: TextStyle(fontSize: 20)),
-  //                   TextFormField(
-  //                       controller: namecontroller,
-  //                       decoration: InputDecoration(labelText: 'Name'),
-  //                       validator: (value) {
-  //                         if (value!.isEmpty) {
-  //                           return "Please enter the name";
-  //                         } else {
-  //                           return null;
-  //                         }
-  //                       }),
-  //                   TextFormField(
-  //                     controller: notescontroller,
-  //                     decoration: InputDecoration(labelText: 'Notes'),
-  //                   ),
-  //                   TextFormField(
-  //                       controller: amountcontroller,
-  //                       decoration: InputDecoration(labelText: 'Amount'),
-  //                       keyboardType: TextInputType.number,
-  //                       validator: (value) {
-  //                         if (value!.isEmpty) {
-  //                           return "Please enter the amount";
-  //                         } else {
-  //                           return null;
-  //                         }
-  //                       }),
-  //                   // TextButton(
-  //                   //     onPressed: () {
-  //                   //       _onAlertWithCustomContentPressed(context);
-  //                   //     },
-  //                   //     child: const Text(
-  //                   //       "Upload",
-  //                   //       style:
-  //                   //           TextStyle(color: Color.fromARGB(255, 0, 0, 0)),
-  //                   //     )),
-  //                   GestureDetector(
-  //                     onTap: selectFile,
-  //                     child: Padding(
-  //                         padding: EdgeInsets.symmetric(
-  //                             horizontal: 40.0, vertical: 20.0),
-  //                         child: DottedBorder(
-  //                           borderType: BorderType.RRect,
-  //                           radius: Radius.circular(10),
-  //                           dashPattern: [10, 4],
-  //                           strokeCap: StrokeCap.round,
-  //                           color: Colors.blue.shade400,
-  //                           child: Container(
-  //                             width: double.infinity,
-  //                             child: Column(
-  //                               mainAxisAlignment: MainAxisAlignment.center,
-  //                               children: [
-  //                                 Icon(
-  //                                   Iconsax.folder_open,
-  //                                   color: Colors.blue,
-  //                                   size: 40,
-  //                                 ),
-  //                               ],
-  //                             ),
-  //                           ),
-  //                         )),
-  //                   ),
-  //                   _platformFile != null
-  //                       ? Container(
-  //                           child: _loading
-  //                               ? CircularProgressIndicator(
-  //                                   valueColor: AlwaysStoppedAnimation<Color>(
-  //                                       Color.fromARGB(255, 93, 99, 216)),
-  //                                 )
-  //                               : Column(
-  //                                   crossAxisAlignment:
-  //                                       CrossAxisAlignment.start,
-  //                                   children: [
-  //                                     Text(
-  //                                       'Selected File',
-  //                                       style: TextStyle(
-  //                                         color: Colors.grey.shade400,
-  //                                         fontSize: 15,
-  //                                       ),
-  //                                     ),
-  //                                     Container(
-  //                                         padding: EdgeInsets.all(8),
-  //                                         decoration: BoxDecoration(
-  //                                             borderRadius:
-  //                                                 BorderRadius.circular(100),
-  //                                             color: Colors.white,
-  //                                             boxShadow: [
-  //                                               BoxShadow(
-  //                                                 color: Colors.grey.shade200,
-  //                                                 offset: Offset(0, 1),
-  //                                                 blurRadius: 3,
-  //                                                 spreadRadius: 2,
-  //                                               )
-  //                                             ]),
-  //                                         child: Row(
-  //                                           children: [
-  //                                             SizedBox(
-  //                                               width: 10,
-  //                                             ),
-  //                                             Expanded(
-  //                                               child: Column(
-  //                                                 crossAxisAlignment:
-  //                                                     CrossAxisAlignment.start,
-  //                                                 children: [
-  //                                                   Text(
-  //                                                     _platformFile!.name,
-  //                                                     style: TextStyle(
-  //                                                         fontSize: 13,
-  //                                                         color: Colors.black),
-  //                                                   ),
-  //                                                   SizedBox(
-  //                                                     height: 5,
-  //                                                   ),
-  //                                                   Text(
-  //                                                     '${(_platformFile!.size / 1024).ceil()} KB',
-  //                                                     style: TextStyle(
-  //                                                         fontSize: 13,
-  //                                                         color: Colors
-  //                                                             .grey.shade500),
-  //                                                   ),
-  //                                                 ],
-  //                                               ),
-  //                                             ),
-  //                                           ],
-  //                                         )),
-  //                                     SizedBox(
-  //                                       height: 20,
-  //                                     ),
-  //                                   ],
-  //                                 ))
-  //                       : Container(),
-  //                   SizedBox(
-  //                     height: 150,
-  //                   ),
 
-  //                   RaisedButton(
-  //                       color: Color.fromARGB(255, 93, 99, 216),
-  //                       child: Text(
-  //                         "Submit",
-  //                         style: TextStyle(color: Colors.white),
-  //                       ),
-  //                       onPressed: () {
-  //  uploadimage();
-  // if (formKey.currentState!.validate()) {
-  //   dataentry(
-  //     typecontroller.text,
-  //     subtypescode,
-  //     namecontroller.text,
-  //     notescontroller.text,
-  //     amountcontroller.text,
-  //   );
+//   void _show(BuildContext ctx, subtypescode, subtypesname) {
+//     showModalBottomSheet(
+//         shape: RoundedRectangleBorder(
+//           borderRadius: BorderRadius.all(Radius.circular(10.0)),
+//         ),
+//         isScrollControlled: true,
+//         elevation: 5,
+//         context: ctx,
+//         builder: (ctx) => Padding(
+//               padding: EdgeInsets.only(
+//                   top: 15,
+//                   left: 15,
+//                   right: 15,
+//                   bottom: MediaQuery.of(ctx).viewInsets.bottom + 15),
+//               child: Form(
+//                 key: formKey,
+//                 child: Column(
+//                   mainAxisSize: MainAxisSize.min,
+//                   crossAxisAlignment: CrossAxisAlignment.start,
+//                   children: [
+//                     Align(
+//                       alignment: Alignment.center,
+//                       child: Text("Asset",
+//                           textAlign: TextAlign.center,
+//                           style: TextStyle(fontSize: 25)),
+//                     ),
+//                     Text(subtypesname, style: TextStyle(fontSize: 20)),
+//                     TextFormField(
+//                         controller: namecontroller,
+//                         decoration: InputDecoration(labelText: 'Name'),
+//                         validator: (value) {
+//                           if (value!.isEmpty) {
+//                             return "Please enter the name";
+//                           } else {
+//                             return null;
+//                           }
+//                         }),
+//                     TextFormField(
+//                       controller: notescontroller,
+//                       decoration: InputDecoration(labelText: 'Notes'),
+//                     ),
+//                     TextFormField(
+//                         controller: amountcontroller,
+//                         decoration: InputDecoration(labelText: 'Amount'),
+//                         keyboardType: TextInputType.number,
+//                         validator: (value) {
+//                           if (value!.isEmpty) {
+//                             return "Please enter the amount";
+//                           } else {
+//                             return null;
+//                           }
+//                         }),
+//                     // TextButton(
+//                     //     onPressed: () {
+//                     //       _onAlertWithCustomContentPressed(context);
+//                     //     },
+//                     //     child: const Text(
+//                     //       "Upload",
+//                     //       style:
+//                     //           TextStyle(color: Color.fromARGB(255, 0, 0, 0)),
+//                     //     )),
+//                     GestureDetector(
+//                       onTap: selectFile,
+//                       child: Padding(
+//                         padding: EdgeInsets.symmetric(
+//                             horizontal: 40.0, vertical: 20.0),
+//                         child: Text("Upload"),
+//                       ),
+//                     ),
+//                     _platformFile != null
+//                         ? Container(
+//                             child: _loading
+//                                 ? CircularProgressIndicator(
+//                                     valueColor: AlwaysStoppedAnimation<Color>(
+//                                         Color.fromARGB(255, 93, 99, 216)),
+//                                   )
+//                                 : Column(
+//                                     crossAxisAlignment:
+//                                         CrossAxisAlignment.start,
+//                                     children: [
+//                                       Text(
+//                                         'Selected File',
+//                                         style: TextStyle(
+//                                           color: Colors.grey.shade400,
+//                                           fontSize: 15,
+//                                         ),
+//                                       ),
+//                                       Container(
+//                                           padding: EdgeInsets.all(8),
+//                                           decoration: BoxDecoration(
+//                                               borderRadius:
+//                                                   BorderRadius.circular(100),
+//                                               color: Colors.white,
+//                                               boxShadow: [
+//                                                 BoxShadow(
+//                                                   color: Colors.grey.shade200,
+//                                                   offset: Offset(0, 1),
+//                                                   blurRadius: 3,
+//                                                   spreadRadius: 2,
+//                                                 )
+//                                               ]),
+//                                           child: Row(
+//                                             children: [
+//                                               SizedBox(
+//                                                 width: 10,
+//                                               ),
+//                                               Expanded(
+//                                                 child: Column(
+//                                                   crossAxisAlignment:
+//                                                       CrossAxisAlignment.start,
+//                                                   children: [
+//                                                     Text(
+//                                                       _platformFile!.name,
+//                                                       style: TextStyle(
+//                                                           fontSize: 13,
+//                                                           color: Colors.black),
+//                                                     ),
+//                                                     SizedBox(
+//                                                       height: 5,
+//                                                     ),
+//                                                     Text(
+//                                                       '${(_platformFile!.size / 1024).ceil()} KB',
+//                                                       style: TextStyle(
+//                                                           fontSize: 13,
+//                                                           color: Colors
+//                                                               .grey.shade500),
+//                                                     ),
+//                                                   ],
+//                                                 ),
+//                                               ),
+//                                             ],
+//                                           )),
+//                                       SizedBox(
+//                                         height: 20,
+//                                       ),
+//                                     ],
+//                                   ))
+//                         : Container(),
+//                     SizedBox(
+//                       height: 150,
+//                     ),
 
-  //   // typecontroller.clear();
-  //   namecontroller.clear();
-  //   notescontroller.clear();
-  //   amountcontroller.clear();
-  //   datecontroller.clear();
-  // }
-  //                       })
-  //                 ],
-  //               ),
-  //             ),
-  //           ));
-  // }
+//                     RaisedButton(
+//                         color: Color.fromARGB(255, 93, 99, 216),
+//                         child: Text(
+//                           "Submit",
+//                           style: TextStyle(color: Colors.white),
+//                         ),
+//                         onPressed: () {
+//                           uploadimage();
+//                           if (formKey.currentState!.validate()) {
+//                             dataentry(
+//                               typecontroller.text,
+//                               subtypescode,
+//                               namecontroller.text,
+//                               notescontroller.text,
+//                               amountcontroller.text,
+//                             );
+
+//                             // typecontroller.clear();
+//                             namecontroller.clear();
+//                             notescontroller.clear();
+//                             amountcontroller.clear();
+//                             datecontroller.clear();
+//                           }
+//                         })
+//                   ],
+//                 ),
+//               ),
+//             ));
+//   }
 
 //   Future dataentry(type, subtypescode, name, notes, amount) async {
 //     if (typecontroller.text.isNotEmpty ||
@@ -654,3 +635,4 @@ class _assetState extends State<asset> with SingleTickerProviderStateMixin {
 //     // return response.body;
 //   }
 // }
+}

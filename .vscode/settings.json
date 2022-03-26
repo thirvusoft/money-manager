@@ -3,5 +3,6 @@
         "dailysheet",
         "subtypescode",
         "uploadimage"
-    ]
+    ],
+    "java.configuration.updateBuildConfiguration": "automatic"
 }

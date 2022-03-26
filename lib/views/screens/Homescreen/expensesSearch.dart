@@ -299,8 +299,10 @@ class _expenseSearchState extends State<expenseSearch> {
                                         Navigator.push(
                                           context,
                                           MaterialPageRoute(
-                                            builder: (context) =>
-                                                dailysheet(subtypescode),
+                                            builder: (context) => MyCustomForm(
+                                                "Assets",
+                                                subtypescode,
+                                                subtypesname),
                                           ),
                                         );
                                       },

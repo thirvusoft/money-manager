@@ -78,6 +78,8 @@ class _incomeSearchState extends State<incomeSearch> {
   var notescontroller = TextEditingController();
   var amountcontroller = TextEditingController();
   var datecontroller = TextEditingController();
+  var subtypescode;
+  var subtypesname;
   final formKey = GlobalKey<FormState>();
   bool _loading = true;
   List icon_nameOnSearch = [];
@@ -271,12 +273,17 @@ class _incomeSearchState extends State<incomeSearch> {
                               Center(
                                   child: TextButton.icon(
                                       onPressed: () {
-                                        subtypes = jsonDecode(row[index])[0];
+                                        subtypescode =
+                                            jsonDecode(row[index])[2];
+                                        subtypesname =
+                                            jsonDecode(row[index])[0];
                                         Navigator.push(
                                           context,
                                           MaterialPageRoute(
-                                            builder: (context) =>
-                                                daily(subtypes),
+                                            builder: (context) => daily(
+                                                "income",
+                                                subtypescode,
+                                                subtypesname),
                                           ),
                                         );
                                       },

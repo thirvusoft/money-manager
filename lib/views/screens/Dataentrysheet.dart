@@ -11,8 +11,10 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
 class daily extends StatelessWidget {
+  String type;
+  String subtypescode;
   String subtypesname;
-  daily(this.subtypesname);
+  daily(this.type, this.subtypescode, this.subtypesname);
 
   @override
   Widget build(BuildContext context) {
