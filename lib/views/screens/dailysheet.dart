@@ -41,7 +41,6 @@ class MyCustomForm extends StatefulWidget {
   }
 }
 
-// Create a corresponding State class, which holds data related to the form.
 class MyCustomFormState extends State<MyCustomForm>
     with SingleTickerProviderStateMixin {
   var name;
@@ -64,7 +63,6 @@ class MyCustomFormState extends State<MyCustomForm>
   }
 
   TextEditingController _textEditingController = TextEditingController();
-
   var typecontroller = TextEditingController();
   var subtypecontroller = TextEditingController();
   var namecontroller = TextEditingController();
@@ -375,6 +373,8 @@ class MyCustomFormState extends State<MyCustomForm>
     );
     SharedPreferences preferences = await SharedPreferences.getInstance();
     var mail = prefs.getString("email");
+    SharedPreferences _prefs = await SharedPreferences.getInstance();
+    mail = _prefs.getString("email");
 
     print(mail);
     print(dio);
