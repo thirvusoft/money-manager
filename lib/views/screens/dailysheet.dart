@@ -10,31 +10,32 @@ import 'package:iconsax/iconsax.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
-class dailysheet extends StatelessWidget {
-  String subtypesname;
-  dailysheet(this.subtypesname);
-
-  @override
-  Widget build(BuildContext context) {
-    final appTitle = 'Flutter Form Demo';
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: appTitle,
-      home: Scaffold(
-        appBar: AppBar(
-          centerTitle: true,
-          backgroundColor: Color.fromARGB(255, 93, 99, 216),
-          title: Text(
-            subtypesname,
-          ),
-        ),
-        body: MyCustomForm(),
-      ),
-    );
-  }
-}
+// class dailysheet extends StatelessWidget {
+//   @override
+//   Widget build(BuildContext context) {
+//     final appTitle = 'Flutter Form Demo';
+//     return MaterialApp(
+//       debugShowCheckedModeBanner: false,
+//       title: appTitle,
+//       home: Scaffold(
+//         appBar: AppBar(
+//           centerTitle: true,
+//           backgroundColor: Color.fromARGB(255, 93, 99, 216),
+//           title: Text(
+//             subtypesname,
+//           ),
+//         ),
+//      //   body: MyCustomForm(),
+//       ),
+//     );
+//   }
+// }
 
 class MyCustomForm extends StatefulWidget {
+  late String type;
+  late String subtypescode;
+  late String subtypesname;
+  MyCustomForm(this.type, this.subtypescode, this.subtypesname);
   @override
   MyCustomFormState createState() {
     return MyCustomFormState();
@@ -80,8 +81,15 @@ class MyCustomFormState extends State<MyCustomForm>
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Form(
+    return Scaffold(
+      appBar: AppBar(
+        centerTitle: true,
+        backgroundColor: Color.fromARGB(255, 93, 99, 216),
+        title: Text(
+          subtypesname,
+        ),
+      ),
+      body: Form(
         key: _formKey,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -216,8 +224,8 @@ class MyCustomFormState extends State<MyCustomForm>
                       ),
                       onPressed: () {
                         print("test");
-                        uploadimage(
-                            _platformFile!.path ?? '', _platformFile!.name);
+                        // uploadimage(
+                        //     _platformFile!.path ?? '', _platformFile!.name);
                         // _file, _platformFile
                         if (_formKey.currentState!.validate()) {
                           dataentry(
@@ -250,10 +258,11 @@ class MyCustomFormState extends State<MyCustomForm>
       SharedPreferences prefs = await SharedPreferences.getInstance();
       var response = await http.post(
           Uri.parse(
-              '${dotenv.env['API_URL']}/api/method/money_management_backend.custom.py.api.daily_entry_submit?Type=Asset&Subtype=${subtypescode}&Name=${name}&Notes=${notes}&Amount=${amount}'),
+              '${dotenv.env['API_URL']}/api/method/money_management_backend.custom.py.api.daily_entry_submit?Type=${type}&Subtype=${subtypescode}&Name=${name}&Notes=${notes}&Amount=${amount}'),
           headers: {"Authorization": prefs.getString('token') ?? ""});
       //print(response.statusCode);
-
+      print(
+          '${dotenv.env['API_URL']}/api/method/money_management_backend.custom.py.api.daily_entry_submit?Type=${type}&Subtype=${subtypescode}&Name=${name}&Notes=${notes}&Amount=${amount}');
       if (response.statusCode == 200) {
         Navigator.pop(context);
 

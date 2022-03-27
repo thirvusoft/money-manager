@@ -286,12 +286,13 @@ class _liabilitySearchState extends State<liabilitySearch> {
                                             jsonDecode(row[index])[2];
                                         subtypesname =
                                             jsonDecode(row[index])[0];
-
                                         Navigator.push(
                                           context,
                                           MaterialPageRoute(
-                                            builder: (context) =>
-                                                daily(subtypesname),
+                                            builder: (context) => data(
+                                                "liability",
+                                                subtypescode,
+                                                subtypesname),
                                           ),
                                         );
                                       },

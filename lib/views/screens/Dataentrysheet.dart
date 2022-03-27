@@ -10,40 +10,42 @@ import 'package:iconsax/iconsax.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
-class daily extends StatelessWidget {
-  String subtypesname;
-  daily(this.subtypesname);
+// class daily extends StatelessWidget {
+//  x
 
-  @override
-  Widget build(BuildContext context) {
-    final appTitle = 'Flutter Form Demo';
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: appTitle,
-      home: Scaffold(
-        appBar: AppBar(
-          centerTitle: true,
-          backgroundColor: Color.fromARGB(255, 93, 99, 216),
-          title: Text(
-            subtypesname,
-          ),
-        ),
-        body: MyCustomForm(),
-      ),
-    );
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     final appTitle = 'Flutter Form Demo';
+//     return MaterialApp(
+//       debugShowCheckedModeBanner: false,
+//       title: appTitle,
+//       home: Scaffold(
+//         appBar: AppBar(
+//           centerTitle: true,
+//           backgroundColor: Color.fromARGB(255, 93, 99, 216),
+//           title: Text(
+//             subtypesname,
+//           ),
+//         ),
+//         body: data(),
+//       ),
+//     );
+//   }
+// }
 
-class MyCustomForm extends StatefulWidget {
+class data extends StatefulWidget {
+  late String type;
+  late String subtypescode;
+  late String subtypesname;
+  data(this.type, this.subtypescode, this.subtypesname);
   @override
-  MyCustomFormState createState() {
-    return MyCustomFormState();
+  dataState createState() {
+    return dataState();
   }
 }
 
 // Create a corresponding State class, which holds data related to the form.
-class MyCustomFormState extends State<MyCustomForm>
-    with SingleTickerProviderStateMixin {
+class dataState extends State<data> with SingleTickerProviderStateMixin {
   String _image = ' ';
   late AnimationController loadingController;
 
@@ -81,8 +83,15 @@ class MyCustomFormState extends State<MyCustomForm>
   bool _loading = false;
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Form(
+    return Scaffold(
+      appBar: AppBar(
+        centerTitle: true,
+        backgroundColor: Color.fromARGB(255, 93, 99, 216),
+        title: Text(
+          subtypesname,
+        ),
+      ),
+      body: Form(
         key: _formKey,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -253,8 +262,8 @@ class MyCustomFormState extends State<MyCustomForm>
                         ),
                         onPressed: () {
                           print("test");
-                          uploadimage(
-                              _platformFile!.path ?? '', _platformFile!.name);
+                          // uploadimage(
+                          //     _platformFile!.path ?? '', _platformFile!.name);
                           // _file, _platformFile
                           if (_formKey.currentState!.validate()) {
                             dataentry(
@@ -318,9 +327,11 @@ class MyCustomFormState extends State<MyCustomForm>
       SharedPreferences prefs = await SharedPreferences.getInstance();
       var response = await http.post(
           Uri.parse(
-              '${dotenv.env['API_URL']}/api/method/money_management_backend.custom.py.api.daily_entry_submit?Type=Asset&Subtype=${subtypescode}&Name=${name}&Notes=${notes}&Amount=${amount}'),
+              '${dotenv.env['API_URL']}/api/method/money_management_backend.custom.py.api.daily_entry_submit?Type=${type}&Subtype=${subtypescode}&Name=${name}&Notes=${notes}&Amount=${amount}'),
           headers: {"Authorization": prefs.getString('token') ?? ""});
       //print(response.statusCode);
+      print(
+          '${dotenv.env['API_URL']}/api/method/money_management_backend.custom.py.api.daily_entry_submit?Type=${type}&Subtype=${subtypescode}&Name=${name}&Notes=${notes}&Amount=${amount}');
 
       if (response.statusCode == 200) {
         Navigator.pop(context);

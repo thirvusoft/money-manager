@@ -338,8 +338,10 @@ class _assetState extends State<asset> with SingleTickerProviderStateMixin {
                                         Navigator.push(
                                           context,
                                           MaterialPageRoute(
-                                            builder: (context) =>
-                                                dailysheet(subtypesname),
+                                            builder: (context) => MyCustomForm(
+                                                "Assets",
+                                                subtypescode,
+                                                subtypesname),
                                           ),
                                         );
 

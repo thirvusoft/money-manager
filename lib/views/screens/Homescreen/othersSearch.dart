@@ -278,8 +278,8 @@ class _othersSearchState extends State<othersSearch> {
                                         Navigator.push(
                                           context,
                                           MaterialPageRoute(
-                                            builder: (context) =>
-                                                daily(subtypesname),
+                                            builder: (context) => data("others",
+                                                subtypescode, subtypesname),
                                           ),
                                         );
                                       },
