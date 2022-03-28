@@ -330,6 +330,8 @@ class _assetState extends State<asset> with SingleTickerProviderStateMixin {
                               Center(
                                   child: TextButton.icon(
                                       onPressed: () {
+                                        print(subtypescode);
+                                        print(subtypesname);
                                         subtypescode =
                                             jsonDecode(row[index])[2];
                                         subtypesname =
@@ -338,11 +340,12 @@ class _assetState extends State<asset> with SingleTickerProviderStateMixin {
                                         Navigator.push(
                                           context,
                                           MaterialPageRoute(
-                                            builder: (context) => MyCustomForm(
-                                                "Assets",
-                                                subtypescode,
-                                                subtypesname),
-                                          ),
+                                              builder: (context) =>
+                                                  SecondScreen(
+                                                      type: 'Asset',
+                                                      subtypeCode: subtypescode,
+                                                      subtypeName:
+                                                          subtypesname)),
                                         );
 
                                         // _show(context, subtypescode,
