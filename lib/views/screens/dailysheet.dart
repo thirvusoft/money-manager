@@ -235,7 +235,7 @@ class MyCustomFormState extends State<MyCustomForm>
                           //   amountcontroller.text,
                           // );
 
-                          // typecontroller.clear();
+                          typecontroller.clear();
                           namecontroller.clear();
                           notescontroller.clear();
                           amountcontroller.clear();
@@ -269,15 +269,11 @@ Future uploadfile(File img64) async {
 //var _file, var _platformFile
 Future uploadimage(String path, String name) async {
   print("object");
-  print(path);
-  print(name);
   FormData formData = FormData.fromMap({
     "file": await MultipartFile.fromFile(
-        // '/data/user/0/com.example.money_manager/cache/file_picker/Employer Survey.pdf',
-        // filename: 'Employer Survey.pdf',
-        '/data/user/0/com.example.money_manager/cache/file_picker/IMG-20220327-WA0005.jpg',
-        filename: 'IMG-20220327-WA0005.jpg'),
-    "docname": 'mail',
+        '/data/user/0/com.example.money_manager/cache/file_picker/IMG20220327222919.jpg',
+        filename: 'IMG20220327222919.jpg'),
+    "docname": 'barathpalanisamy2002@gmail.com',
     "doctype": 'User',
     "is_private": 0,
     "folder": "Home/Attachments"
@@ -337,6 +333,11 @@ class SecondScreen extends StatelessWidget {
   }
 
   Future<String> dataentry(type, subtypescode, name, notes, amount) async {
+    print(type);
+    print(subtypescode);
+    print(name);
+    print(notes);
+    print(amount);
     // if (typecontroller.text.isNotEmpty ||
     //     namecontroller.text.isNotEmpty ||
     //     notescontroller.text.isNotEmpty ||
@@ -350,6 +351,8 @@ class SecondScreen extends StatelessWidget {
     print(
         '${dotenv.env['API_URL']}/api/method/money_management_backend.custom.py.api.daily_entry_submit?Type=${type}&Subtype=${subtypescode}&Name=${name}&Notes=${notes}&Amount=${amount}');
 
+    print(response.statusCode);
+    print(response.body);
     if (response.statusCode == 200) {
       return json.decode(response.body)['message'];
     } else if (response.statusCode == 401) {
@@ -531,26 +534,26 @@ class SecondScreen extends StatelessWidget {
                         style: TextStyle(color: Colors.white),
                       ),
                       onPressed: () {
-                        uploadimage(
-                            _platformFile!.path ?? '', _platformFile!.name);
-                        // if (_formKey.currentState!.validate()) {
-                        //   Future<String> msg = dataentry(
-                        //     typecontroller.text,
-                        //     subtypescode,
-                        //     namecontroller.text,
-                        //     notescontroller.text,
-                        //     amountcontroller.text,
-                        //   );
+                        // uploadimage(
+                        //     _platformFile!.path ?? '', _platformFile!.name);
+                        if (_formKey.currentState!.validate()) {
+                          var msg = dataentry(
+                            type,
+                            subtypeCode,
+                            namecontroller.text,
+                            notescontroller.text,
+                            amountcontroller.text,
+                          );
 
-                        //   Navigator.pop(context);
+                          Navigator.pop(context);
 
-                        //   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                        //     content: Text(msg.toString()),
-                        //     backgroundColor: Colors.red,
-                        //   ));
-                        // }
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                            content: Text(msg.toString()),
+                            backgroundColor: Colors.red,
+                          ));
+                        }
 
-                        // typecontroller.clear();
+                        typecontroller.clear();
                         namecontroller.clear();
                         notescontroller.clear();
                         amountcontroller.clear();
