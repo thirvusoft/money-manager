@@ -406,57 +406,60 @@ class dataState extends State<data> with SingleTickerProviderStateMixin {
       }
     }
   }
-}
 
-Future uploadfile(File img64) async {
-  var bytes = img64.readAsBytesSync();
-  SharedPreferences prefs = await SharedPreferences.getInstance();
+  Future uploadfile(File img64) async {
+    var bytes = img64.readAsBytesSync();
+    SharedPreferences prefs = await SharedPreferences.getInstance();
 
-  var response = await http.post(
-    Uri.parse(
-        "${dotenv.env['API_URL']}/api/method/money_management_backend.custom.py.api.upload_profile_image"),
-    headers: {"Authorization": prefs.getString('token') ?? ""},
-    body: {
-      "file",
-    },
-    encoding: Encoding.getByName("utf-8"),
-  );
-  return response.body;
-}
+    var response = await http.post(
+      Uri.parse(
+          "${dotenv.env['API_URL']}/api/method/money_management_backend.custom.py.api.upload_profile_image"),
+      headers: {"Authorization": prefs.getString('token') ?? ""},
+      body: {
+        "file",
+      },
+      encoding: Encoding.getByName("utf-8"),
+    );
+    return response.body;
+  }
 
 //var _file, var _platformFile
-Future uploadimage(String path, String name) async {
-  print("object");
-  print(path);
-  print(name);
-  FormData formData = FormData.fromMap({
-    "file": await MultipartFile.fromFile(
-        // '/data/user/0/com.example.money_manager/cache/file_picker/Employer Survey.pdf',
-        // filename: 'Employer Survey.pdf',
-        path,
-        filename: name),
-    "docname": 'mail',
-    "doctype": 'User',
-    "is_private": 0,
-    "folder": "Home/Attachments"
-  });
-  print(formData);
+  Future uploadimage(String path, String name) async {
+    print("object");
+    print(path);
+    print(name);
+    FormData formData = FormData.fromMap({
+      "file": await MultipartFile.fromFile(
+          // '/data/user/0/com.example.money_manager/cache/file_picker/Employer Survey.pdf',
+          // filename: 'Employer Survey.pdf',
+          path,
+          filename: name),
+      "docname": 'mail',
+      "doctype": 'User',
+      "is_private": 0,
+      "folder": "Home/Attachments"
+    });
+    print(formData);
 
-  var dio = Dio();
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  dio.options.headers["Authorization"] = prefs.getString('token') ?? "";
+    var dio = Dio();
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    dio.options.headers["Authorization"] = prefs.getString('token') ?? "";
 
-  var response = await dio.post(
-    "${dotenv.env['API_URL']}/api/method/upload_file",
-    data: formData,
-  );
-  SharedPreferences preferences = await SharedPreferences.getInstance();
-  var mail = prefs.getString("email");
-  print(mail);
-  print(dio);
-  print(response.statusCode);
-  if (response.statusCode == 200) {
-  } else {
-    throw Exception('Something went wrong');
+    var response = await dio.post(
+      "${dotenv.env['API_URL']}/api/method/upload_file",
+      data: formData,
+    );
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    var mail = prefs.getString("email");
+    SharedPreferences _prefs = await SharedPreferences.getInstance();
+    mail = _prefs.getString("email");
+    print(mail);
+    print(dio);
+    print(response.statusCode);
+    if (response.statusCode == 200) {
+      Navigator.pop(context);
+    } else {
+      throw Exception('Something went wrong');
+    }
   }
 }
