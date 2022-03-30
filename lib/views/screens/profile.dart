@@ -158,7 +158,7 @@ Future profile(email) async {
   SharedPreferences _prefs = await SharedPreferences.getInstance();
   var response = await http.post(
       Uri.parse(
-          "${dotenv.env['API_URL']}/api/method/money_management_backend.custom.py.api.profile?email=${email}"),
+          "${dotenv.env['API_URL']}/api/method/money_management_backend.custom.py.api.get_profile_data?email=${email}"),
       headers: {"Authorization": _prefs.getString('token') ?? ""});
   if (response.statusCode == 200) {
     SharedPreferences prefs = await SharedPreferences.getInstance();

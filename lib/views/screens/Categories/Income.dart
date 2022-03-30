@@ -51,8 +51,11 @@ class _customIncomeState extends State<customIncome> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var response = await http.post(
         Uri.parse(
-            "${dotenv.env['API_URL']}/api/method/money_management_backend.custom.py.api.withsubtype?Type=Income"),
+            "${dotenv.env['API_URL']}/api/method/money_management_backend.custom.py.api.icon_list?type=Income"),
         headers: {"Authorization": prefs.getString('token') ?? ""});
+
+    print(
+        '${dotenv.env['API_URL']}/api/method/money_management_backend.custom.py.api.icon_list?type=Income');
 
     if (response.statusCode == 200) {
       SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -130,7 +133,7 @@ class _customIncomeState extends State<customIncome> {
                       ? icon_nameOnSearch.length
                       : icon_name.length,
                   itemBuilder: (context, index) {
-                    code = jsonEncode(icon_name[index])[0];
+                    code = jsonDecode(icon_name[index])[0];
 
                     return Padding(
                       padding: const EdgeInsets.all(8.0),
@@ -230,8 +233,12 @@ class _customIncomeState extends State<customIncome> {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       var response = await http.post(
           Uri.parse(
-              "${dotenv.env['API_URL']}/api/method/money_management_backend.custom.py.api.custom?Type=Income&Subtype=${name}&IconBineryCode=654654"),
+              "${dotenv.env['API_URL']}/api/method/money_management_backend.custom.py.api.create_new_subtype?type=Income&subtype=${name}&iconbinerycode=${code}"),
           headers: {"Authorization": prefs.getString('token') ?? ""});
+
+      print(
+          '${dotenv.env['API_URL']}/api/method/money_management_backend.custom.py.api.create_new_subtype?type=Income&subtype=${name}&iconbinerycode=${code}');
+
       if (response.statusCode == 200) {
         Navigator.pop(context);
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(

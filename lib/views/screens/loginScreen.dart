@@ -223,6 +223,7 @@ class _login_pageState extends State<login_page> {
     if (passwordcontroller.text.isNotEmpty || emailcontroller.text.isNotEmpty) {
       var response = await http.post(Uri.parse(
           "${dotenv.env['API_URL']}/api/method/money_management_backend.custom.py.api.login?email=${email}&password=${password}"));
+      //{{host}}/api/method/money_management_backend.custom.py.api.login?email={{email}}&password={{password}}
       if (response.statusCode == 200) {
         SharedPreferences prefs = await SharedPreferences.getInstance();
         prefs.setString('token', json.decode(response.body)['token']);

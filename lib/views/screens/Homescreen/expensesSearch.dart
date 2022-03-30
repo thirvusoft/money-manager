@@ -41,49 +41,6 @@ class expenseSearch extends StatefulWidget {
 }
 
 class _expenseSearchState extends State<expenseSearch> {
-  var file;
-  File _myImage = File('');
-  pickImage(ImageSource source) async {
-    XFile? image = await picker.pickImage(
-      source: source,
-      imageQuality: 100,
-      maxHeight: MediaQuery.of(context).size.height,
-      maxWidth: MediaQuery.of(context).size.width,
-      preferredCameraDevice: CameraDevice.rear,
-    );
-
-    setState(() {
-      print(_myImage);
-      if (image == null) {
-        isFileSelected = 0;
-      } else {
-        bool isLoading = true;
-        _myImage = File(image.path);
-        final bytes = Io.File(image.path).readAsBytesSync();
-
-        String img64 = base64Encode(bytes);
-        print(img64);
-        print(_myImage);
-        isFileSelected = 1;
-      }
-    });
-  }
-
-  Widget showImage(File file) {
-    if (isFileSelected == 0) {
-      return Center(child: Text("Image Selected"));
-    } else {
-      return Container(
-        height: MediaQuery.of(context).size.width * 9 / 16,
-        width: MediaQuery.of(context).size.width,
-        child: Image.file(file, fit: BoxFit.contain),
-      );
-    }
-  }
-
-  int isFileSelected = 0;
-  ImagePicker picker = ImagePicker();
-
   TextEditingController _textEditingController = TextEditingController();
 
   var typecontroller = TextEditingController();
@@ -140,13 +97,14 @@ class _expenseSearchState extends State<expenseSearch> {
 //Icon API
   Future listapi() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    print(prefs.getString('token'));
     var response = await http.post(
         Uri.parse(
-            "${dotenv.env['API_URL']}/api/method/money_management_backend.custom.py.api.withsubtype?Type=Expense"),
+            "${dotenv.env['API_URL']}/api/method/money_management_backend.custom.py.api.subtype_list?type=Expense"),
         headers: {"Authorization": prefs.getString('token') ?? ""});
-    print(response.statusCode);
-    print('status API');
+
+    print(
+        '${dotenv.env['API_URL']}/api/method/money_management_backend.custom.py.api.subtype_list?type=Expense');
+
     if (response.statusCode == 200) {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       List<String> liability_icon_list = [];
@@ -157,10 +115,6 @@ class _expenseSearchState extends State<expenseSearch> {
       prefs.setStringList('liability_icon_list', liability_icon_list);
       icon_name = prefs.getStringList("liability_icon_list")!;
       setState(() => _loading = true);
-      // ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      //   content: Text(json.decode(response.body)['message']),
-      //   backgroundColor: Colors.green,
-      // ));
     } else if (response.statusCode == 401) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text(json.decode(response.body)['message']),
@@ -295,14 +249,16 @@ class _expenseSearchState extends State<expenseSearch> {
                                             jsonDecode(row[index])[2];
                                         subtypesname =
                                             jsonDecode(row[index])[0];
+
                                         Navigator.push(
                                           context,
                                           MaterialPageRoute(
-                                            builder: (context) => MyCustomForm(
-                                                "expenses",
-                                                subtypescode,
-                                                subtypesname),
-                                          ),
+                                              builder: (context) =>
+                                                  SecondScreen(
+                                                      type: 'Expense',
+                                                      subtypeCode: subtypescode,
+                                                      subtypeName:
+                                                          subtypesname)),
                                         );
                                       },
                                       label: Text(
@@ -336,236 +292,5 @@ class _expenseSearchState extends State<expenseSearch> {
                 MaterialPageRoute(builder: (context) => customExpense()),
               );
             }));
-  }
-
-  void _show(BuildContext ctx, subtypes) {
-    showModalBottomSheet(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(10.0)),
-        ),
-        isScrollControlled: true,
-        elevation: 5,
-        context: ctx,
-        builder: (ctx) => Padding(
-              padding: EdgeInsets.only(
-                  top: 15,
-                  left: 15,
-                  right: 15,
-                  bottom: MediaQuery.of(ctx).viewInsets.bottom + 15),
-              child: Form(
-                key: formKey,
-                child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Align(
-                        alignment: Alignment
-                            .center, // Align however you like (i.e .centerRight, centerLeft)
-                        child: Text("Expense",
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 25)),
-                      ),
-                      Text(subtype,
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 20)),
-                      TextFormField(
-                          controller: namecontroller,
-                          decoration: InputDecoration(labelText: 'Name'),
-                          validator: (value) {
-                            if (value!.isEmpty) {
-                              return "Please enter the name";
-                            } else {
-                              return null;
-                            }
-                          }),
-                      TextField(
-                        controller: notescontroller,
-                        decoration: InputDecoration(labelText: 'Notes'),
-                      ),
-                      TextFormField(
-                          controller: amountcontroller,
-                          decoration: InputDecoration(labelText: 'Amount'),
-                          keyboardType: TextInputType.number,
-                          validator: (value) {
-                            if (value!.isEmpty) {
-                              return "Please enter the amount";
-                            } else {
-                              return null;
-                            }
-                          }),
-                      TextButton(
-                          onPressed: () {
-                            _onAlertWithCustomContentPressed;
-                          },
-                          child: Text(
-                            "Upload",
-                            style:
-                                TextStyle(color: Color.fromARGB(255, 0, 0, 0)),
-                          )),
-                      SizedBox(
-                        height: 15,
-                      ),
-                      RaisedButton(
-                          color: Color.fromARGB(255, 93, 99, 216),
-                          child: Text(
-                            "Submit",
-                            style: TextStyle(color: Colors.white),
-                          ),
-                          onPressed: () {
-                            if (formKey.currentState!.validate()) {
-                              dataentry(
-                                  typecontroller.text,
-                                  subtypes,
-                                  namecontroller.text,
-                                  notescontroller.text,
-                                  amountcontroller.text,
-                                  datecontroller.text);
-                              namecontroller.clear();
-                              notescontroller.clear();
-                              amountcontroller.clear();
-                              datecontroller.clear();
-                            }
-                          })
-                    ]),
-              ),
-            ));
-  }
-
-// DataEntry API
-  Future dataentry(type, subtypes, name, notes, amount, date) async {
-    if (typecontroller.text.isNotEmpty ||
-        namecontroller.text.isNotEmpty ||
-        notescontroller.text.isNotEmpty ||
-        amountcontroller.text.isNotEmpty ||
-        datecontroller.text.isNotEmpty) {
-      print(subtypecontroller.text);
-
-      print(dotenv.env['API_URL']);
-
-      var response = await http.post(Uri.parse(
-          "${dotenv.env['API_URL']}/api/method/money_management_backend.custom.py.api.daily_entry_submit?Type=Expense&Subtype=${subtypes}&Name=${name}&Notes=${notes}&Amount=${amount}&Remainder_date=${date}"));
-      //print(response.statusCode);
-      if (response.statusCode == 200) {
-        print(response.statusCode);
-        print('gf');
-        Navigator.pop(context);
-
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text(json.decode(response.body)['message']),
-          backgroundColor: Colors.green,
-        ));
-      } else if (response.statusCode == 401) {
-        Navigator.pop(context);
-
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text(json.decode(response.body)['message']),
-          backgroundColor: Colors.red,
-        ));
-      } else if (response.statusCode == 403) {
-        Navigator.pop(context);
-
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text('Permission Denied'),
-          backgroundColor: Colors.red,
-        ));
-      } else if (response.statusCode == 417) {
-        Navigator.pop(context);
-
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text(json.decode(response.body)['message']),
-          backgroundColor: Colors.red,
-        ));
-      } else if (response.statusCode == 500) {
-        Navigator.pop(context);
-
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text(json.decode(response.body)['message']),
-          backgroundColor: Colors.red,
-        ));
-      } else if (response.statusCode == 503) {
-        Navigator.pop(context);
-
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text(json.decode(response.body)['message']),
-          backgroundColor: Colors.red,
-        ));
-      } else if (response.statusCode == 409) {
-        Navigator.pop(context);
-
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text(json.decode(response.body)['message']),
-          backgroundColor: Colors.red,
-        ));
-      } else if (response.statusCode == 404) {
-        Navigator.pop(context);
-
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text(json.decode(response.body)['message']),
-          backgroundColor: Colors.red,
-        ));
-      } else {
-        Navigator.pop(context);
-
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text("Invalid"),
-          backgroundColor: Colors.red,
-        ));
-      }
-    }
-  }
-
-  _onAlertWithCustomContentPressed(context) {
-    print("test11");
-    var alertStyle = AlertStyle(
-      isCloseButton: false,
-      isOverlayTapDismiss: true,
-    );
-    Alert(context: context, title: "Image", buttons: [
-      DialogButton(
-          color: Color.fromARGB(255, 93, 99, 216),
-          child: Text(
-            "Camera",
-            style: TextStyle(color: Color.fromARGB(255, 255, 253, 253)),
-          ),
-          onPressed: () {
-            pickImage(ImageSource.camera);
-            Navigator.pop(
-              context,
-            );
-          }),
-      DialogButton(
-          color: Color.fromARGB(255, 93, 99, 216),
-          child: Text(
-            "Image",
-            style: TextStyle(color: Color.fromARGB(255, 255, 253, 253)),
-          ),
-          onPressed: () {
-            pickImage(ImageSource.gallery);
-            Navigator.pop(
-              context,
-            );
-          }),
-      DialogButton(
-        color: Color.fromARGB(255, 93, 99, 216),
-        child: Text(
-          "Image",
-          style: TextStyle(color: Color.fromARGB(255, 255, 253, 253)),
-        ),
-        onPressed: () async {
-          final result = await FilePicker.platform.pickFiles();
-          if (result == null) return;
-          var img;
-          img = result.files.first;
-
-          final bytes = Io.File(img.path).readAsBytesSync();
-
-          String img64 = base64Encode(bytes);
-          print(img64);
-          Navigator.pop(
-            context,
-          );
-        },
-      )
-    ]).show();
   }
 }

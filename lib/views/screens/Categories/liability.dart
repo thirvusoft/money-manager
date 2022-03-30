@@ -51,8 +51,11 @@ class _customLiabilityState extends State<customLiability> {
 
     var response = await http.post(
         Uri.parse(
-            "${dotenv.env['API_URL']}/api/method/money_management_backend.custom.py.api.withsubtype?Type=Liability"),
+            "${dotenv.env['API_URL']}/api/method/money_management_backend.custom.py.api.icon_list?type=Liability"),
         headers: {"Authorization": prefs.getString('token') ?? ""});
+
+    print(
+        '${dotenv.env['API_URL']}/api/method/money_management_backend.custom.py.api.icon_list?type=Liability');
 
     if (response.statusCode == 200) {
       SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -130,7 +133,7 @@ class _customLiabilityState extends State<customLiability> {
                       ? icon_nameOnSearch.length
                       : icon_name.length,
                   itemBuilder: (context, index) {
-                    code = icon_name[index][1];
+                    code = jsonDecode(icon_name[index])[0];
 
                     return Padding(
                       padding: const EdgeInsets.all(8.0),
@@ -228,8 +231,12 @@ class _customLiabilityState extends State<customLiability> {
 
       var response = await http.post(
           Uri.parse(
-              "${dotenv.env['API_URL']}/api/method/money_management_backend.custom.py.api.custom?Type=Liability&Subtype=${name}&IconBineryCode=654654"),
+              "${dotenv.env['API_URL']}/api/method/money_management_backend.custom.py.api.create_new_subtype?type=Liability&subtype=${name}&iconbinerycode=${code}"),
           headers: {"Authorization": prefs.getString('token') ?? ""});
+
+      print(
+          '${dotenv.env['API_URL']}/api/method/money_management_backend.custom.py.api.create_new_subtype?type=Liability&subtype=${name}&iconbinerycode=${code}');
+
       if (response.statusCode == 200) {
         Navigator.pop(context);
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(

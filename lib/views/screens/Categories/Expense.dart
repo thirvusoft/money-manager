@@ -63,11 +63,13 @@ class _customExpenseState extends State<customExpense> {
   Future listapi() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     _loading = false;
-    print(prefs.getString('token'));
     var response = await http.post(
         Uri.parse(
-            "${dotenv.env['API_URL']}/api/method/money_management_backend.custom.py.api.withoutsubtype?Type=Expense"),
+            "${dotenv.env['API_URL']}/api/method/money_management_backend.custom.py.api.icon_list?type=Expense"),
         headers: {"Authorization": prefs.getString('token') ?? ""});
+
+    print(
+        '${dotenv.env['API_URL']}/api/method/money_management_backend.custom.py.api.icon_list?type=Expense');
 
     if (response.statusCode == 200) {
       SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -78,7 +80,6 @@ class _customExpenseState extends State<customExpense> {
       }
       prefs.setStringList('Expense_icon_list', liability_icon_list);
       icon_name = prefs.getStringList("Expense_icon_list")!;
-      print(icon_name[0]);
     } else if (response.statusCode == 401) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text(jsonDecode('message')),
@@ -146,7 +147,7 @@ class _customExpenseState extends State<customExpense> {
                       ? icon_nameOnSearch.length
                       : icon_name.length,
                   itemBuilder: (context, index) {
-                    code = jsonEncode(icon_name[index])[0];
+                    code = jsonDecode(icon_name[index])[0];
 
                     return Padding(
                       padding: const EdgeInsets.all(8.0),
@@ -242,11 +243,14 @@ class _customExpenseState extends State<customExpense> {
   Future cussubmit(type, name, code) async {
     if (typecontroller.text.isNotEmpty || namecontroller.text.isNotEmpty) {
       SharedPreferences prefs = await SharedPreferences.getInstance();
-      print(dotenv.env['API_URL']);
       var response = await http.post(
           Uri.parse(
-              "${dotenv.env['API_URL']}/api/method/money_management_backend.custom.py.api.custom?Type=Expense&Subtype=${name}&IconBineryCode=${code}"),
+              "${dotenv.env['API_URL']}/api/method/money_management_backend.custom.py.api.create_new_subtype?type=Expense&subtype=${name}&iconbinerycode=${code}"),
           headers: {"Authorization": prefs.getString('token') ?? ""});
+
+      print(
+          '${dotenv.env['API_URL']}/api/method/money_management_backend.custom.py.api.create_new_subtype?Type=Expense&Subtype=${name}&iconbinerycode=${code}');
+
       if (response.statusCode == 200) {
         Navigator.pop(context);
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(

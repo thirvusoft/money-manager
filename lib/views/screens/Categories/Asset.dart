@@ -20,6 +20,7 @@ class _customAssetState extends State<customAsset> {
   final formKey = GlobalKey<FormState>();
   var code;
   var code1;
+  var check;
   bool _loading = true;
 
   List icon_nameOnSearch = [];
@@ -60,15 +61,20 @@ class _customAssetState extends State<customAsset> {
 
     var response = await http.post(
         Uri.parse(
-            "${dotenv.env['API_URL']}/api/method/money_management_backend.custom.py.api.withoutsubtype?Type=Asset"),
+            "${dotenv.env['API_URL']}/api/method/money_management_backend.custom.py.api.icon_list?type=Asset"),
         headers: {"Authorization": prefs.getString('token') ?? ""});
+
+    print(
+        '${dotenv.env['API_URL']}/api/method/money_management_backend.custom.py.api.icon_list?type=Asset');
 
     if (response.statusCode == 200) {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       List<String> Asset_icon_list = [];
+
       for (var i = 0; i < json.decode(response.body)["Asset"].length; i++) {
         Asset_icon_list.add(jsonEncode(json.decode(response.body)["Asset"][i]));
       }
+
       prefs.setStringList('Asset_icon_list', Asset_icon_list);
       icon_name = prefs.getStringList("Asset_icon_list")!;
     } else if (response.statusCode == 401) {
@@ -141,7 +147,7 @@ class _customAssetState extends State<customAsset> {
                           ? icon_nameOnSearch.length
                           : icon_name.length,
                       itemBuilder: (context, index) {
-                        code = jsonEncode(icon_name[index])[0];
+                        code = jsonDecode(icon_name[index])[0];
 
                         return Padding(
                           padding: const EdgeInsets.all(8.0),
@@ -246,12 +252,16 @@ class _customAssetState extends State<customAsset> {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       var response = await http.post(
           Uri.parse(
-              "${dotenv.env['API_URL']}/api/method/money_management_backend.custom.py.api.custom?Type=Asset&Subtype=${name}&IconBineryCode=${code}"),
+              "${dotenv.env['API_URL']}/api/method/money_management_backend.custom.py.api.create_new_subtype?type=Asset&subtype=${name}&iconbinerycode=${code}"),
           headers: {"Authorization": prefs.getString('token') ?? ""});
+
+      print(
+          '${dotenv.env['API_URL']}/api/method/money_management_backend.custom.py.api.create_new_subtype?type=Asset&subtype=${name}&iconbinerycode=${code}');
+
       if (response.statusCode == 200) {
         Navigator.pop(context);
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text(jsonDecode('message')),
+          content: Text("Submitted Successfully"),
           backgroundColor: Colors.green,
         ));
       } else if (response.statusCode == 401) {

@@ -20,7 +20,6 @@ class _customOthersState extends State<customOthers> {
   final formKey = GlobalKey<FormState>();
 
   var code;
-  List icon_nameOnSearch = [];
   bool _loading = true;
   List icon_name = [];
   var hexcode_dict = <String, int>{
@@ -51,8 +50,11 @@ class _customOthersState extends State<customOthers> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var response = await http.post(
         Uri.parse(
-            "${dotenv.env['API_URL']}/api/method/money_management_backend.custom.py.api.withsubtype?Type=Others"),
+            "${dotenv.env['API_URL']}/api/method/money_management_backend.custom.py.api.icon_list?type=Others"),
         headers: {"Authorization": prefs.getString('token') ?? ""});
+
+    print(
+        '${dotenv.env['API_URL']}/api/method/money_management_backend.custom.py.api.icon_list?type=Others');
 
     if (response.statusCode == 200) {
       SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -126,11 +128,9 @@ class _customOthersState extends State<customOthers> {
                       crossAxisCount: 2,
                       childAspectRatio: 3,
                       crossAxisSpacing: 12),
-                  itemCount: _textEditingController.text.isNotEmpty
-                      ? icon_nameOnSearch.length
-                      : icon_name.length,
+                  itemCount: icon_name.length,
                   itemBuilder: (context, index) {
-                    code = icon_name[index][1];
+                    code = jsonDecode(icon_name[index])[0];
                     return Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Row(
@@ -141,7 +141,7 @@ class _customOthersState extends State<customOthers> {
                             child: IconButton(
                                 iconSize: 30.0,
                                 onPressed: () {
-                                  _show(context);
+                                  _show(context, code);
                                 },
                                 icon: Icon(
                                     IconData(
@@ -161,7 +161,7 @@ class _customOthersState extends State<customOthers> {
         ));
   }
 
-  void _show(BuildContext ctx) {
+  void _show(BuildContext ctx, String code) {
     showModalBottomSheet(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(10.0)),
@@ -226,8 +226,11 @@ class _customOthersState extends State<customOthers> {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       var response = await http.post(
           Uri.parse(
-              "${dotenv.env['API_URL']}/api/method/money_management_backend.custom.py.api.custom?Type=Others&Subtype=${name}&IconBineryCode=${code}"),
+              "${dotenv.env['API_URL']}/api/method/money_management_backend.custom.py.api.create_new_subtype?type=Others&subtype=${name}&iconbinerycode=${code}"),
           headers: {"Authorization": prefs.getString('token') ?? ""});
+      print(
+          '${dotenv.env['API_URL']}/api/method/money_management_backend.custom.py.api.create_new_subtype?type=Others&subtype=${name}&iconbinerycode=${code}');
+
       if (response.statusCode == 200) {
         Navigator.pop(context);
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
