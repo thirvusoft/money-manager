@@ -277,8 +277,7 @@ class SecondScreen extends StatelessWidget {
                         style: TextStyle(color: Colors.white),
                       ),
                       onPressed: () {
-                        // uploadimage(
-                        //     _platformFile!.path ?? '', _platformFile!.name);
+                  
                         if (_formKey.currentState!.validate()) {
                           var msg = dataentry(
                             type,
@@ -293,7 +292,12 @@ class SecondScreen extends StatelessWidget {
                           Navigator.pop(context);
 
                           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                            content: Text(msg.toString()),
+                            content: Text("Successfully  Completed"),
+                            backgroundColor: Colors.green,
+                          ));
+                        }else{
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                            content: Text("Invalid"),
                             backgroundColor: Colors.red,
                           ));
                         }

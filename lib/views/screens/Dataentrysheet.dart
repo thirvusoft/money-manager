@@ -313,8 +313,7 @@ class Third extends StatelessWidget {
                           style: TextStyle(color: Colors.white),
                         ),
                         onPressed: () {
-                          // uploadimage(
-                          //     _platformFile!.path ?? '', _platformFile!.name);
+                         
                           if (_formKey.currentState!.validate()) {
                             var msg = dataentry(
                                 type,
@@ -328,12 +327,16 @@ class Third extends StatelessWidget {
 
                             Navigator.pop(context);
 
-                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                              content: Text(msg.toString()),
-                              backgroundColor: Colors.red,
-                            ));
+                              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                            content: Text("Successfully  Completed"),
+                            backgroundColor: Colors.green,
+                          ));
+                          }else{
+                              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                            content: Text("Invalid"),
+                            backgroundColor: Colors.red,
+                          ));
                           }
-
                           typecontroller.clear();
                           namecontroller.clear();
                           notescontroller.clear();

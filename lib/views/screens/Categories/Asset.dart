@@ -19,15 +19,13 @@ class _customAssetState extends State<customAsset> {
   var namecontroller = TextEditingController();
   final formKey = GlobalKey<FormState>();
   var code;
-  var code1;
-  var check;
   bool _loading = true;
 
   List icon_nameOnSearch = [];
   List icon_name = [];
   var hexcode_dict = <String, int>{
-    ' 0xf1dd': 0xf1dd,
-    ' 0xf1dd': 0xf1dd,
+    '0xf1dd': 0xf1dd,
+    '0xf1dd': 0xf1dd,
     '0xf1dd': 0xf1dd,
     '0xf05e7': 0xf05e7,
     '0xee62': 0xee62,
@@ -42,10 +40,15 @@ class _customAssetState extends State<customAsset> {
     '0xf05ce': 0xf05ce
   };
 
+  get name => null;
+
+  get type => null;
+
   @override
   void initState() {
     super.initState();
     listapi();
+    cussubmit(type, name, code);
     Future.delayed(Duration(seconds: 1), () {
       Color.fromARGB(255, 93, 99, 216);
       setState(() {
@@ -120,7 +123,6 @@ class _customAssetState extends State<customAsset> {
     }
   }
 
-  var data;
   get index => null;
   @override
   Widget build(BuildContext context) {
@@ -136,8 +138,7 @@ class _customAssetState extends State<customAsset> {
                       Color.fromARGB(255, 93, 99, 216)),
                 )
               : Container(
-                  // height: height/5,
-                  // width: width/1.5,
+              
                   child: GridView.builder(
                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                           crossAxisCount: 2,
@@ -147,7 +148,7 @@ class _customAssetState extends State<customAsset> {
                           ? icon_nameOnSearch.length
                           : icon_name.length,
                       itemBuilder: (context, index) {
-                        code = jsonDecode(icon_name[index])[0];
+                        code = jsonEncode(icon_name[index])[0];
 
                         return Padding(
                           padding: const EdgeInsets.all(8.0),
@@ -248,6 +249,7 @@ class _customAssetState extends State<customAsset> {
 
 //DataEntry API
   Future cussubmit(type, name, code) async {
+    _loading = false;
     if (namecontroller.text.isNotEmpty) {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       var response = await http.post(
@@ -266,6 +268,7 @@ class _customAssetState extends State<customAsset> {
         ));
       } else if (response.statusCode == 401) {
         Navigator.pop(context);
+         
 
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text(jsonDecode('message')),
