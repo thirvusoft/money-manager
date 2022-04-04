@@ -22,9 +22,6 @@ class _ProfilesState extends State<Profiles> {
   String? mail;
   var email;
 
-  // void main() async {
-  //   await checkupdateNeeded();
-  // }
   @override
   void initState() {
     super.initState();

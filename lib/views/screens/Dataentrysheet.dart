@@ -92,9 +92,6 @@ class Third extends StatelessWidget {
             '${dotenv.env['API_URL']}/api/method/money_management_backend.custom.py.api.daily_entry_submit?type=${type}&subtype=${subtypeCode}&name=${subtypeName}&notes=${notes}&amount=${amount}&remainder_date=${date}'),
         headers: {"Authorization": prefs.getString('token') ?? ""});
 
-    print(
-        '${dotenv.env['API_URL']}/api/method/money_management_backend.custom.py.api.daily_entry_submit?type=${type}&subtype=${subtypeCode}&name=${subtypeName}&notes=${notes}&amount=${amount}&remainder_date=${date}');
-
     if (response.statusCode == 200) {
       var docName = json.decode(response.body)['docname'];
       if (path.isNotEmpty || imgName.isNotEmpty || docName.isNotEmpty) {
@@ -313,7 +310,6 @@ class Third extends StatelessWidget {
                           style: TextStyle(color: Colors.white),
                         ),
                         onPressed: () {
-                         
                           if (_formKey.currentState!.validate()) {
                             var msg = dataentry(
                                 type,
@@ -327,15 +323,15 @@ class Third extends StatelessWidget {
 
                             Navigator.pop(context);
 
-                              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                            content: Text("Successfully  Completed"),
-                            backgroundColor: Colors.green,
-                          ));
-                          }else{
-                              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                            content: Text("Invalid"),
-                            backgroundColor: Colors.red,
-                          ));
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                              content: Text("Successfully  Completed"),
+                              backgroundColor: Colors.green,
+                            ));
+                          } else {
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                              content: Text("Invalid"),
+                              backgroundColor: Colors.red,
+                            ));
                           }
                           typecontroller.clear();
                           namecontroller.clear();

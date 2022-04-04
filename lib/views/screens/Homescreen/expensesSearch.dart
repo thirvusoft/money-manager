@@ -51,6 +51,7 @@ class _expenseSearchState extends State<expenseSearch> {
   var datecontroller = TextEditingController();
   var subtypescode;
   var subtypesname;
+  var code;
   final formKey = GlobalKey<FormState>();
 
   bool _loading = true;
@@ -85,6 +86,7 @@ class _expenseSearchState extends State<expenseSearch> {
   @override
   void initState() {
     super.initState();
+
     listapi();
     Future.delayed(Duration(seconds: 1), () {
       Color.fromARGB(255, 93, 99, 216);
@@ -101,9 +103,6 @@ class _expenseSearchState extends State<expenseSearch> {
         Uri.parse(
             "${dotenv.env['API_URL']}/api/method/money_management_backend.custom.py.api.subtype_list?type=Expense"),
         headers: {"Authorization": prefs.getString('token') ?? ""});
-
-    print(
-        '${dotenv.env['API_URL']}/api/method/money_management_backend.custom.py.api.subtype_list?type=Expense');
 
     if (response.statusCode == 200) {
       SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -242,55 +241,209 @@ class _expenseSearchState extends State<expenseSearch> {
                           ),
                           child: Row(
                             children: [
-                              Center(
-                                  child: TextButton.icon(
-                                      onPressed: () {
-                                        subtypescode =
-                                            jsonDecode(row[index])[2];
-                                        subtypesname =
-                                            jsonDecode(row[index])[0];
+                              SizedBox(
+                                width: 15,
+                              ),
+                              InkWell(
+                                onTap: () {
+                                  subtypescode = jsonDecode(row[index])[2];
+                                  subtypesname = jsonDecode(row[index])[0];
 
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  SecondScreen(
-                                                      type: 'Expense',
-                                                      subtypeCode: subtypescode,
-                                                      subtypeName:
-                                                          subtypesname)),
-                                        );
-                                      },
-                                      label: Text(
-                                        _textEditingController.text.isNotEmpty
-                                            ? jsonDecode(row[index])[0]
-                                            : jsonDecode(row[index])[0],
-                                        style: TextStyle(
-                                            color: Colors.black,
-                                            fontSize: 15,
-                                            letterSpacing: .7),
-                                      ),
-                                      icon: Icon(
-                                          IconData(
-                                              hexcode_dict[jsonDecode(
-                                                      row[index])[1]] ??
-                                                  0XF155,
-                                              fontFamily: 'MaterialIcons'),
-                                          color: Color.fromARGB(
-                                              255, 93, 99, 216)))),
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => SecondScreen(
+                                            type: 'Asset',
+                                            subtypeCode: subtypescode,
+                                            subtypeName: subtypesname)),
+                                  );
+                                },
+                                child: CircleAvatar(
+                                    child: Text(
+                                      jsonDecode(row[index])[3],
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                    backgroundColor:
+                                        Color.fromARGB(255, 93, 99, 216)),
+                              ),
+                              SizedBox(
+                                width: 15,
+                              ),
+                              TextButton(
+                                onPressed: () {
+                                  subtypescode = jsonDecode(row[index])[2];
+                                  subtypesname = jsonDecode(row[index])[0];
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => SecondScreen(
+                                            type: 'Expense',
+                                            subtypeCode: subtypescode,
+                                            subtypeName: subtypesname)),
+                                  );
+                                },
+                                child: Text(
+                                  _textEditingController.text.isNotEmpty
+                                      ? jsonDecode(row[index])[0]
+                                      : jsonDecode(row[index])[0],
+                                  style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 15,
+                                      letterSpacing: .7,
+                                      fontWeight: FontWeight.w700),
+                                ),
+                              )
                             ],
                           ));
                     })),
         floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
         floatingActionButton: FloatingActionButton(
-            // isExtended: true,
             child: Icon(Icons.add, semanticLabel: 'Customise icon'),
             backgroundColor: Color.fromARGB(255, 93, 99, 216),
             onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => customExpense()),
-              );
+              _loading = false;
+              _show(context);
             }));
+  }
+
+  void _show(BuildContext ctx) {
+    showModalBottomSheet(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(10.0)),
+        ),
+        isScrollControlled: true,
+        elevation: 5,
+        context: ctx,
+        builder: (ctx) => Padding(
+              padding: EdgeInsets.only(
+                  top: 15,
+                  left: 15,
+                  right: 15,
+                  bottom: MediaQuery.of(ctx).viewInsets.bottom + 15),
+              child: Form(
+                key: formKey,
+                child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      new Text(
+                        "Expense",
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      SizedBox(
+                        height: 15,
+                      ),
+                      TextFormField(
+                          maxLength: 11,
+                          controller: namecontroller,
+                          keyboardType: TextInputType.text,
+                          decoration: InputDecoration(labelText: 'Name:'),
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return "Please enter the name";
+                            } else {
+                              return null;
+                            }
+                          }),
+                      SizedBox(
+                        height: 15,
+                      ),
+                      RaisedButton(
+                          color: Color.fromARGB(255, 93, 99, 216),
+                          child: Text(
+                            "Submit",
+                            style: TextStyle(color: Colors.white),
+                          ),
+                          onPressed: () {
+                            if (formKey.currentState!.validate()) {
+                              cussubmit(
+                                typecontroller.text,
+                                namecontroller.text,
+                                code,
+                              );
+                              namecontroller.clear();
+                            }
+                          })
+                    ]),
+              ),
+            ));
+  }
+
+//DataEntry API
+  Future cussubmit(type, name, code) async {
+    _loading = false;
+    if (namecontroller.text.isNotEmpty) {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      var response = await http.post(
+          Uri.parse(
+              "${dotenv.env['API_URL']}/api/method/money_management_backend.custom.py.api.create_new_subtype?type=Expense&subtype=${name}&iconbinerycode=${code}"),
+          headers: {"Authorization": prefs.getString('token') ?? ""});
+
+      if (response.statusCode == 200) {
+        Navigator.pop(context);
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text("Submitted Successfully"),
+          backgroundColor: Colors.green,
+        ));
+      } else if (response.statusCode == 401) {
+        Navigator.pop(context);
+
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(jsonDecode('message')),
+          backgroundColor: Colors.red,
+        ));
+      } else if (response.statusCode == 403) {
+        Navigator.pop(context);
+
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text('Permission Denied'),
+          backgroundColor: Colors.red,
+        ));
+      } else if (response.statusCode == 417) {
+        Navigator.pop(context);
+
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(jsonDecode('message')),
+          backgroundColor: Colors.red,
+        ));
+      } else if (response.statusCode == 500) {
+        Navigator.pop(context);
+
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(jsonDecode('message')),
+          backgroundColor: Colors.red,
+        ));
+      } else if (response.statusCode == 503) {
+        Navigator.pop(context);
+
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(jsonDecode('message')),
+          backgroundColor: Colors.red,
+        ));
+      } else if (response.statusCode == 409) {
+        Navigator.pop(context);
+
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(jsonDecode('message')),
+          backgroundColor: Colors.red,
+        ));
+      } else if (response.statusCode == 404) {
+        Navigator.pop(context);
+
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(jsonDecode('message')),
+          backgroundColor: Colors.red,
+        ));
+      } else {
+        Navigator.pop(context);
+
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text("Invalid"),
+          backgroundColor: Colors.red,
+        ));
+      }
+    }
   }
 }

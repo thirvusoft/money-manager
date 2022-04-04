@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'package:bottom_navy_bar/bottom_navy_bar.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -49,23 +50,24 @@ class _bottomnavigationState extends State<bottomnavigation> {
                 style: TextStyle(color: Color.fromARGB(255, 93, 99, 217))),
           ),
           BottomNavyBarItem(
-            icon: Icon(Icons.assessment_outlined,
+            icon: Icon(Icons.insert_chart,
                 color: Color.fromARGB(255, 93, 99, 217)),
             title: Text("Liability",
                 style: TextStyle(color: Color.fromARGB(255, 93, 99, 217))),
           ),
           BottomNavyBarItem(
-            icon: Icon(Icons.savings, color: Color.fromARGB(255, 93, 99, 217)),
+            icon: Icon(Icons.monetization_on,
+                color: Color.fromARGB(255, 93, 99, 217)),
             title: Text("Expense",
                 style: TextStyle(color: Color.fromARGB(255, 93, 99, 217))),
           ),
           BottomNavyBarItem(
-            icon: Icon(Icons.money, color: Color.fromARGB(255, 93, 99, 217)),
+            icon: Icon(Icons.savings, color: Color.fromARGB(255, 93, 99, 217)),
             title: Text("Income",
                 style: TextStyle(color: Color.fromARGB(255, 93, 99, 217))),
           ),
           BottomNavyBarItem(
-            icon: Icon(Icons.plus_one_outlined,
+            icon: Icon(FontAwesomeIcons.cartPlus,
                 color: Color.fromARGB(255, 93, 99, 217)),
             title: Text("Others",
                 style: TextStyle(color: Color.fromARGB(255, 93, 99, 217))),
