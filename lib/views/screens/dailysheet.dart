@@ -89,7 +89,9 @@ class SecondScreen extends StatelessWidget {
         Uri.parse(
             '${dotenv.env['API_URL']}/api/method/money_management_backend.custom.py.api.daily_entry_submit?type=${type}&subtype=${subtypeCode}&name=${subtypeName}&notes=${notes}&amount=${amount}'),
         headers: {"Authorization": prefs.getString('token') ?? ""});
-
+    print("check");
+    print(
+        "dotenv.env['API_URL']}/api/method/money_management_backend.custom.py.api.daily_entry_submit?type=${type}&subtype=${subtypeCode}&name=${subtypeName}&notes=${notes}&amount=${amount}");
     if (response.statusCode == 200) {
       var docName = json.decode(response.body)['docname'];
       if (path.isNotEmpty || imgName.isNotEmpty || docName.isNotEmpty) {
