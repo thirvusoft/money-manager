@@ -294,7 +294,7 @@ class _assetState extends State<asset> with SingleTickerProviderStateMixin {
                                         Color.fromARGB(255, 93, 99, 216)),
                               ),
                               SizedBox(
-                                width: 15,
+                                width: 5,
                               ),
                               TextButton(
                                 onPressed: () {
