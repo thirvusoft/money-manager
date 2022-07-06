@@ -61,6 +61,8 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^1.0.0
+  flutter_launcher_icons: ^0.9.2
+
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -77,14 +79,16 @@ flutter:
   assets:
    - assets/images/thirvulogo.png
    - assets/images/login.svg
-   - assets/images/money.png
    - assets/images/background.png
    - assets/images/light-1.png
    - assets/images/light-2.png
    - assets/images/Icon.webp
    - .env
 
-
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "assets/images/logo.png"
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
 
