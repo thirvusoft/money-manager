@@ -219,6 +219,7 @@ class _assetState extends State<asset> with SingleTickerProviderStateMixin {
                     value.trimLeft();
                     icon_nameOnSearch.clear();
                     for (var i = 0; i < icon_name.length; i++) {
+                      data = jsonDecode(icon_name[i])[0];
                       data = (icon_name[i])[0];
 
                       if (data
@@ -275,8 +276,8 @@ class _assetState extends State<asset> with SingleTickerProviderStateMixin {
                                 ),
                                 InkWell(
                                   onTap: () {
-                                    subtypescode = (row[index])[2];
-                                    subtypesname = (row[index])[0];
+                                    subtypescode = jsonDecode(row[index])[2];
+                                    subtypesname = jsonDecode(row[index])[0];
 
                                     Navigator.push(
                                       context,
@@ -302,8 +303,8 @@ class _assetState extends State<asset> with SingleTickerProviderStateMixin {
                                 ),
                                 TextButton(
                                   onPressed: () {
-                                    subtypescode = (row[index])[2];
-                                    subtypesname = (row[index])[0];
+                                    subtypescode = jsonDecode(row[index])[2];
+                                    subtypesname = jsonDecode(row[index])[0];
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
