@@ -162,6 +162,8 @@ class _expenseSearchState extends State<expenseSearch> {
   get index => null;
   @override
   Widget build(BuildContext context) {
+    double screenwidth = MediaQuery.of(context).size.width;
+    double screenheight = MediaQuery.of(context).size.height;
     return Scaffold(
         appBar: AppBar(
           actions: [
@@ -222,9 +224,9 @@ class _expenseSearchState extends State<expenseSearch> {
                   )
                 : GridView.builder(
                     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 2,
+                        crossAxisCount: screenwidth >= 360 ? 2 : 1,
                         childAspectRatio: 3,
-                        crossAxisSpacing: 20),
+                        crossAxisSpacing: screenwidth >= 400 ? 50 : 25),
                     itemCount: _textEditingController.text.isNotEmpty
                         ? icon_nameOnSearch.length
                         : icon_name.length,
@@ -242,7 +244,7 @@ class _expenseSearchState extends State<expenseSearch> {
                           child: Row(
                             children: [
                               SizedBox(
-                                width: 15,
+                                 width: MediaQuery.of(context).size.width / 30,
                               ),
                               InkWell(
                                 onTap: () {
@@ -269,7 +271,7 @@ class _expenseSearchState extends State<expenseSearch> {
                                         Color.fromARGB(255, 93, 99, 216)),
                               ),
                               SizedBox(
-                                width: 15,
+                                 width: MediaQuery.of(context).size.width / 30,
                               ),
                               TextButton(
                                 onPressed: () {
@@ -290,8 +292,7 @@ class _expenseSearchState extends State<expenseSearch> {
                                       : jsonDecode(row[index])[0],
                                   style: TextStyle(
                                       color: Colors.black,
-                                      fontSize: 15,
-                                      letterSpacing: .7,
+                                      fontSize: screenwidth / 25,                                    
                                       fontWeight: FontWeight.w700),
                                 ),
                               )
