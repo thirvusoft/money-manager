@@ -227,8 +227,7 @@ class _liabilitySearchState extends State<liabilitySearch> {
                           child: Row(
                             children: [
                               SizedBox(
-                                                                   width: MediaQuery.of(context).size.width / 30,
-
+                                width: MediaQuery.of(context).size.width / 30,
                               ),
                               InkWell(
                                 onTap: () {
@@ -255,8 +254,7 @@ class _liabilitySearchState extends State<liabilitySearch> {
                                         Color.fromARGB(255, 93, 99, 216)),
                               ),
                               SizedBox(
-                                                                   width: MediaQuery.of(context).size.width / 30,
-
+                                width: MediaQuery.of(context).size.width / 30,
                               ),
                               TextButton(
                                 onPressed: () {
@@ -277,7 +275,7 @@ class _liabilitySearchState extends State<liabilitySearch> {
                                       : jsonDecode(row[index])[0],
                                   style: TextStyle(
                                       color: Colors.black,
-                                      fontSize: screenwidth / 25,                                    
+                                      fontSize: screenwidth / 25,
                                       fontWeight: FontWeight.w700),
                                 ),
                               )
@@ -344,7 +342,7 @@ class _liabilitySearchState extends State<liabilitySearch> {
                           ),
                           onPressed: () {
                             if (formKey.currentState!.validate()) {
-                              cussubmit(
+                              cussubmits(
                                 typecontroller.text,
                                 namecontroller.text,
                                 code,
@@ -357,7 +355,7 @@ class _liabilitySearchState extends State<liabilitySearch> {
             ));
   }
 
-  Future cussubmit(type, name, code) async {
+  Future cussubmits(type, name, code) async {
     _loading = false;
     if (namecontroller.text.isNotEmpty) {
       SharedPreferences prefs = await SharedPreferences.getInstance();

@@ -89,9 +89,8 @@ class SecondScreen extends StatelessWidget {
         Uri.parse(
             '${dotenv.env['API_URL']}/api/method/money_management_backend.custom.py.api.daily_entry_submit?type=${type}&subtype=${subtypeCode}&name=${subtypeName}&notes=${notes}&amount=${amount}'),
         headers: {"Authorization": prefs.getString('token') ?? ""});
-    print("check");
-    print(
-        "dotenv.env['API_URL']}/api/method/money_management_backend.custom.py.api.daily_entry_submit?type=${type}&subtype=${subtypeCode}&name=${subtypeName}&notes=${notes}&amount=${amount}");
+    (response.statusCode);
+
     if (response.statusCode == 200) {
       var docName = json.decode(response.body)['docname'];
       if (path.isNotEmpty || imgName.isNotEmpty || docName.isNotEmpty) {
@@ -214,7 +213,8 @@ class SecondScreen extends StatelessWidget {
                                 'Selected File',
                                 style: TextStyle(
                                   color: Colors.grey.shade400,
-                                  fontSize: screenwidth / 25,                                ),
+                                  fontSize: screenwidth / 25,
+                                ),
                               ),
                               Container(
                                   padding: EdgeInsets.all(8),
