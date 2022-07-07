@@ -135,6 +135,8 @@ class Third extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double screenwidth = MediaQuery.of(context).size.width;
+    double screenheight = MediaQuery.of(context).size.height;
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -244,7 +246,7 @@ class Third extends StatelessWidget {
                                   'Selected File',
                                   style: TextStyle(
                                     color: Colors.grey.shade400,
-                                    fontSize: 15,
+                                    fontSize: screenwidth / 25,
                                   ),
                                 ),
                                 Container(

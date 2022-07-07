@@ -1,5 +1,5 @@
 import 'dart:convert';
-
+import 'package:sizer/sizer.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -46,6 +46,7 @@ class asset extends StatefulWidget {
 }
 
 class _assetState extends State<asset> with SingleTickerProviderStateMixin {
+  bool mobile(BuildContext context) => MediaQuery.of(context).size.width < 300;
   String _image = ' ';
   late AnimationController loadingController;
 
@@ -181,157 +182,160 @@ class _assetState extends State<asset> with SingleTickerProviderStateMixin {
   get index => null;
   @override
   Widget build(BuildContext context) {
-    var file;
-    return Scaffold(
-        appBar: AppBar(
-          actions: [
-            InkWell(
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => Profiles(),
+    return Sizer(builder: (context, orientation, deviceType) {
+      double screenwidth = MediaQuery.of(context).size.width;
+      double screenheight = MediaQuery.of(context).size.height;
+      var file;
+      return Scaffold(
+          appBar: AppBar(
+            actions: [
+              InkWell(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => Profiles(),
+                    ),
+                  );
+                },
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Icon(
+                    Icons.account_circle_outlined,
+                    size: 30,
                   ),
-                );
-              },
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Icon(
-                  Icons.account_circle_outlined,
-                  size: 30,
                 ),
               ),
-            ),
-          ],
-          backgroundColor: Color.fromARGB(255, 93, 99, 216),
-          automaticallyImplyLeading: false,
-          title: Container(
-            decoration: BoxDecoration(
-                color: Color.fromARGB(255, 255, 255, 255),
-                borderRadius: BorderRadius.circular(10)),
-            child: TextField(
-              onChanged: (value) {
-                setState(() {
-                  value.trimLeft();
-                  icon_nameOnSearch.clear();
-                  for (var i = 0; i < icon_name.length; i++) {
-                    data = jsonDecode(icon_name[i])[0];
+            ],
+            backgroundColor: Color.fromARGB(255, 93, 99, 216),
+            automaticallyImplyLeading: false,
+            title: Container(
+              decoration: BoxDecoration(
+                  color: Color.fromARGB(255, 255, 255, 255),
+                  borderRadius: BorderRadius.circular(10)),
+              child: TextField(
+                onChanged: (value) {
+                  setState(() {
+                    value.trimLeft();
+                    icon_nameOnSearch.clear();
+                    for (var i = 0; i < icon_name.length; i++) {
+                      data = (icon_name[i])[0];
 
-                    if (data
-                        .toLowerCase()
-                        .contains(value.trim().toLowerCase())) {
-                      icon_nameOnSearch.add(icon_name[i]);
+                      if (data
+                          .toLowerCase()
+                          .contains(value.trim().toLowerCase())) {
+                        icon_nameOnSearch.add(icon_name[i]);
+                      }
                     }
-                  }
-                });
-              },
-              controller: _textEditingController,
-              decoration: InputDecoration(
-                  border: InputBorder.none,
-                  errorBorder: InputBorder.none,
-                  focusedBorder: InputBorder.none,
-                  contentPadding: EdgeInsets.all(15),
-                  hintText: "Search",
-                  prefixIcon: Icon(
-                    Icons.search,
-                    color: Color.fromARGB(255, 93, 99, 216),
-                  )),
+                  });
+                },
+                controller: _textEditingController,
+                decoration: InputDecoration(
+                    border: InputBorder.none,
+                    errorBorder: InputBorder.none,
+                    focusedBorder: InputBorder.none,
+                    contentPadding: EdgeInsets.all(15),
+                    hintText: "Search",
+                    prefixIcon: Icon(
+                      Icons.search,
+                      color: Color.fromARGB(255, 93, 99, 216),
+                    )),
+              ),
             ),
           ),
-        ),
-        body: Center(
-            child: _loading
-                ? CircularProgressIndicator(
-                    valueColor: AlwaysStoppedAnimation<Color>(
-                        Color.fromARGB(255, 93, 99, 216)),
-                  )
-                : GridView.builder(
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 2,
-                        childAspectRatio: 3,
-                        crossAxisSpacing: 20),
-                    itemCount: _textEditingController.text.isNotEmpty
-                        ? icon_nameOnSearch.length
-                        : icon_name.length,
-                    itemBuilder: (context, index) {
-                      var row = [];
-                      if (icon_nameOnSearch.length != 0) {
-                        row = icon_nameOnSearch;
-                      } else {
-                        row = icon_name;
-                      }
-                      return Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: Row(
-                            children: [
-                              SizedBox(
-                                width: 15,
-                              ),
-                              InkWell(
-                                onTap: () {
-                                  subtypescode = jsonDecode(row[index])[2];
-                                  subtypesname = jsonDecode(row[index])[0];
-
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => SecondScreen(
-                                            type: 'Asset',
-                                            subtypeCode: subtypescode,
-                                            subtypeName: subtypesname)),
-                                  );
-                                },
-                                child: CircleAvatar(
-                                    child: Text(
-                                      jsonDecode(row[index])[3],
-                                      style: TextStyle(
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                    backgroundColor:
-                                        Color.fromARGB(255, 93, 99, 216)),
-                              ),
-                              SizedBox(
-                                width: 5,
-                              ),
-                              TextButton(
-                                onPressed: () {
-                                  subtypescode = jsonDecode(row[index])[2];
-                                  subtypesname = jsonDecode(row[index])[0];
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => SecondScreen(
-                                            type: 'Asset',
-                                            subtypeCode: subtypescode,
-                                            subtypeName: subtypesname)),
-                                  );
-                                },
-                                child: Text(
-                                  _textEditingController.text.isNotEmpty
-                                      ? jsonDecode(row[index])[0]
-                                      : jsonDecode(row[index])[0],
-                                  style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 15,
-                                      letterSpacing: .7,
-                                      fontWeight: FontWeight.w700),
+          body: Center(
+              child: _loading
+                  ? CircularProgressIndicator(
+                      valueColor: AlwaysStoppedAnimation<Color>(
+                          Color.fromARGB(255, 93, 99, 216)),
+                    )
+                  : GridView.builder(
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: screenwidth >= 360 ? 2 : 1,
+                          childAspectRatio: 3,
+                          crossAxisSpacing: screenwidth >= 400 ? 50 : 25),
+                      itemCount: _textEditingController.text.isNotEmpty
+                          ? icon_nameOnSearch.length
+                          : icon_name.length,
+                      itemBuilder: (context, index) {
+                        var row = [];
+                        if (icon_nameOnSearch.length != 0) {
+                          row = icon_nameOnSearch;
+                        } else {
+                          row = icon_name;
+                        }
+                        return Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: Row(
+                              children: [
+                                SizedBox(
+                                  width: MediaQuery.of(context).size.width / 30,
                                 ),
-                              )
-                            ],
-                          ));
-                    })),
-        floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-        floatingActionButton: FloatingActionButton(
-            child: Icon(Icons.add, semanticLabel: 'Customise icon'),
-            backgroundColor: Color.fromARGB(255, 93, 99, 216),
-            onPressed: () {
-              _show(context);
+                                InkWell(
+                                  onTap: () {
+                                    subtypescode = (row[index])[2];
+                                    subtypesname = (row[index])[0];
 
-              _loading = false;
-            }));
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => SecondScreen(
+                                              type: 'Asset',
+                                              subtypeCode: subtypescode,
+                                              subtypeName: subtypesname)),
+                                    );
+                                  },
+                                  child: CircleAvatar(
+                                      child: Text(
+                                        jsonDecode(row[index])[3],
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                      backgroundColor:
+                                          Color.fromARGB(255, 93, 99, 216)),
+                                ),
+                                SizedBox(
+                                  width: MediaQuery.of(context).size.width / 30,
+                                ),
+                                TextButton(
+                                  onPressed: () {
+                                    subtypescode = (row[index])[2];
+                                    subtypesname = (row[index])[0];
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => SecondScreen(
+                                              type: 'Asset',
+                                              subtypeCode: subtypescode,
+                                              subtypeName: subtypesname)),
+                                    );
+                                  },
+                                  child: Text(
+                                    _textEditingController.text.isNotEmpty
+                                        ? jsonDecode(row[index])[0]
+                                        : jsonDecode(row[index])[0],
+                                    style: TextStyle(
+                                        color: Colors.black,
+                                        fontSize: screenwidth / 25,
+                                        fontWeight: FontWeight.w900),
+                                  ),
+                                )
+                              ],
+                            ));
+                      })),
+          floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+          floatingActionButton: FloatingActionButton(
+              child: Icon(Icons.add, semanticLabel: 'Customise icon'),
+              backgroundColor: Color.fromARGB(255, 93, 99, 216),
+              onPressed: () {
+                _show(context);
+
+                _loading = false;
+              }));
+    });
   }
 
   void _show(BuildContext ctx) {
