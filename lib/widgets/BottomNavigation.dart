@@ -77,101 +77,109 @@ class _bottomnavigationState extends State<bottomnavigation> {
           ),
         ),
         child: SingleChildScrollView(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                TextButton.icon(
-                  onPressed: () {
-                    setState(() {
-                      pageIndex = 0;
-                    });
-                  },
-                  icon: Icon(
-                    Icons.home_work,
-                    size: 24.0,
-                    color: Colors.white,
+            child: Padding(
+              padding: EdgeInsets.only(left: 25),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  TextButton.icon(
+                    onPressed: () {
+                      setState(() {
+                        pageIndex = 0;
+                      });
+                    },
+                    icon: Icon(
+                      Icons.home_work,
+                      size: 24.0,
+                      color: Colors.white,
+                    ),
+                    label: pageIndex == 0
+                        ? Text('Assets',
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize:
+                                    MediaQuery.of(context).size.width / 25))
+                        : Text(""),
                   ),
-                  label: pageIndex == 0
-                      ? Text('Assets',
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontSize: MediaQuery.of(context).size.width / 25))
-                      : Text(""),
-                ),
-                TextButton.icon(
-                  onPressed: () {
-                    setState(() {
-                      pageIndex = 1;
-                    });
-                  },
-                  icon: Icon(
-                    Icons.insert_chart,
-                    size: 24.0,
-                    color: Colors.white,
+                  TextButton.icon(
+                    onPressed: () {
+                      setState(() {
+                        pageIndex = 1;
+                      });
+                    },
+                    icon: Icon(
+                      Icons.insert_chart,
+                      size: 24.0,
+                      color: Colors.white,
+                    ),
+                    label: pageIndex == 1
+                        ? Text('Liability',
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize:
+                                    MediaQuery.of(context).size.width / 25))
+                        : Text(""),
                   ),
-                  label: pageIndex == 1
-                      ? Text('Liability',
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontSize: MediaQuery.of(context).size.width / 25))
-                      : Text(""),
-                ),
-                TextButton.icon(
-                  onPressed: () {
-                    setState(() {
-                      pageIndex = 2;
-                    });
-                  },
-                  icon: Icon(
-                    Icons.monetization_on,
-                    size: 24.0,
-                    color: Colors.white,
+                  TextButton.icon(
+                    onPressed: () {
+                      setState(() {
+                        pageIndex = 2;
+                      });
+                    },
+                    icon: Icon(
+                      Icons.monetization_on,
+                      size: 24.0,
+                      color: Colors.white,
+                    ),
+                    label: pageIndex == 2
+                        ? Text('Expense',
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize:
+                                    MediaQuery.of(context).size.width / 25))
+                        : Text(""),
                   ),
-                  label: pageIndex == 2
-                      ? Text('Expense',
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontSize: MediaQuery.of(context).size.width / 25))
-                      : Text(""),
-                ),
-                TextButton.icon(
-                  onPressed: () {
-                    setState(() {
-                      pageIndex = 3;
-                    });
-                  },
-                  icon: Icon(
-                    Icons.savings,
-                    size: 24.0,
-                    color: Colors.white,
+                  TextButton.icon(
+                    onPressed: () {
+                      setState(() {
+                        pageIndex = 3;
+                      });
+                    },
+                    icon: Icon(
+                      Icons.savings,
+                      size: 24.0,
+                      color: Colors.white,
+                    ),
+                    label: pageIndex == 3
+                        ? Text('Income',
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize:
+                                    MediaQuery.of(context).size.width / 25))
+                        : Text(""),
                   ),
-                  label: pageIndex == 3
-                      ? Text('Income',
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontSize: MediaQuery.of(context).size.width / 25))
-                      : Text(""),
-                ),
-                TextButton.icon(
-                  onPressed: () {
-                    setState(() {
-                      pageIndex = 4;
-                    });
-                  },
-                  icon: Icon(
-                    FontAwesomeIcons.cartPlus,
+                  TextButton.icon(
+                    onPressed: () {
+                      setState(() {
+                        pageIndex = 4;
+                      });
+                    },
+                    icon: Icon(
+                      FontAwesomeIcons.cartPlus,
 //                 color: Color.fromARGB(255, 93, 99, 217)),
-                    size: 24.0,
-                    color: Colors.white,
+                      size: 24.0,
+                      color: Colors.white,
+                    ),
+                    label: pageIndex == 4
+                        ? Text('Others',
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize:
+                                    MediaQuery.of(context).size.width / 25))
+                        : Text(""),
                   ),
-                  label: pageIndex == 4
-                      ? Text('Others',
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontSize: MediaQuery.of(context).size.width / 25))
-                      : Text(""),
-                ),
-              ],
+                ],
+              ),
             ),
             scrollDirection: Axis.horizontal));
   }
