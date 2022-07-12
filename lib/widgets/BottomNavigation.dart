@@ -67,7 +67,7 @@ class _bottomnavigationState extends State<bottomnavigation> {
 
   Container buildMyNavBar(BuildContext context) {
     return Container(
-        height: MediaQuery.of(context).size.height / 15,
+        height: MediaQuery.of(context).size.height / 10,
         width: MediaQuery.of(context).size.width / 15,
         decoration: BoxDecoration(
           color: Color.fromARGB(255, 93, 99, 216),

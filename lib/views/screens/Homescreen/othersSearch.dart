@@ -209,7 +209,7 @@ class _othersSearchState extends State<othersSearch> {
                 : GridView.builder(
                     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: screenwidth >= 360 ? 2 : 1,
-                        childAspectRatio: 3,
+                        childAspectRatio: screenwidth >= 360 ? 3 : 5,
                         crossAxisSpacing: screenwidth >= 400 ? 50 : 25),
                     itemCount: _textEditingController.text.isNotEmpty
                         ? icon_nameOnSearch.length

@@ -36,52 +36,46 @@ class _forget_passwordState extends State<forget_password> {
         child: Container(
           child: Column(
             children: [
-              Container(
-                height: 400,
-                decoration: const BoxDecoration(
-                    image: DecorationImage(
-                        image: AssetImage('assets/images/background.png'),
-                        fit: BoxFit.fill)),
-                child: Stack(
-                  children: [
-                    Positioned(
-                        left: 30,
-                        width: 80,
-                        height: 200,
-                        child: Container(
-                          decoration: const BoxDecoration(
-                              image: DecorationImage(
-                                  image:
-                                      AssetImage('assets/images/light-1.png'))),
-                        )),
-                    Positioned(
-                        left: 130,
-                        width: 80,
-                        height: 150,
-                        child: Container(
-                          decoration: const BoxDecoration(
-                              image: DecorationImage(
-                                  image:
-                                      AssetImage('assets/images/light-2.png'))),
-                        )),
-                    FadeAnimation(
-                        0.5,
-                        Positioned(
-                            child: Container(
-                          margin: const EdgeInsets.only(top: 50),
-                          child: const Center(
-                            child: Text(
-                              "FORGET PASSWORD",
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 30,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                        )))
-                  ],
+              Stack(children: [
+                Container(
+                    child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                      Image.asset("assets/images/background.png")
+                    ])),
+                Positioned(
+                    left: 30,
+                    width: 80,
+                    height: 300,
+                    child: Container(
+                        child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                          Image.asset("assets/images/light-1.png")
+                        ]))),
+                Positioned(
+                  left: 150,
+                  width: 50,
+                  height: 200,
+                  child: Container(
+                      child: Column(children: [
+                    Image.asset("assets/images/light-2.png")
+                  ])),
                 ),
-              ),
+                Positioned(
+                    child: Container(
+                  margin: EdgeInsets.only(top: 250),
+                  child: Center(
+                    child: Text(
+                      "FORGOT PASSWORD",
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 30,
+                          fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                ))
+              ]),
               Padding(
                 padding: const EdgeInsets.all(30.0),
                 child: Column(
@@ -123,7 +117,7 @@ class _forget_passwordState extends State<forget_password> {
                             ],
                           )),
                     ),
-                    const SizedBox(
+                    SizedBox(
                       height: 30,
                     ),
                     FadeAnimation(

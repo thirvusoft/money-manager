@@ -47,52 +47,43 @@ class _login_pageState extends State<login_page> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            Container(
-              height: 400,
-              decoration: BoxDecoration(
-                  image: DecorationImage(
-                      image: AssetImage('assets/images/background.png'),
-                      fit: BoxFit.fill)),
-              child: Stack(
-                children: [
-                  Positioned(
-                      left: 30,
-                      width: 80,
-                      height: 200,
-                      child: Container(
-                        decoration: BoxDecoration(
-                            image: DecorationImage(
-                                image:
-                                    AssetImage('assets/images/light-1.png'))),
-                      )),
-                  Positioned(
-                      left: 130,
-                      width: 80,
-                      height: 150,
-                      child: Container(
-                        decoration: BoxDecoration(
-                            image: DecorationImage(
-                                image:
-                                    AssetImage('assets/images/light-2.png'))),
-                      )),
-                  FadeAnimation(
-                      0.5,
-                      Positioned(
-                          child: Container(
-                        margin: EdgeInsets.only(top: 50),
-                        child: Center(
-                          child: Text(
-                            "LOGIN",
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 30,
-                                fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                      )))
-                ],
+            Stack(children: [
+              Container(
+                  child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [Image.asset("assets/images/background.png")])),
+              Positioned(
+                  left: 30,
+                  width: 80,
+                  height: 300,
+                  child: Container(
+                      child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                        Image.asset("assets/images/light-1.png")
+                      ]))),
+              Positioned(
+                left: 150,
+                width: 50,
+                height: 200,
+                child: Container(
+                    child: Column(
+                        children: [Image.asset("assets/images/light-2.png")])),
               ),
-            ),
+              Positioned(
+                  child: Container(
+                margin: EdgeInsets.only(top: 250),
+                child: Center(
+                  child: Text(
+                    "LOGIN",
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 30,
+                        fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ))
+            ]),
             Padding(
               padding: EdgeInsets.all(30.0),
               child: Column(
@@ -225,7 +216,6 @@ class _login_pageState extends State<login_page> {
     if (passwordcontroller.text.isNotEmpty || emailcontroller.text.isNotEmpty) {
       var response = await http.post(Uri.parse(
           "${dotenv.env['API_URL']}/api/method/money_management_backend.custom.py.api.login?email=${email}&password=${password}"));
-      //{{host}}/api/method/money_management_backend.custom.py.api.login?email={{email}}&password={{password}}
       if (response.statusCode == 200) {
         SharedPreferences prefs = await SharedPreferences.getInstance();
         prefs.setString('token', json.decode(response.body)['token']);
