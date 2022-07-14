@@ -50,8 +50,6 @@ class _splash_screenState extends State<splash_screen> {
           child: Column(
             children: [
               Padding(padding: EdgeInsets.only(top: 100)),
-              // FadeAnimation(
-              //   2,
               Container(
                 child: Image.asset(
                   'assets/images/Icon.webp',

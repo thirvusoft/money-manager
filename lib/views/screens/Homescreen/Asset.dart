@@ -98,8 +98,8 @@ class _assetState extends State<asset> with SingleTickerProviderStateMixin {
   List icon_nameOnSearch = [];
   List icon_name = [];
   var hexcode_dict = <String, int>{
-    ' 0xf1dd': 0xf1dd,
-    ' 0xf1dd': 0xf1dd,
+    '0xf1dd': 0xf1dd,
+    '0xf1dd': 0xf1dd,
     '0xf1dd': 0xf1dd,
     '0xf05e7': 0xf05e7,
     '0xee62': 0xee62,
@@ -253,8 +253,8 @@ class _assetState extends State<asset> with SingleTickerProviderStateMixin {
                   : GridView.builder(
                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                           crossAxisCount: screenwidth >= 360 ? 2 : 1,
-                          childAspectRatio: 3,
-                          crossAxisSpacing: screenwidth >= 400 ? 50 : 25),
+                          childAspectRatio: screenwidth >= 360 ? 3 : 5,
+                          crossAxisSpacing: screenwidth >= 400 ? 50 : 15),
                       itemCount: _textEditingController.text.isNotEmpty
                           ? icon_nameOnSearch.length
                           : icon_name.length,
@@ -272,7 +272,7 @@ class _assetState extends State<asset> with SingleTickerProviderStateMixin {
                             child: Row(
                               children: [
                                 SizedBox(
-                                  width: MediaQuery.of(context).size.width / 30,
+                                  width: MediaQuery.of(context).size.width / 25,
                                 ),
                                 InkWell(
                                   onTap: () {
@@ -299,7 +299,7 @@ class _assetState extends State<asset> with SingleTickerProviderStateMixin {
                                           Color.fromARGB(255, 93, 99, 216)),
                                 ),
                                 SizedBox(
-                                  width: MediaQuery.of(context).size.width / 30,
+                                  width: MediaQuery.of(context).size.width / 15,
                                 ),
                                 TextButton(
                                   onPressed: () {

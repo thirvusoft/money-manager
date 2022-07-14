@@ -225,7 +225,7 @@ class _expenseSearchState extends State<expenseSearch> {
                 : GridView.builder(
                     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: screenwidth >= 360 ? 2 : 1,
-                        childAspectRatio: 3,
+                        childAspectRatio: screenwidth >= 360 ? 3 : 5,
                         crossAxisSpacing: screenwidth >= 400 ? 50 : 25),
                     itemCount: _textEditingController.text.isNotEmpty
                         ? icon_nameOnSearch.length
@@ -244,7 +244,7 @@ class _expenseSearchState extends State<expenseSearch> {
                           child: Row(
                             children: [
                               SizedBox(
-                                 width: MediaQuery.of(context).size.width / 30,
+                                width: MediaQuery.of(context).size.width / 30,
                               ),
                               InkWell(
                                 onTap: () {
@@ -271,7 +271,7 @@ class _expenseSearchState extends State<expenseSearch> {
                                         Color.fromARGB(255, 93, 99, 216)),
                               ),
                               SizedBox(
-                                 width: MediaQuery.of(context).size.width / 30,
+                                width: MediaQuery.of(context).size.width / 30,
                               ),
                               TextButton(
                                 onPressed: () {
@@ -292,7 +292,7 @@ class _expenseSearchState extends State<expenseSearch> {
                                       : jsonDecode(row[index])[0],
                                   style: TextStyle(
                                       color: Colors.black,
-                                      fontSize: screenwidth / 25,                                    
+                                      fontSize: screenwidth / 25,
                                       fontWeight: FontWeight.w700),
                                 ),
                               )

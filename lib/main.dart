@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:money_manager/views/screens/loginScreen.dart';
 import 'dart:io';
 import 'package:money_manager/views/screens/profile.dart';
 import 'package:money_manager/views/screens/splash_screen.dart';
