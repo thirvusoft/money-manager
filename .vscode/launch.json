@@ -8,7 +8,10 @@
         {
             "name": "money_manager",
             "request": "launch",
-            "type": "dart"
+            "type": "dart",
+            "args": [
+                "--no-sound-null-safety"
+            ]
             
         },
         {

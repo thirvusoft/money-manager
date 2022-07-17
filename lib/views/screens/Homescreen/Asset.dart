@@ -220,7 +220,6 @@ class _assetState extends State<asset> with SingleTickerProviderStateMixin {
                     icon_nameOnSearch.clear();
                     for (var i = 0; i < icon_name.length; i++) {
                       data = jsonDecode(icon_name[i])[0];
-                      data = (icon_name[i])[0];
 
                       if (data
                           .toLowerCase()
