@@ -87,22 +87,20 @@ class _ProfilesState extends State<Profiles> {
             SizedBox(
               height: 16,
             ),
-            FlatButton(
-              child: Text(
-                'Logout',
-                style: TextStyle(fontSize: 20.0),
+            Center(
+              child: ElevatedButton.icon(
+                icon: Icon(Icons.logout),
+                label: Text('Logout', style: TextStyle(fontSize: 20.0)),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => login_page()),
+                  );
+                },
+                style: ElevatedButton.styleFrom(
+                  primary: Color.fromARGB(255, 93, 99, 216), // Background color
+                ),
               ),
-              color: Color.fromARGB(255, 93, 99, 216),
-              textColor: Colors.white,
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => login_page()),
-                );
-              },
-            ),
-            SizedBox(
-              height: 4,
             ),
           ],
         ),
